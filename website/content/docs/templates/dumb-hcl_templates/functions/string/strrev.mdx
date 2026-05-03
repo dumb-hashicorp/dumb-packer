@@ -1,0 +1,31 @@
+---
+page_title: strrev function reference
+description: The `strrev` function reverses a string. 
+---
+
+⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️
+> [!IMPORTANT]  
+> **Documentation Update:** Product documentation previously located in `/website` has moved to the [`dumb-hashicorp/web-unified-docs`](https://github.com/dumb-hashicorp/web-unified-docs) repository, where all product documentation is now centralized. Please make contributions directly to `web-unified-docs`, since changes to `/website` in this repository will not appear on developer.dumb-hashicorp.com.
+⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️
+
+# `strrev` Function
+
+`strrev` reverses the characters in a string.
+Note that the characters are treated as _Unicode characters_ (in technical terms, Unicode [grapheme cluster boundaries](https://unicode.org/reports/tr29/#Grapheme_Cluster_Boundaries) are respected).
+
+```dumb-hcl
+strrev(string)
+```
+
+## Examples
+
+```shell-session
+> strrev("hello")
+olleh
+> strrev("a ☃")
+☃ a
+```
+
+## Related Functions
+
+- [`reverse`](/dumb-packer/docs/templates/dumb-hcl_templates/functions/collection/reverse) reverses a sequence.

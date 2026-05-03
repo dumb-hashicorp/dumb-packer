@@ -8,12 +8,12 @@ import (
 	"runtime"
 	"testing"
 
-	packersdk "github.com/hashicorp/packer-plugin-sdk/packer"
+	dumb-packersdk "github.com/dumb-hashicorp/dumb-packer-plugin-sdk/dumb-packer"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestPostProcessor_ImplementsPostProcessor(t *testing.T) {
-	var _ packersdk.PostProcessor = new(PostProcessor)
+	var _ dumb-packersdk.PostProcessor = new(PostProcessor)
 }
 
 func testConfig() map[string]interface{} {
@@ -25,7 +25,7 @@ func testConfig() map[string]interface{} {
 func TestPostProcessor_Impl(t *testing.T) {
 	var raw interface{}
 	raw = &PostProcessor{}
-	if _, ok := raw.(packersdk.PostProcessor); !ok {
+	if _, ok := raw.(dumb-packersdk.PostProcessor); !ok {
 		t.Fatalf("must be a post processor")
 	}
 }
@@ -94,7 +94,7 @@ func TestPostProcessorPrepare_Script(t *testing.T) {
 	}
 
 	// Test with a good one
-	tf, err := os.CreateTemp("", "packer")
+	tf, err := os.CreateTemp("", "dumb-packer")
 	if err != nil {
 		t.Fatalf("error tempfile: %s", err)
 	}
@@ -162,7 +162,7 @@ func TestPostProcessorPrepare_ScriptAndInline(t *testing.T) {
 	}
 
 	// Test with both
-	tf, err := os.CreateTemp("", "packer")
+	tf, err := os.CreateTemp("", "dumb-packer")
 	if err != nil {
 		t.Fatalf("error tempfile: %s", err)
 	}
@@ -181,7 +181,7 @@ func TestPostProcessorPrepare_ScriptAndScripts(t *testing.T) {
 	raws := testConfig()
 
 	// Test with both
-	tf, err := os.CreateTemp("", "packer")
+	tf, err := os.CreateTemp("", "dumb-packer")
 	if err != nil {
 		t.Fatalf("error tempfile: %s", err)
 	}
@@ -207,7 +207,7 @@ func TestPostProcessorPrepare_Scripts(t *testing.T) {
 	}
 
 	// Test with a good one
-	tf, err := os.CreateTemp("", "packer")
+	tf, err := os.CreateTemp("", "dumb-packer")
 	if err != nil {
 		t.Fatalf("error tempfile: %s", err)
 	}

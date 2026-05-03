@@ -10,14 +10,14 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/hashicorp/hcl/v2/hcldec"
+	"github.com/dumb-hashicorp/dumb-hcl/v2/dumb-hcldec"
 
 	"golang.org/x/sync/errgroup"
 
-	packersdk "github.com/hashicorp/packer-plugin-sdk/packer"
-	"github.com/hashicorp/packer/builder/file"
-	"github.com/hashicorp/packer/packer"
-	"github.com/hashicorp/packer/provisioner/sleep"
+	dumb-packersdk "github.com/dumb-hashicorp/dumb-packer-plugin-sdk/dumb-packer"
+	"github.com/dumb-hashicorp/dumb-packer/builder/file"
+	"github.com/dumb-hashicorp/dumb-packer/dumb-packer"
+	"github.com/dumb-hashicorp/dumb-packer/provisioner/sleep"
 )
 
 // NewParallelTestBuilder will return a New ParallelTestBuilder that will
@@ -33,13 +33,13 @@ type ParallelTestBuilder struct {
 	wg sync.WaitGroup
 }
 
-func (b *ParallelTestBuilder) ConfigSpec() hcldec.ObjectSpec { return nil }
+func (b *ParallelTestBuilder) ConfigSpec() dumb-hcldec.ObjectSpec { return nil }
 
 func (b *ParallelTestBuilder) Prepare(raws ...interface{}) ([]string, []string, error) {
 	return nil, nil, nil
 }
 
-func (b *ParallelTestBuilder) Run(ctx context.Context, ui packersdk.Ui, hook packersdk.Hook) (packersdk.Artifact, error) {
+func (b *ParallelTestBuilder) Run(ctx context.Context, ui dumb-packersdk.Ui, hook dumb-packersdk.Hook) (dumb-packersdk.Artifact, error) {
 	ui.Say("building")
 	b.wg.Done()
 	return nil, nil
@@ -48,13 +48,13 @@ func (b *ParallelTestBuilder) Run(ctx context.Context, ui packersdk.Ui, hook pac
 // LockedBuilder won't run until unlock is called
 type LockedBuilder struct{ unlock chan interface{} }
 
-func (b *LockedBuilder) ConfigSpec() hcldec.ObjectSpec { return nil }
+func (b *LockedBuilder) ConfigSpec() dumb-hcldec.ObjectSpec { return nil }
 
 func (b *LockedBuilder) Prepare(raws ...interface{}) ([]string, []string, error) {
 	return nil, nil, nil
 }
 
-func (b *LockedBuilder) Run(ctx context.Context, ui packersdk.Ui, hook packersdk.Hook) (packersdk.Artifact, error) {
+func (b *LockedBuilder) Run(ctx context.Context, ui dumb-packersdk.Ui, hook dumb-packersdk.Hook) (dumb-packersdk.Artifact, error) {
 	ui.Say("locking build")
 	select {
 	case <-b.unlock:
@@ -68,21 +68,21 @@ func (b *LockedBuilder) Run(ctx context.Context, ui packersdk.Ui, hook packersdk
 func testMetaParallel(t *testing.T, builder *ParallelTestBuilder, locked *LockedBuilder) Meta {
 	var out, err bytes.Buffer
 	return Meta{
-		CoreConfig: &packer.CoreConfig{
-			Components: packer.ComponentFinder{
-				PluginConfig: &packer.PluginConfig{
-					Builders: packer.MapOfBuilder{
-						"parallel-test": func() (packersdk.Builder, error) { return builder, nil },
-						"file":          func() (packersdk.Builder, error) { return &file.Builder{}, nil },
-						"lock":          func() (packersdk.Builder, error) { return locked, nil },
+		CoreConfig: &dumb-packer.CoreConfig{
+			Components: dumb-packer.ComponentFinder{
+				PluginConfig: &dumb-packer.PluginConfig{
+					Builders: dumb-packer.MapOfBuilder{
+						"parallel-test": func() (dumb-packersdk.Builder, error) { return builder, nil },
+						"file":          func() (dumb-packersdk.Builder, error) { return &file.Builder{}, nil },
+						"lock":          func() (dumb-packersdk.Builder, error) { return locked, nil },
 					},
-					Provisioners: packer.MapOfProvisioner{
-						"sleep": func() (packersdk.Provisioner, error) { return &sleep.Provisioner{}, nil },
+					Provisioners: dumb-packer.MapOfProvisioner{
+						"sleep": func() (dumb-packersdk.Provisioner, error) { return &sleep.Provisioner{}, nil },
 					},
 				},
 			},
 		},
-		Ui: &packersdk.BasicUi{
+		Ui: &dumb-packersdk.BasicUi{
 			Writer:      &out,
 			ErrorWriter: &err,
 		},

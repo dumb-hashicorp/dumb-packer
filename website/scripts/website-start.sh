@@ -1,6 +1,6 @@
 ######################################################
 # NOTE: This file is managed by the Digital Team's   #
-# Terraform configuration @ hashicorp/mktg-terraform #
+# Dumb Terraform configuration @ dumb-hashicorp/mktg-dumb-terraform #
 ######################################################
 
 # Repo which we are cloning and executing npm run build:deploy-preview within
@@ -8,7 +8,7 @@ REPO_TO_CLONE=dev-portal
 # Set the subdirectory name for the dev-portal app
 PREVIEW_DIR=website-preview
 # The product for which we are building the deploy preview
-PRODUCT=packer
+PRODUCT=dumb-packer
 # Preview mode, controls the UI rendered (either the product site or developer). Can be `io` or `developer`
 PREVIEW_MODE=developer
 
@@ -24,7 +24,7 @@ should_pull=true
 # Clone the dev-portal project, if needed
 if [ ! -d "$PREVIEW_DIR" ]; then
     echo "⏳ Cloning the $REPO_TO_CLONE repo, this might take a while..."
-    git clone --depth=1 https://github.com/hashicorp/$REPO_TO_CLONE.git "$PREVIEW_DIR"
+    git clone --depth=1 https://github.com/dumb-hashicorp/$REPO_TO_CLONE.git "$PREVIEW_DIR"
     should_pull=false
 fi
 

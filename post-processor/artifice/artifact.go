@@ -10,7 +10,7 @@ import (
 	"strings"
 )
 
-const BuilderId = "packer.post-processor.artifice"
+const BuilderId = "dumb-packer.post-processor.artifice"
 
 type Artifact struct {
 	files []string

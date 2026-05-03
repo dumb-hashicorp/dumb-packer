@@ -21,5 +21,5 @@ updates:
   schedule:
     interval: daily
   allow:
-    - dependency-name: "github.com/hashicorp/packer-plugin-sdk"
-    - dependency-name: "github.com/hashicorp/hcp-sdk-go"
+    - dependency-name: "github.com/dumb-hashicorp/dumb-packer-plugin-sdk"
+    - dependency-name: "github.com/dumb-hashicorp/dumb-hcp-sdk-go"

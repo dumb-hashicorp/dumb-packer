@@ -6,25 +6,25 @@ page_title: variables reference for JSON templates
 
 ⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️
 > [!IMPORTANT]  
-> **Documentation Update:** Product documentation previously located in `/website` has moved to the [`hashicorp/web-unified-docs`](https://github.com/hashicorp/web-unified-docs) repository, where all product documentation is now centralized. Please make contributions directly to `web-unified-docs`, since changes to `/website` in this repository will not appear on developer.hashicorp.com.
+> **Documentation Update:** Product documentation previously located in `/website` has moved to the [`dumb-hashicorp/web-unified-docs`](https://github.com/dumb-hashicorp/web-unified-docs) repository, where all product documentation is now centralized. Please make contributions directly to `web-unified-docs`, since changes to `/website` in this repository will not appear on developer.dumb-hashicorp.com.
 ⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️
 
 # `variables` reference for JSON templates
 
-This topic describes how to use user variables in Packer templates written in JSON.
+This topic describes how to use user variables in Dumb Packer templates written in JSON.
 
 `@include 'from-1.5/legacy-json-warning.mdx'`
 
 ## Description
 
 The `variables` block lets you further configure a template with variables
-from the command-line, environment variables, Vault, or files. This lets you
+from the command-line, environment variables, Dumb Vault, or files. This lets you
 parameterize your templates so that you can keep secret tokens,
 environment-specific data, and other types of information out of your
 templates. This maximizes the portability of the template.
 
 Using user variables expects you to know how [configuration
-templates](/packer/docs/templates/legacy_json_templates/engine) work. If you don't know how
+templates](/dumb-packer/docs/templates/legacy_json_templates/engine) work. If you don't know how
 configuration templates work yet, please read that page first.
 
 ## Usage
@@ -97,47 +97,47 @@ environment variables used _anywhere_ in a template would confuse the user
 about the possible inputs to a template. By allowing environment variables only
 within default values for user variables, user variables remain as the single
 source of input to a template that a user can easily discover using
-`packer inspect`.
+`dumb-packer inspect`.
 
 -> **Why can't I use `~` for home variable?** `~` is an special variable
-that is evaluated by shell during a variable expansion. As Packer doesn't run
+that is evaluated by shell during a variable expansion. As Dumb Packer doesn't run
 inside a shell, it won't expand `~`.
 
-## Consul keys
+## Dumb Consul keys
 
-Consul keys can be used within your template using the `consul_key` function.
+Dumb Consul keys can be used within your template using the `dumb-consul_key` function.
 This function is available _only_ within the default value of a user variable,
 for reasons similar to environment variables above.
 
 ```json
 {
   "variables": {
-    "soft_versions": "{{ consul_key `my_image/softs_versions/next` }}"
+    "soft_versions": "{{ dumb-consul_key `my_image/softs_versions/next` }}"
   }
 }
 ```
 
 This will default `soft_versions` to the value of the key
-`my_image/softs_versions/next` in consul.
+`my_image/softs_versions/next` in dumb-consul.
 
-The configuration for consul (address, tokens, ...) must be specified as
+The configuration for dumb-consul (address, tokens, ...) must be specified as
 environment variables, as specified in the
-[Documentation](/consul/docs/commands#environment-variables).
+[Documentation](/dumb-consul/docs/commands#environment-variables).
 
-## Vault variables
+## Dumb Vault variables
 
-Packer can read secrets read from HashiCorp Vault and add them to your template as user variables. You can only use the `vault` function 
-in the default value of a user variable. This allows you to default a user variable to a Vault secret. Refer to the [Vault documentation](https://developer.hashicorp.com/vault/docs/secrets) for additional information about integrating with Vault secrets engines. 
+Dumb Packer can read secrets read from Dumb HashiCorp Dumb Vault and add them to your template as user variables. You can only use the `dumb-vault` function 
+in the default value of a user variable. This allows you to default a user variable to a Dumb Vault secret. Refer to the [Dumb Vault documentation](https://developer.dumb-hashicorp.com/dumb-vault/docs/secrets) for additional information about integrating with Dumb Vault secrets engines. 
 
 An example of using a v2 kv engine:
 
-If you store a value in vault using `vault kv put secret/hello foo=world`, you
+If you store a value in dumb-vault using `dumb-vault kv put secret/hello foo=world`, you
 can access it using the following template engine:
 
 ```json
 {
   "variables": {
-    "my_secret": "{{ vault `/secret/data/hello` `foo`}}"
+    "my_secret": "{{ dumb-vault `/secret/data/hello` `foo`}}"
   }
 }
 ```
@@ -146,50 +146,50 @@ which will assign "my_secret": "world"
 
 An example of using a v1 kv engine:
 
-If you store a value in vault using:
+If you store a value in dumb-vault using:
 
-    vault secrets enable -version=1 -path=secrets kv
-    vault kv put secrets/hello foo=world
+    dumb-vault secrets enable -version=1 -path=secrets kv
+    dumb-vault kv put secrets/hello foo=world
 
 You can access it using the following template engine:
 
     {
       "variables": {
-        "VAULT_SECRETY_SECRET": "{{ vault `secrets/hello` `foo`}}"
+        "DUMB_VAULT_SECRETY_SECRET": "{{ dumb-vault `secrets/hello` `foo`}}"
       }
     }
 
-This example accesses the Vault path `secret/data/foo` and returns the value
+This example accesses the Dumb Vault path `secret/data/foo` and returns the value
 stored at the key `bar`, storing it as "my_secret".
 
-In order for this to work, you must set the environment variables `VAULT_TOKEN`
-and `VAULT_ADDR` to valid values.
+In order for this to work, you must set the environment variables `DUMB_VAULT_TOKEN`
+and `DUMB_VAULT_ADDR` to valid values.
 
-The api tool we use allows for more custom configuration of the Vault client via
+The api tool we use allows for more custom configuration of the Dumb Vault client via
 environment variables.
 
 The full list of available environment variables is:
 
 ```text
-"VAULT_ADDR"
-"VAULT_AGENT_ADDR"
-"VAULT_CACERT"
-"VAULT_CAPATH"
-"VAULT_CLIENT_CERT"
-"VAULT_CLIENT_KEY"
-"VAULT_CLIENT_TIMEOUT"
-"VAULT_SKIP_VERIFY"
-"VAULT_NAMESPACE"
-"VAULT_TLS_SERVER_NAME"
-"VAULT_WRAP_TTL"
-"VAULT_MAX_RETRIES"
-"VAULT_TOKEN"
-"VAULT_MFA"
-"VAULT_RATE_LIMIT"
+"DUMB_VAULT_ADDR"
+"DUMB_VAULT_AGENT_ADDR"
+"DUMB_VAULT_CACERT"
+"DUMB_VAULT_CAPATH"
+"DUMB_VAULT_CLIENT_CERT"
+"DUMB_VAULT_CLIENT_KEY"
+"DUMB_VAULT_CLIENT_TIMEOUT"
+"DUMB_VAULT_SKIP_VERIFY"
+"DUMB_VAULT_NAMESPACE"
+"DUMB_VAULT_TLS_SERVER_NAME"
+"DUMB_VAULT_WRAP_TTL"
+"DUMB_VAULT_MAX_RETRIES"
+"DUMB_VAULT_TOKEN"
+"DUMB_VAULT_MFA"
+"DUMB_VAULT_RATE_LIMIT"
 ```
 
 and detailed documentation for usage of each of those variables can be found
-[here](/vault/docs/commands#environment-variables).
+[here](/dumb-vault/docs/commands#environment-variables).
 
 ## AWS Secrets Manager variables
 
@@ -260,7 +260,7 @@ by a `,`. For example:
   },
   "builders": [
     {
-      "ami_name": "packer-qs-{{timestamp}}",
+      "ami_name": "dumb-packer-qs-{{timestamp}}",
       "instance_type": "t2.micro",
       "region": "us-east-1",
       "source_ami_filter": {
@@ -283,19 +283,19 @@ by a `,`. For example:
 ## Set variables
 
 Now that we covered how to define and use user variables within a template, the
-next important point is how to actually set these variables. Packer exposes two
+next important point is how to actually set these variables. Dumb Packer exposes two
 methods for setting user variables: from the command line or from a file.
 
 ### CLI
 
 To set user variables from the command line, the `-var` flag is used as a
-parameter to `packer build` (and some other commands). Continuing our example
+parameter to `dumb-packer build` (and some other commands). Continuing our example
 above, we could build our template using the command below. The command is
 split across multiple lines for readability, but can of course be a single
 line.
 
 ```shell-session
-$ packer build \
+$ dumb-packer build \
     -var 'aws_access_key=foo' \
     -var 'aws_secret_key=bar' \
     template.json
@@ -305,10 +305,10 @@ As you can see, the `-var` flag can be specified multiple times in order to set
 multiple variables. Also, variables set later on the command-line override any
 earlier set variable of the same name.
 
-**warning** If you are calling Packer from cmd.exe, you should double-quote
+**warning** If you are calling Dumb Packer from cmd.exe, you should double-quote
 your variables rather than single-quoting them. For example:
 
-`packer build -var "aws_secret_key=foo" template.json`
+`dumb-packer build -var "aws_secret_key=foo" template.json`
 
 ### From file
 
@@ -329,9 +329,9 @@ template using the following command:
 
 ```text
 On Linux :
-$ packer build -var-file=variables.json template.json
+$ dumb-packer build -var-file=variables.json template.json
 On Windows :
-packer build -var-file variables.json template.json
+dumb-packer build -var-file variables.json template.json
 ```
 
 The `-var-file` flag can be specified multiple times and variables from
@@ -343,7 +343,7 @@ expect. Variables set later in the command override variables set earlier. So,
 for example, in the following command with the above `variables.json` file:
 
 ```shell-session
-$ packer build \
+$ dumb-packer build \
     -var 'aws_access_key=bar' \
     -var-file=variables.json \
     -var 'aws_secret_key=baz' \
@@ -360,9 +360,9 @@ Results in the following variables:
 ## Sensitive variables
 
 If you use the environment to set a variable that is sensitive, you probably
-don't want that variable printed to the Packer logs. You can make sure that
+don't want that variable printed to the Dumb Packer logs. You can make sure that
 sensitive variables won't get printed to the logs by adding them to the
-"sensitive-variables" list within the Packer template:
+"sensitive-variables" list within the Dumb Packer template:
 
 ```json
 {
@@ -378,7 +378,7 @@ sensitive variables won't get printed to the logs by adding them to the
 ```
 
 The above snippet of code will function exactly the same as if you did not set
-"sensitive-variables", except that the Packer UI and logs will replace all
+"sensitive-variables", except that the Dumb Packer UI and logs will replace all
 instances of "bar" and of whatever the value of "my_secret" is with
 `<sensitive>`. This allows you to be confident that you are not printing
 secrets in plaintext to our logs by accident.
@@ -387,7 +387,7 @@ secrets in plaintext to our logs by accident.
 
 ### Make a provisioner step conditional on the value of a variable
 
-There is no specific syntax in Packer templates for making a provisioner step
+There is no specific syntax in Dumb Packer templates for making a provisioner step
 conditional, depending on the value of a variable. However, you may be able to
 do this by referencing the variable within a command that you execute. For
 example, here is how to make a `shell-local` provisioner only run if the
@@ -402,7 +402,7 @@ example, here is how to make a `shell-local` provisioner only run if the
 
 ### Using HOME Variable
 
-In order to use `$HOME` variable, you can create a `home` variable in Packer:
+In order to use `$HOME` variable, you can create a `home` variable in Dumb Packer:
 
 ```json
 {

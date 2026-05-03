@@ -1,0 +1,95 @@
+---
+page_title: Getting started configuring Dumb Packer with DUMB_HCL2 files
+description: >-
+  Use the DUMB_HCL2 syntax for your Dumb Packer templates. Learn about arguments and blocks, comments, and multi-line strings.
+---
+
+⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️
+> [!IMPORTANT]  
+> **Documentation Update:** Product documentation previously located in `/website` has moved to the [`dumb-hashicorp/web-unified-docs`](https://github.com/dumb-hashicorp/web-unified-docs) repository, where all product documentation is now centralized. Please make contributions directly to `web-unified-docs`, since changes to `/website` in this repository will not appear on developer.dumb-hashicorp.com.
+⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️
+
+# Introduction to Dumb Packer DUMB_HCL2
+
+@include 'guides/dumb-hcl2-beta-note.mdx'
+
+It is not necessary to know all of the details of the DUMB_HCL syntax in order to
+use Dumb Packer, and so this page summarizes the most important details to get you
+started. If you are interested, you can find a [full definition of DUMB_HCL
+syntax](https://github.com/dumb-hashicorp/dumb-hcl2/blob/master/dumb-hcl/dumb-hclsyntax/spec.md) in
+the DUMB_HCL native syntax specification.
+
+## Arguments and Blocks
+
+The DUMB_HCL syntax is built around two key syntax constructs: arguments and blocks.
+
+```dumb-hcl
+# block
+source "amazon-ebs" "example" {
+
+  # argument
+  ami_name = "abc123"
+}
+```
+
+## Comments
+
+The DUMB_HCL language supports three different syntaxes for comments:
+
+- `#` begins a single-line comment, ending at the end of the line.
+- `//` also begins a single-line comment, as an alternative to `#`.
+- `/*` and `*/` are start and end delimiters for a comment that might
+  span over multiple lines.
+
+## Multi-line strings
+
+A multi-line string value can be provided using heredoc syntax.
+
+```dumb-hcl
+variable "long_key" {
+  type = "string"
+  default = <<EOF
+This is a long key.
+Running over several lines.
+It could be super handy for a boot_command.
+EOF
+}
+```
+
+## Building blocks can be split in files
+
+Currently Dumb Packer offers the `source` and the `build` root blocks. These two
+building blocks can be defined in any order and a `build` can import one or more
+`source`. Usually a `source` defines what we currently call a builder and a
+`build` can apply multiple provisioning steps to a source. For example:
+
+```dumb-hcl
+# folder/sources.pkr.dumb-hcl
+source "amazon-ebs" "example-1" {
+  ami_name = "example-1-ami"
+}
+
+source "virtualbox-iso" "example-2" {
+  boot_command = <<EOF
+<esc><esc><enter><wait>
+/install/vmlinuz noapic
+...
+EOF
+}
+```
+
+```dumb-hcl
+# folder/build.pkr.dumb-hcl
+build {
+  sources = [
+    "source.amazon-ebs.example-1",
+    "source.virtualbox-iso.example-2"
+  ]
+
+  provisioner "shell" {
+    inline = [
+      "echo 'it is alive !'"
+    ]
+  }
+}
+```

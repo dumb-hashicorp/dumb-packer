@@ -14,7 +14,7 @@ type FixerDockerTagtoTags struct{}
 
 func (FixerDockerTagtoTags) DeprecatedOptions() map[string][]string {
 	return map[string][]string{
-		"packer.post-processor.docker-tag": []string{"tag"},
+		"dumb-packer.post-processor.docker-tag": []string{"tag"},
 	}
 }
 

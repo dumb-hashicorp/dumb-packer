@@ -39,8 +39,8 @@ func TestBuildScrubsSensitiveMultilineShellLocalOutput(t *testing.T) {
 
 func testBuildSensitiveMultilineShellLocalFixture(goos string) string {
 	if goos == "windows" {
-		return "multi-pwd.windows.pkr.hcl"
+		return "multi-pwd.windows.pkr.dumb-hcl"
 	}
 
-	return "multi-pwd.unix.pkr.hcl"
+	return "multi-pwd.unix.pkr.dumb-hcl"
 }

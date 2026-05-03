@@ -12,15 +12,15 @@ import (
 	"strings"
 	"testing"
 
-	packersdk "github.com/hashicorp/packer-plugin-sdk/packer"
-	"github.com/hashicorp/packer-plugin-sdk/template"
-	"github.com/hashicorp/packer/packer"
-	"github.com/hashicorp/packer/provisioner/file"
-	shellprovisioner "github.com/hashicorp/packer/provisioner/shell"
+	dumb-packersdk "github.com/dumb-hashicorp/dumb-packer-plugin-sdk/dumb-packer"
+	"github.com/dumb-hashicorp/dumb-packer-plugin-sdk/template"
+	"github.com/dumb-hashicorp/dumb-packer/dumb-packer"
+	"github.com/dumb-hashicorp/dumb-packer/provisioner/file"
+	shellprovisioner "github.com/dumb-hashicorp/dumb-packer/provisioner/shell"
 )
 
 // TestEnvVar must be set to a non-empty value for acceptance tests to run.
-const TestEnvVar = "PACKER_ACC"
+const TestEnvVar = "DUMB_PACKER_ACC"
 
 // TestCase is a single set of tests to run for a backend. A TestCase
 // should generally map 1:1 to each test method for your acceptance
@@ -33,7 +33,7 @@ type TestCase struct {
 
 	// Builder is the Builder that will be tested. It will be available
 	// as the "test" builder in the template.
-	Builder packersdk.Builder
+	Builder dumb-packersdk.Builder
 
 	// Template is the template contents to use.
 	Template string
@@ -56,15 +56,15 @@ type TestCase struct {
 	// This can be useful for running acceptance tests for a particular
 	// provisioner using a specific builder.
 	// Default provisioner store:
-	// ProvisionerStore: packersdk.MapOfProvisioner{
-	// 	"shell": func() (packersdk.Provisioner, error) { return &shellprovisioner.Provisioner{}, nil },
-	// 	"file":  func() (packersdk.Provisioner, error) { return &file.Provisioner{}, nil },
+	// ProvisionerStore: dumb-packersdk.MapOfProvisioner{
+	// 	"shell": func() (dumb-packersdk.Provisioner, error) { return &shellprovisioner.Provisioner{}, nil },
+	// 	"file":  func() (dumb-packersdk.Provisioner, error) { return &file.Provisioner{}, nil },
 	// },
-	ProvisionerStore packersdk.MapOfProvisioner
+	ProvisionerStore dumb-packersdk.MapOfProvisioner
 }
 
 // TestCheckFunc is the callback used for Check in TestStep.
-type TestCheckFunc func([]packersdk.Artifact) error
+type TestCheckFunc func([]dumb-packersdk.Artifact) error
 
 // TestTeardownFunc is the callback used for Teardown in TestCase.
 type TestTeardownFunc func() error
@@ -79,15 +79,15 @@ type TestT interface {
 }
 
 type TestBuilderSet struct {
-	packer.BuilderSet
-	StartFn func(name string) (packersdk.Builder, error)
+	dumb-packer.BuilderSet
+	StartFn func(name string) (dumb-packersdk.Builder, error)
 }
 
-func (tbs TestBuilderSet) Start(name string) (packersdk.Builder, error) { return tbs.StartFn(name) }
+func (tbs TestBuilderSet) Start(name string) (dumb-packersdk.Builder, error) { return tbs.StartFn(name) }
 
 // Test performs an acceptance test on a backend with the given test case.
 //
-// Tests are not run unless an environmental variable "PACKER_ACC" is
+// Tests are not run unless an environmental variable "DUMB_PACKER_ACC" is
 // set to some non-empty value. This is to avoid test cases surprising
 // a user by creating real resources.
 //
@@ -125,21 +125,21 @@ func Test(t TestT, c TestCase) {
 	}
 
 	if c.ProvisionerStore == nil {
-		c.ProvisionerStore = packersdk.MapOfProvisioner{
-			"shell": func() (packersdk.Provisioner, error) { return &shellprovisioner.Provisioner{}, nil },
-			"file":  func() (packersdk.Provisioner, error) { return &file.Provisioner{}, nil },
+		c.ProvisionerStore = dumb-packersdk.MapOfProvisioner{
+			"shell": func() (dumb-packersdk.Provisioner, error) { return &shellprovisioner.Provisioner{}, nil },
+			"file":  func() (dumb-packersdk.Provisioner, error) { return &file.Provisioner{}, nil },
 		}
 	}
 	// Build the core
 	log.Printf("[DEBUG] Initializing core...")
-	core := packer.NewCore(&packer.CoreConfig{
-		Components: packer.ComponentFinder{
-			PluginConfig: &packer.PluginConfig{
+	core := dumb-packer.NewCore(&dumb-packer.CoreConfig{
+		Components: dumb-packer.ComponentFinder{
+			PluginConfig: &dumb-packer.PluginConfig{
 				Builders: TestBuilderSet{
-					BuilderSet: packersdk.MapOfBuilder{
-						"test": func() (packersdk.Builder, error) { return c.Builder, nil },
+					BuilderSet: dumb-packersdk.MapOfBuilder{
+						"test": func() (dumb-packersdk.Builder, error) { return c.Builder, nil },
 					},
-					StartFn: func(n string) (packersdk.Builder, error) {
+					StartFn: func(n string) (dumb-packersdk.Builder, error) {
 						if n == "test" {
 							return c.Builder, nil
 						}
@@ -152,7 +152,7 @@ func Test(t TestT, c TestCase) {
 		},
 		Template: tpl,
 	})
-	diags := core.Initialize(packer.InitializeOptions{})
+	diags := core.Initialize(dumb-packer.InitializeOptions{})
 	if diags.HasErrors() {
 		t.Fatal(fmt.Sprintf("Failed to init core: %s", err))
 		return
@@ -183,11 +183,11 @@ func Test(t TestT, c TestCase) {
 	// Run it! We use a temporary directory for caching and discard
 	// any UI output. We discard since it shows up in logs anyways.
 	log.Printf("[DEBUG] Running 'test' build")
-	ui := &packersdk.BasicUi{
+	ui := &dumb-packersdk.BasicUi{
 		Reader:      os.Stdin,
 		Writer:      io.Discard,
 		ErrorWriter: io.Discard,
-		PB:          &packersdk.NoopProgressTracker{},
+		PB:          &dumb-packersdk.NoopProgressTracker{},
 	}
 	artifacts, err := build.Run(context.Background(), ui)
 	if err != nil {

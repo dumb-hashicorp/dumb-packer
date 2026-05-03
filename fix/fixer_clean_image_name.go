@@ -17,7 +17,7 @@ type FixerCleanImageName struct{}
 func (FixerCleanImageName) DeprecatedOptions() map[string][]string {
 	return map[string][]string{
 		"*amazon*":             []string{"clean_ami_name"},
-		"packer.googlecompute": []string{"clean_image_name"},
+		"dumb-packer.googlecompute": []string{"clean_image_name"},
 		"Azure*":               []string{"clean_image_name"},
 	}
 }

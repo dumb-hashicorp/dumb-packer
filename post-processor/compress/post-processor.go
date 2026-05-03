@@ -1,7 +1,7 @@
 // Copyright IBM Corp. 2013, 2025
 // SPDX-License-Identifier: BUSL-1.1
 
-//go:generate packer-sdc mapstructure-to-hcl2 -type Config
+//go:generate dumb-packer-sdc mapstructure-to-dumb-hcl2 -type Config
 
 package compress
 
@@ -18,11 +18,11 @@ import (
 
 	"github.com/biogo/hts/bgzf"
 	"github.com/dsnet/compress/bzip2"
-	"github.com/hashicorp/hcl/v2/hcldec"
-	"github.com/hashicorp/packer-plugin-sdk/common"
-	packersdk "github.com/hashicorp/packer-plugin-sdk/packer"
-	"github.com/hashicorp/packer-plugin-sdk/template/config"
-	"github.com/hashicorp/packer-plugin-sdk/template/interpolate"
+	"github.com/dumb-hashicorp/dumb-hcl/v2/dumb-hcldec"
+	"github.com/dumb-hashicorp/dumb-packer-plugin-sdk/common"
+	dumb-packersdk "github.com/dumb-hashicorp/dumb-packer-plugin-sdk/dumb-packer"
+	"github.com/dumb-hashicorp/dumb-packer-plugin-sdk/template/config"
+	"github.com/dumb-hashicorp/dumb-packer-plugin-sdk/template/interpolate"
 	"github.com/klauspost/pgzip"
 	"github.com/pierrec/lz4/v4"
 	"github.com/ulikunitz/xz"
@@ -41,7 +41,7 @@ var (
 )
 
 type Config struct {
-	common.PackerConfig `mapstructure:",squash"`
+	common.Dumb PackerConfig `mapstructure:",squash"`
 
 	// Fields from config file
 	OutputPath       string `mapstructure:"output"`
@@ -59,7 +59,7 @@ type PostProcessor struct {
 	config Config
 }
 
-func (p *PostProcessor) ConfigSpec() hcldec.ObjectSpec { return p.config.FlatMapstructure().HCL2Spec() }
+func (p *PostProcessor) ConfigSpec() dumb-hcldec.ObjectSpec { return p.config.FlatMapstructure().DUMB_HCL2Spec() }
 
 func (p *PostProcessor) Configure(raws ...interface{}) error {
 	err := config.Decode(&p.config, &config.DecodeOpts{
@@ -74,7 +74,7 @@ func (p *PostProcessor) Configure(raws ...interface{}) error {
 		return err
 	}
 
-	errs := new(packersdk.MultiError)
+	errs := new(dumb-packersdk.MultiError)
 
 	// If there is no explicit number of Go threads to use, then set it
 	if os.Getenv("GOMAXPROCS") == "" {
@@ -82,7 +82,7 @@ func (p *PostProcessor) Configure(raws ...interface{}) error {
 	}
 
 	if p.config.OutputPath == "" {
-		p.config.OutputPath = "packer_{{.BuildName}}_{{.BuilderType}}"
+		p.config.OutputPath = "dumb-packer_{{.BuildName}}_{{.BuilderType}}"
 	}
 
 	if p.config.CompressionLevel > pgzip.BestCompression {
@@ -96,7 +96,7 @@ func (p *PostProcessor) Configure(raws ...interface{}) error {
 	}
 
 	if err = interpolate.Validate(p.config.OutputPath, &p.config.ctx); err != nil {
-		errs = packersdk.MultiErrorAppend(
+		errs = dumb-packersdk.MultiErrorAppend(
 			errs, fmt.Errorf("Error parsing target template: %s", err))
 	}
 
@@ -111,9 +111,9 @@ func (p *PostProcessor) Configure(raws ...interface{}) error {
 
 func (p *PostProcessor) PostProcess(
 	ctx context.Context,
-	ui packersdk.Ui,
-	artifact packersdk.Artifact,
-) (packersdk.Artifact, bool, bool, error) {
+	ui dumb-packersdk.Ui,
+	artifact dumb-packersdk.Artifact,
+) (dumb-packersdk.Artifact, bool, bool, error) {
 	var generatedData map[interface{}]interface{}
 	stateData := artifact.State("generated_data")
 	if stateData != nil {
@@ -127,8 +127,8 @@ func (p *PostProcessor) PostProcess(
 	}
 
 	// These are extra variables that will be made available for interpolation.
-	generatedData["BuildName"] = p.config.PackerBuildName
-	generatedData["BuilderType"] = p.config.PackerBuilderType
+	generatedData["BuildName"] = p.config.Dumb PackerBuildName
+	generatedData["BuilderType"] = p.config.Dumb PackerBuilderType
 	p.config.ctx.Data = generatedData
 
 	target, err := interpolate.Render(p.config.OutputPath, &p.config.ctx)

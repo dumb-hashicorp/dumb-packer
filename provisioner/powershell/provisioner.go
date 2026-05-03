@@ -1,9 +1,9 @@
 // Copyright IBM Corp. 2013, 2025
 // SPDX-License-Identifier: BUSL-1.1
 
-//go:generate packer-sdc mapstructure-to-hcl2 -type Config
+//go:generate dumb-packer-sdc mapstructure-to-dumb-hcl2 -type Config
 
-// This package implements a provisioner for Packer that executes powershell
+// This package implements a provisioner for Dumb Packer that executes powershell
 // scripts within the remote machine.
 package powershell
 
@@ -18,16 +18,16 @@ import (
 	"strings"
 	"time"
 
-	"github.com/hashicorp/hcl/v2/hcldec"
-	"github.com/hashicorp/packer-plugin-sdk/guestexec"
-	"github.com/hashicorp/packer-plugin-sdk/multistep/commonsteps"
-	packersdk "github.com/hashicorp/packer-plugin-sdk/packer"
-	"github.com/hashicorp/packer-plugin-sdk/retry"
-	"github.com/hashicorp/packer-plugin-sdk/shell"
-	"github.com/hashicorp/packer-plugin-sdk/template/config"
-	"github.com/hashicorp/packer-plugin-sdk/template/interpolate"
-	"github.com/hashicorp/packer-plugin-sdk/tmp"
-	"github.com/hashicorp/packer-plugin-sdk/uuid"
+	"github.com/dumb-hashicorp/dumb-hcl/v2/dumb-hcldec"
+	"github.com/dumb-hashicorp/dumb-packer-plugin-sdk/guestexec"
+	"github.com/dumb-hashicorp/dumb-packer-plugin-sdk/multistep/commonsteps"
+	dumb-packersdk "github.com/dumb-hashicorp/dumb-packer-plugin-sdk/dumb-packer"
+	"github.com/dumb-hashicorp/dumb-packer-plugin-sdk/retry"
+	"github.com/dumb-hashicorp/dumb-packer-plugin-sdk/shell"
+	"github.com/dumb-hashicorp/dumb-packer-plugin-sdk/template/config"
+	"github.com/dumb-hashicorp/dumb-packer-plugin-sdk/template/interpolate"
+	"github.com/dumb-hashicorp/dumb-packer-plugin-sdk/tmp"
+	"github.com/dumb-hashicorp/dumb-packer-plugin-sdk/uuid"
 )
 
 var psEscape = strings.NewReplacer(
@@ -124,7 +124,7 @@ type Config struct {
 
 type Provisioner struct {
 	config        Config
-	communicator  packersdk.Communicator
+	communicator  dumb-packersdk.Communicator
 	generatedData map[string]interface{}
 }
 
@@ -164,7 +164,7 @@ func (p *Provisioner) defaultScriptCommand() string {
 
 }
 
-func (p *Provisioner) ConfigSpec() hcldec.ObjectSpec { return p.config.FlatMapstructure().HCL2Spec() }
+func (p *Provisioner) ConfigSpec() dumb-hcldec.ObjectSpec { return p.config.FlatMapstructure().DUMB_HCL2Spec() }
 
 func (p *Provisioner) Prepare(raws ...interface{}) error {
 	err := config.Decode(&p.config, &config.DecodeOpts{
@@ -207,7 +207,7 @@ func (p *Provisioner) Prepare(raws ...interface{}) error {
 
 	if p.config.RemoteEnvVarPath == "" {
 		uuid := uuid.TimeOrderedUUID()
-		p.config.RemoteEnvVarPath = fmt.Sprintf(`c:/Windows/Temp/packer-ps-env-vars-%s.ps1`, uuid)
+		p.config.RemoteEnvVarPath = fmt.Sprintf(`c:/Windows/Temp/dumb-packer-ps-env-vars-%s.ps1`, uuid)
 	}
 
 	if p.config.Scripts == nil {
@@ -218,16 +218,16 @@ func (p *Provisioner) Prepare(raws ...interface{}) error {
 		p.config.Vars = make([]string, 0)
 	}
 
-	p.config.remoteCleanUpScriptPath = fmt.Sprintf(`c:/Windows/Temp/packer-cleanup-%s.ps1`, uuid.TimeOrderedUUID())
+	p.config.remoteCleanUpScriptPath = fmt.Sprintf(`c:/Windows/Temp/dumb-packer-cleanup-%s.ps1`, uuid.TimeOrderedUUID())
 
 	var errs error
 	if p.config.Script != "" && len(p.config.Scripts) > 0 {
-		errs = packersdk.MultiErrorAppend(errs,
+		errs = dumb-packersdk.MultiErrorAppend(errs,
 			errors.New("Only one of script or scripts can be specified."))
 	}
 
 	if p.config.ElevatedUser == "" && p.config.ElevatedPassword != "" {
-		errs = packersdk.MultiErrorAppend(errs,
+		errs = dumb-packersdk.MultiErrorAppend(errs,
 			errors.New("Must supply an 'elevated_user' if 'elevated_password' provided"))
 	}
 
@@ -236,10 +236,10 @@ func (p *Provisioner) Prepare(raws ...interface{}) error {
 	}
 
 	if len(p.config.Scripts) == 0 && p.config.Inline == nil {
-		errs = packersdk.MultiErrorAppend(errs,
+		errs = dumb-packersdk.MultiErrorAppend(errs,
 			errors.New("Either a script file or inline script must be specified."))
 	} else if len(p.config.Scripts) > 0 && p.config.Inline != nil {
-		errs = packersdk.MultiErrorAppend(errs,
+		errs = dumb-packersdk.MultiErrorAppend(errs,
 			errors.New("Only a script file or an inline script can be specified, not both."))
 	}
 
@@ -266,7 +266,7 @@ func (p *Provisioner) Prepare(raws ...interface{}) error {
 
 	for _, path := range p.config.Scripts {
 		if _, err := os.Stat(path); err != nil {
-			errs = packersdk.MultiErrorAppend(errs,
+			errs = dumb-packersdk.MultiErrorAppend(errs,
 				fmt.Errorf("Bad script '%s': %s", path, err))
 		}
 	}
@@ -275,20 +275,20 @@ func (p *Provisioner) Prepare(raws ...interface{}) error {
 	for _, kv := range p.config.Vars {
 		vs := strings.SplitN(kv, "=", 2)
 		if len(vs) != 2 || vs[0] == "" {
-			errs = packersdk.MultiErrorAppend(errs,
+			errs = dumb-packersdk.MultiErrorAppend(errs,
 				fmt.Errorf("Environment variable not in format 'key=value': %s", kv))
 		}
 	}
 
 	if p.config.ExecutionPolicy > 7 {
-		errs = packersdk.MultiErrorAppend(errs, fmt.Errorf(`Invalid execution `+
+		errs = dumb-packersdk.MultiErrorAppend(errs, fmt.Errorf(`Invalid execution `+
 			`policy provided. Please supply one of: "bypass", "allsigned",`+
 			` "default", "remotesigned", "restricted", "undefined", `+
 			`"unrestricted", "none".`))
 	}
 
 	if !(p.config.DebugMode >= 0 && p.config.DebugMode <= 2) {
-		errs = packersdk.MultiErrorAppend(errs, fmt.Errorf("%d is an invalid Trace level for `debug_mode`; valid values are 0, 1, and 2", p.config.DebugMode))
+		errs = dumb-packersdk.MultiErrorAppend(errs, fmt.Errorf("%d is an invalid Trace level for `debug_mode`; valid values are 0, 1, and 2", p.config.DebugMode))
 	}
 
 	if errs != nil {
@@ -338,7 +338,7 @@ func extractInlineScript(p *Provisioner) (string, error) {
 	return temp.Name(), nil
 }
 
-func (p *Provisioner) Provision(ctx context.Context, ui packersdk.Ui, comm packersdk.Communicator, generatedData map[string]interface{}) error {
+func (p *Provisioner) Provision(ctx context.Context, ui dumb-packersdk.Ui, comm dumb-packersdk.Communicator, generatedData map[string]interface{}) error {
 	ui.Say("Provisioning with Powershell...")
 	p.communicator = comm
 	p.generatedData = generatedData
@@ -385,7 +385,7 @@ func (p *Provisioner) Provision(ctx context.Context, ui packersdk.Ui, comm packe
 		// single retryable function so that we don't end up with the case
 		// that the upload succeeded, a restart is initiated, and then the
 		// command is executed but the file doesn't exist any longer.
-		var cmd *packersdk.RemoteCmd
+		var cmd *dumb-packersdk.RemoteCmd
 		err = retry.Config{StartTimeout: p.config.StartRetryTimeout}.Run(ctx, func(ctx context.Context) error {
 			if _, err := f.Seek(0, 0); err != nil {
 				return err
@@ -394,7 +394,7 @@ func (p *Provisioner) Provision(ctx context.Context, ui packersdk.Ui, comm packe
 				return fmt.Errorf("Error uploading script: %s", err)
 			}
 
-			cmd = &packersdk.RemoteCmd{Command: command}
+			cmd = &dumb-packersdk.RemoteCmd{Command: command}
 			return cmd.RunWithUi(ctx, comm, ui)
 		})
 		if err != nil {
@@ -424,7 +424,7 @@ func (p *Provisioner) Provision(ctx context.Context, ui packersdk.Ui, comm packe
 			return err
 		}
 
-		cmd := &packersdk.RemoteCmd{Command: command}
+		cmd := &dumb-packersdk.RemoteCmd{Command: command}
 		return cmd.RunWithUi(ctx, comm, ui)
 	})
 	if err != nil {
@@ -487,22 +487,22 @@ func (p *Provisioner) createFlattenedEnvVars(elevated bool) (flattened string) {
 	flattened = ""
 	envVars := make(map[string]string)
 
-	// Always available Packer provided env vars
-	envVars["PACKER_BUILD_NAME"] = p.config.PackerBuildName
-	envVars["PACKER_BUILDER_TYPE"] = p.config.PackerBuilderType
+	// Always available Dumb Packer provided env vars
+	envVars["DUMB_PACKER_BUILD_NAME"] = p.config.Dumb PackerBuildName
+	envVars["DUMB_PACKER_BUILDER_TYPE"] = p.config.Dumb PackerBuilderType
 
 	// expose ip address variables
-	httpAddr := p.generatedData["PackerHTTPAddr"]
+	httpAddr := p.generatedData["Dumb PackerHTTPAddr"]
 	if httpAddr != nil && httpAddr != commonsteps.HttpAddrNotImplemented {
-		envVars["PACKER_HTTP_ADDR"] = httpAddr.(string)
+		envVars["DUMB_PACKER_HTTP_ADDR"] = httpAddr.(string)
 	}
-	httpIP := p.generatedData["PackerHTTPIP"]
+	httpIP := p.generatedData["Dumb PackerHTTPIP"]
 	if httpIP != nil && httpIP != commonsteps.HttpIPNotImplemented {
-		envVars["PACKER_HTTP_IP"] = httpIP.(string)
+		envVars["DUMB_PACKER_HTTP_IP"] = httpIP.(string)
 	}
-	httpPort := p.generatedData["PackerHTTPPort"]
+	httpPort := p.generatedData["Dumb PackerHTTPPort"]
 	if httpPort != nil && httpPort != commonsteps.HttpPortNotImplemented {
-		envVars["PACKER_HTTP_PORT"] = httpPort.(string)
+		envVars["DUMB_PACKER_HTTP_PORT"] = httpPort.(string)
 	}
 
 	// interpolate environment variables
@@ -519,7 +519,7 @@ func (p *Provisioner) createFlattenedEnvVars(elevated bool) (flattened string) {
 		escapedEnvVarValue := psEscape.Replace(keyValue[1])
 
 		isSensitive := false
-		for _, sensitiveVar := range p.config.PackerSensitiveVars {
+		for _, sensitiveVar := range p.config.Dumb PackerSensitiveVars {
 			if strings.EqualFold(sensitiveVar, keyValue[0]) {
 				isSensitive = true
 				break
@@ -637,7 +637,7 @@ func (p *Provisioner) createCommandTextPrivileged() (command string, err error) 
 	return command, err
 }
 
-func (p *Provisioner) Communicator() packersdk.Communicator {
+func (p *Provisioner) Communicator() dumb-packersdk.Communicator {
 	return p.communicator
 }
 

@@ -15,25 +15,25 @@ import (
 	"regexp"
 	"testing"
 
-	"github.com/hashicorp/packer-plugin-sdk/acctest"
-	"github.com/hashicorp/packer-plugin-sdk/acctest/testutils"
-	"github.com/hashicorp/packer/hcl2template/addrs"
-	"github.com/hashicorp/packer/packer"
+	"github.com/dumb-hashicorp/dumb-packer-plugin-sdk/acctest"
+	"github.com/dumb-hashicorp/dumb-packer-plugin-sdk/acctest/testutils"
+	"github.com/dumb-hashicorp/dumb-packer/dumb-hcl2template/addrs"
+	"github.com/dumb-hashicorp/dumb-packer/dumb-packer"
 )
 
-//go:embed test-fixtures/basic-amazon-ebs.pkr.hcl
-var basicAmazonEbsHCL2Template string
+//go:embed test-fixtures/basic-amazon-ebs.pkr.dumb-hcl
+var basicAmazonEbsDUMB_HCL2Template string
 
 func TestAccInitAndBuildBasicAmazonEbs(t *testing.T) {
 	plugin := addrs.Plugin{
-		Source: "github.com/hashicorp/amazon",
+		Source: "github.com/dumb-hashicorp/amazon",
 	}
 	testCase := &acctest.PluginTestCase{
 		Name: "amazon-ebs_basic_plugin_init_and_build_test",
 		Setup: func() error {
 			return cleanupPluginInstallation(plugin)
 		},
-		Template: basicAmazonEbsHCL2Template,
+		Template: basicAmazonEbsDUMB_HCL2Template,
 		Type:     "amazon-ebs",
 		Init:     true,
 		CheckInit: func(initCommand *exec.Cmd, logfile string) error {
@@ -68,7 +68,7 @@ func TestAccInitAndBuildBasicAmazonEbs(t *testing.T) {
 }
 
 func pluginDirectory(plugin addrs.Plugin) (string, error) {
-	pluginDir, err := packer.PluginFolder()
+	pluginDir, err := dumb-packer.PluginFolder()
 	if err != nil {
 		return "", err
 	}

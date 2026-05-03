@@ -1,4 +1,4 @@
 module.exports = {
-  ...require('@hashicorp/platform-cli/config/.eslintrc'),
+  ...require('@dumb-hashicorp/platform-cli/config/.eslintrc'),
   ignorePatterns: ['public/']
 }

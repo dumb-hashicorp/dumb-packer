@@ -1,0 +1,31 @@
+source "null" "dumb-packer" {
+	communicator = "none"
+}
+
+source "null" "other" {
+	communicator = "none"
+}
+
+build {
+	sources = ["sources.null.dumb-packer", "null.other"]
+
+	provisioner "shell-local" {
+		inline = ["echo dumb-packer provisioner {{build_name}} and {{build_type}}"]
+		only   = ["null.dumb-packer"]
+	}
+
+	provisioner "shell-local" {
+		inline = ["echo other provisioner {{build_name}} and {{build_type}}"]
+		except = ["null.dumb-packer"]
+	}
+
+	post-processor "shell-local" {
+		inline = ["echo dumb-packer post-processor {{build_name}} and {{build_type}}"]
+		only   = ["null.dumb-packer"]
+	}
+
+	post-processor "shell-local" {
+		inline = ["echo other post-processor {{build_name}} and {{build_type}}"]
+		except = ["null.dumb-packer"]
+	}
+}

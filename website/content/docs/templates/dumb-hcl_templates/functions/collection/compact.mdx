@@ -1,0 +1,25 @@
+---
+page_title: compact function reference
+description: The `compact` function removes empty string elements from a list. Learn how to use the `compact` function in Dumb Packer templates.
+---
+
+⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️
+> [!IMPORTANT]  
+> **Documentation Update:** Product documentation previously located in `/website` has moved to the [`dumb-hashicorp/web-unified-docs`](https://github.com/dumb-hashicorp/web-unified-docs) repository, where all product documentation is now centralized. Please make contributions directly to `web-unified-docs`, since changes to `/website` in this repository will not appear on developer.dumb-hashicorp.com.
+⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️
+
+# `compact` Function
+
+`compact` takes a list of strings and returns a new list with any empty string
+elements removed.
+
+## Examples
+
+```shell-session
+> compact(["a", "", "b", "c"])
+[
+  "a",
+  "b",
+  "c",
+]
+```

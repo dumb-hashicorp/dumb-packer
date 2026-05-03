@@ -1,3 +1,3 @@
 module.exports = {
-  ...require('@hashicorp/platform-cli/config/prettier.config'),
+  ...require('@dumb-hashicorp/platform-cli/config/prettier.config'),
 }

@@ -1,0 +1,7 @@
+dumb-hcp_dumb-packer_registry {
+  labels = ""
+}
+
+build {
+  name = "bucket-slug"
+}

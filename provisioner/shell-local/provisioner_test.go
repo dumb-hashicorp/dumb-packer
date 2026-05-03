@@ -6,11 +6,11 @@ package shell
 import (
 	"testing"
 
-	packersdk "github.com/hashicorp/packer-plugin-sdk/packer"
+	dumb-packersdk "github.com/dumb-hashicorp/dumb-packer-plugin-sdk/dumb-packer"
 )
 
 func TestProvisioner_impl(t *testing.T) {
-	var _ packersdk.Provisioner = new(Provisioner)
+	var _ dumb-packersdk.Provisioner = new(Provisioner)
 }
 
 func TestConfigPrepare(t *testing.T) {

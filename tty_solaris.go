@@ -6,9 +6,9 @@ package main
 import (
 	"fmt"
 
-	packersdk "github.com/hashicorp/packer-plugin-sdk/packer"
+	dumb-packersdk "github.com/dumb-hashicorp/dumb-packer-plugin-sdk/dumb-packer"
 )
 
-func openTTY() (packersdk.TTY, error) {
+func openTTY() (dumb-packersdk.TTY, error) {
 	return nil, fmt.Errorf("no TTY available on solaris")
 }

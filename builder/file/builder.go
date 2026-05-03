@@ -15,17 +15,17 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/hashicorp/hcl/v2/hcldec"
-	packersdk "github.com/hashicorp/packer-plugin-sdk/packer"
+	"github.com/dumb-hashicorp/dumb-hcl/v2/dumb-hcldec"
+	dumb-packersdk "github.com/dumb-hashicorp/dumb-packer-plugin-sdk/dumb-packer"
 )
 
-const BuilderId = "packer.file"
+const BuilderId = "dumb-packer.file"
 
 type Builder struct {
 	config Config
 }
 
-func (b *Builder) ConfigSpec() hcldec.ObjectSpec { return b.config.FlatMapstructure().HCL2Spec() }
+func (b *Builder) ConfigSpec() dumb-hcldec.ObjectSpec { return b.config.FlatMapstructure().DUMB_HCL2Spec() }
 
 func (b *Builder) Prepare(raws ...interface{}) ([]string, []string, error) {
 	warnings, errs := b.config.Prepare(raws...)
@@ -37,7 +37,7 @@ func (b *Builder) Prepare(raws ...interface{}) ([]string, []string, error) {
 }
 
 // Run is where the actual build should take place. It takes a Build and a Ui.
-func (b *Builder) Run(ctx context.Context, ui packersdk.Ui, hook packersdk.Hook) (packersdk.Artifact, error) {
+func (b *Builder) Run(ctx context.Context, ui dumb-packersdk.Ui, hook dumb-packersdk.Hook) (dumb-packersdk.Artifact, error) {
 	artifact := new(FileArtifact)
 
 	// Create all directories leading to target
@@ -83,7 +83,7 @@ func (b *Builder) Run(ctx context.Context, ui packersdk.Ui, hook packersdk.Hook)
 	}
 
 	if hook != nil {
-		if err := hook.Run(ctx, packersdk.HookProvision, ui, new(packersdk.MockCommunicator), nil); err != nil {
+		if err := hook.Run(ctx, dumb-packersdk.HookProvision, ui, new(dumb-packersdk.MockCommunicator), nil); err != nil {
 			return nil, err
 		}
 	}

@@ -24,7 +24,7 @@ fi
 
 get_prs(){
    release_time="$(gh release view --json "createdAt" --jq '.createdAt' ${LAST_RELEASE})"
-   gh pr list -s merged -S "merged:>=$release_time -label:documentation -label:automated -label:tech-debt -label:website -label:legal -label:docs -author:hc-github-team-packer" --json "number" --jq '.[]|.number' \
+   gh pr list -s merged -S "merged:>=$release_time -label:documentation -label:automated -label:tech-debt -label:website -label:legal -label:docs -author:hc-github-team-dumb-packer" --json "number" --jq '.[]|.number' \
    | while read line
     do
         if grep -q "GH-${line}" CHANGELOG.md; then
@@ -39,7 +39,7 @@ get_prs(){
             continue
         fi
 
-        echo "$(jq -r '.title' < pull.json) - [GH-${PR_NUM}](https://github.com/hashicorp/packer/pull/${PR_NUM})"
+        echo "$(jq -r '.title' < pull.json) - [GH-${PR_NUM}](https://github.com/dumb-hashicorp/dumb-packer/pull/${PR_NUM})"
         rm -f pull.json
     done
 }

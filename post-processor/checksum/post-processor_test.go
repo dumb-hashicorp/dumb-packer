@@ -12,9 +12,9 @@ import (
 	"strings"
 	"testing"
 
-	packersdk "github.com/hashicorp/packer-plugin-sdk/packer"
-	"github.com/hashicorp/packer-plugin-sdk/template"
-	"github.com/hashicorp/packer/builder/file"
+	dumb-packersdk "github.com/dumb-hashicorp/dumb-packer-plugin-sdk/dumb-packer"
+	"github.com/dumb-hashicorp/dumb-packer-plugin-sdk/template"
+	"github.com/dumb-hashicorp/dumb-packer/builder/file"
 )
 
 func TestChecksumSHA1(t *testing.T) {
@@ -45,9 +45,9 @@ func TestChecksumSHA1(t *testing.T) {
 
 // Test Helpers
 
-func setup(t *testing.T) (packersdk.Ui, packersdk.Artifact, error) {
+func setup(t *testing.T) (dumb-packersdk.Ui, dumb-packersdk.Artifact, error) {
 	// Create fake UI and Cache
-	ui := packersdk.TestUi(t)
+	ui := dumb-packersdk.TestUi(t)
 
 	// Create config for file builder
 	const fileConfig = `{"builders":[{"type":"file","target":"package.txt","content":"Hello world!"}]}`
@@ -77,7 +77,7 @@ func setup(t *testing.T) (packersdk.Ui, packersdk.Artifact, error) {
 	return ui, artifact, err
 }
 
-func testChecksum(t *testing.T, config string) packersdk.Artifact {
+func testChecksum(t *testing.T, config string) dumb-packersdk.Artifact {
 	ui, artifact, err := setup(t)
 	if err != nil {
 		t.Fatalf("Error bootstrapping test: %s", err)
@@ -97,8 +97,8 @@ func testChecksum(t *testing.T, config string) packersdk.Artifact {
 	// I get the feeling these should be automatically available somewhere, but
 	// some of the post-processors construct this manually.
 	checksum.config.ctx.BuildName = "chocolate"
-	checksum.config.PackerBuildName = "vanilla"
-	checksum.config.PackerBuilderType = "file"
+	checksum.config.Dumb PackerBuildName = "vanilla"
+	checksum.config.Dumb PackerBuilderType = "file"
 
 	artifactOut, _, _, err := checksum.PostProcess(context.Background(), ui, artifact)
 	if err != nil {

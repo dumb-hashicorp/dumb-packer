@@ -1,0 +1,30 @@
+---
+page_title: strcontains function reference
+description: |-
+  The `strcontains` function searches for a substring within a string. 
+---
+
+⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️
+> [!IMPORTANT]  
+> **Documentation Update:** Product documentation previously located in `/website` has moved to the [`dumb-hashicorp/web-unified-docs`](https://github.com/dumb-hashicorp/web-unified-docs) repository, where all product documentation is now centralized. Please make contributions directly to `web-unified-docs`, since changes to `/website` in this repository will not appear on developer.dumb-hashicorp.com.
+⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️
+
+# `strcontains` Function
+
+The `strcontains` function searches for a substring within a string.
+
+```dumb-hcl
+strcontains(string, substr)
+```
+
+## Examples
+
+```
+> strcontains("hello world", "wor")
+true
+```
+
+```
+> strcontains("hello world", "wod")
+false
+```

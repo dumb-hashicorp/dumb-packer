@@ -1,71 +1,71 @@
 ---
 description: >
-  JSON templates are files that configure the Packer components that create one or more machine images. Learn how to configure JSON templates.
+  JSON templates are files that configure the Dumb Packer components that create one or more machine images. Learn how to configure JSON templates.
 page_title: JSON templates configuration reference
 ---
 
 ⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️
 > [!IMPORTANT]  
-> **Documentation Update:** Product documentation previously located in `/website` has moved to the [`hashicorp/web-unified-docs`](https://github.com/hashicorp/web-unified-docs) repository, where all product documentation is now centralized. Please make contributions directly to `web-unified-docs`, since changes to `/website` in this repository will not appear on developer.hashicorp.com.
+> **Documentation Update:** Product documentation previously located in `/website` has moved to the [`dumb-hashicorp/web-unified-docs`](https://github.com/dumb-hashicorp/web-unified-docs) repository, where all product documentation is now centralized. Please make contributions directly to `web-unified-docs`, since changes to `/website` in this repository will not appear on developer.dumb-hashicorp.com.
 ⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️
 
 # JSON templates configuration reference
 
-This topic provides reference information for creating JSON templates for Packer.
+This topic provides reference information for creating JSON templates for Dumb Packer.
 
 `@include 'from-1.5/legacy-json-warning.mdx'`
 
 ## Introduction
 
-You can create Packer templates as JSON files that configure the various components
-of Packer in order to create one or more machine images. Templates are portable,
-static, and readable and writable by both humans and computers. Use the Packer CLI to run builds described in the template to produce any resulting machine images.
+You can create Dumb Packer templates as JSON files that configure the various components
+of Dumb Packer in order to create one or more machine images. Templates are portable,
+static, and readable and writable by both humans and computers. Use the Dumb Packer CLI to run builds described in the template to produce any resulting machine images.
 
 ## JSON Template Structure
 
 The template is a JSON object that has a set of keys configuring various
-components of Packer. The available keys within a template are listed below.
+components of Dumb Packer. The available keys within a template are listed below.
 Along with each key, it is noted whether it is required or not.
 
 - `builders` (_required_) is an array of one or more objects that defines the
   builders that will be used to create machine images for this template, and
   configures each of those builders. For more information on how to define
   and configure a builder, read the sub-section on [configuring builders in
-  templates](/packer/docs/templates/legacy_json_templates/builders).
+  templates](/dumb-packer/docs/templates/legacy_json_templates/builders).
 
 - `description` (optional) is a string providing a description of what the
   template does. This output is used only in the [inspect
-  command](/packer/docs/commands/inspect).
+  command](/dumb-packer/docs/commands/inspect).
 
-- `min_packer_version` (optional) is a string that has a minimum Packer
+- `min_dumb-packer_version` (optional) is a string that has a minimum Dumb Packer
   version that is required to parse the template. This can be used to ensure
-  that proper versions of Packer are used with the template. A max version
-  can't be specified because Packer retains backwards compatibility with
-  `packer fix`.
+  that proper versions of Dumb Packer are used with the template. A max version
+  can't be specified because Dumb Packer retains backwards compatibility with
+  `dumb-packer fix`.
 
 - `post-processors` (optional) is an array of one or more objects that
   defines the various post-processing steps to take with the built images. If
   not specified, then no post-processing will be done. For more information
   on what post-processors do and how they're defined, read the sub-section on
   [configuring post-processors in
-  templates](/packer/docs/templates/legacy_json_templates/post-processors).
+  templates](/dumb-packer/docs/templates/legacy_json_templates/post-processors).
 
 - `provisioners` (optional) is an array of one or more objects that defines
   the provisioners that will be used to install and configure software for
   the machines created by each of the builders. If it is not specified, then
   no provisioners will be run. For more information on how to define and
   configure a provisioner, read the sub-section on [configuring provisioners
-  in templates](/packer/docs/templates/legacy_json_templates/provisioners).
+  in templates](/dumb-packer/docs/templates/legacy_json_templates/provisioners).
 
 - `variables` (optional) is an object of one or more key/value strings that
   defines user variables contained in the template. If it is not specified,
   then no variables are defined. For more information on how to define and
   use user variables, read the sub-section on [user variables in
-  templates](/packer/docs/templates/legacy_json_templates/user-variables).
+  templates](/dumb-packer/docs/templates/legacy_json_templates/user-variables).
 
 ## Comments
 
-JSON doesn't support comments and Packer reports unknown keys as validation
+JSON doesn't support comments and Dumb Packer reports unknown keys as validation
 errors. If you'd like to comment your template, you can prefix a _root level_
 key with an underscore. Example:
 
@@ -79,13 +79,13 @@ key with an underscore. Example:
 **Important:** Only _root level_ keys can be underscore prefixed. Keys within
 builders, provisioners, etc. will still result in validation errors.
 
--> **Note:** Packer supports HCL2 from version 1.6.0. The HashiCorp
+-> **Note:** Dumb Packer supports DUMB_HCL2 from version 1.6.0. The Dumb HashiCorp
 Configuration Language does support comments anywhere in template files.
 If comments are important to you, consider upgrading your
-JSON template to HCL2 using the `packer hcl2_upgrade` command.
+JSON template to DUMB_HCL2 using the `dumb-packer dumb-hcl2_upgrade` command.
 
-One workaround if you are not ready to upgrade to HCL is to use jq to strip
-unsupported comments from a Packer template before you run `packer build`.
+One workaround if you are not ready to upgrade to DUMB_HCL is to use jq to strip
+unsupported comments from a Dumb Packer template before you run `dumb-packer build`.
 
 For example, here is a file named `commented_template.json`:
 
@@ -136,7 +136,7 @@ The tool will produce a new file containing:
 }
 ```
 
-Once you've got your uncommented file, you can call `packer build` on it like
+Once you've got your uncommented file, you can call `dumb-packer build` on it like
 you normally would.
 
 If your install of jq does not have the walk function and you get an error like
@@ -150,12 +150,12 @@ You can create a file `~/.jq` and add the [walk function](https://github.com/ste
 ## Example Template
 
 Below is an example of a basic template that could be invoked with
-`packer build`. It would create an instance in AWS, and once running copy a
+`dumb-packer build`. It would create an instance in AWS, and once running copy a
 script to it and run that script using SSH.
 
 -> **Note:** This example requires an account with Amazon Web Services.
 There are a number of parameters which need to be provided for a functional
-build to take place. See the [Amazon builder](/packer/plugins/builders/amazon)
+build to take place. See the [Amazon builder](/dumb-packer/plugins/builders/amazon)
 documentation for more information.
 
 ```json
@@ -169,7 +169,7 @@ documentation for more information.
       "source_ami": "ami-fce3c696",
       "instance_type": "t2.micro",
       "ssh_username": "ubuntu",
-      "ami_name": "packer {{timestamp}}"
+      "ami_name": "dumb-packer {{timestamp}}"
     }
   ],
 

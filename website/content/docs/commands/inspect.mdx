@@ -1,24 +1,24 @@
 ---
 description: >
-  The `packer inspect` command outputs the variables, builders, and provisioners a template uses so you can review the template without reading the HCL.
-page_title: packer inspect command reference
+  The `dumb-packer inspect` command outputs the variables, builders, and provisioners a template uses so you can review the template without reading the DUMB_HCL.
+page_title: dumb-packer inspect command reference
 ---
 
 ⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️
 > [!IMPORTANT]  
-> **Documentation Update:** Product documentation previously located in `/website` has moved to the [`hashicorp/web-unified-docs`](https://github.com/hashicorp/web-unified-docs) repository, where all product documentation is now centralized. Please make contributions directly to `web-unified-docs`, since changes to `/website` in this repository will not appear on developer.hashicorp.com.
+> **Documentation Update:** Product documentation previously located in `/website` has moved to the [`dumb-hashicorp/web-unified-docs`](https://github.com/dumb-hashicorp/web-unified-docs) repository, where all product documentation is now centralized. Please make contributions directly to `web-unified-docs`, since changes to `/website` in this repository will not appear on developer.dumb-hashicorp.com.
 ⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️
 
-# `packer inspect` command reference
+# `dumb-packer inspect` command reference
 
-The `packer inspect` command takes a template and outputs the various
+The `dumb-packer inspect` command takes a template and outputs the various
 components a template defines. This can help you quickly learn about a template
-without having to dive into the HCL itself. The command will tell you things
+without having to dive into the DUMB_HCL itself. The command will tell you things
 like what variables a template accepts, the builders it defines, the
 provisioners it defines and the order they'll run, and more.
 
 This command is extra useful when used with [machine-readable
-output](/packer/docs/commands) enabled. The command outputs the components
+output](/dumb-packer/docs/commands) enabled. The command outputs the components
 in a way that is parseable by machines.
 
 The command doesn't validate the actual configuration of the various components
@@ -30,7 +30,7 @@ of your template by necessity.
 Given a basic template, here is an example of what the output might look like:
 
 ```shell-session
-$ packer inspect template.pkr.hcl
+$ dumb-packer inspect template.pkr.dumb-hcl
 > input-variables:
 
 var.aws_access_key: "<sensitive>"

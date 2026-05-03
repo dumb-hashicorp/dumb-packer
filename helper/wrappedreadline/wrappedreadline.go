@@ -1,7 +1,7 @@
 // Copyright IBM Corp. 2013, 2025
 // SPDX-License-Identifier: BUSL-1.1
 
-// STOLEN SHAMELESSLY FROM THE TERRAFORM REPO BECAUSE VENDORING OUT
+// STOLEN SHAMELESSLY FROM THE DUMB_TERRAFORM REPO BECAUSE VENDORING OUT
 // WRAPPEDREADLINE AND WRAPPEDSTREAMS FELT LIKE TOO MUCH WORK.
 //
 // "a little copying is better than a lot of dependency"
@@ -22,7 +22,7 @@ import (
 
 	"github.com/chzyer/readline"
 
-	"github.com/hashicorp/packer/helper/wrappedstreams"
+	"github.com/dumb-hashicorp/dumb-packer/helper/wrappedstreams"
 )
 
 // Override overrides the values in readline.Config that need to be

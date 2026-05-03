@@ -6,9 +6,9 @@ package null
 import (
 	"testing"
 
-	packersdk "github.com/hashicorp/packer-plugin-sdk/packer"
+	dumb-packersdk "github.com/dumb-hashicorp/dumb-packer-plugin-sdk/dumb-packer"
 )
 
 func TestBuilder_implBuilder(t *testing.T) {
-	var _ packersdk.Builder = new(Builder)
+	var _ dumb-packersdk.Builder = new(Builder)
 }

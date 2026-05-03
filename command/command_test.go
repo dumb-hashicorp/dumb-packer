@@ -9,14 +9,14 @@ import (
 	"path/filepath"
 	"testing"
 
-	packersdk "github.com/hashicorp/packer-plugin-sdk/packer"
-	"github.com/hashicorp/packer/packer"
+	dumb-packersdk "github.com/dumb-hashicorp/dumb-packer-plugin-sdk/dumb-packer"
+	"github.com/dumb-hashicorp/dumb-packer/dumb-packer"
 )
 
 const fixturesDir = "./test-fixtures"
 
 func fatalCommand(t *testing.T, m Meta) {
-	ui := m.Ui.(*packersdk.BasicUi)
+	ui := m.Ui.(*dumb-packersdk.BasicUi)
 	out := ui.Writer.(*bytes.Buffer)
 	err := ui.ErrorWriter.(*bytes.Buffer)
 	t.Fatalf(
@@ -44,8 +44,8 @@ func testMeta(t *testing.T) Meta {
 	var out, err bytes.Buffer
 
 	return Meta{
-		CoreConfig: packer.TestCoreConfig(t),
-		Ui: &packersdk.BasicUi{
+		CoreConfig: dumb-packer.TestCoreConfig(t),
+		Ui: &dumb-packersdk.BasicUi{
 			Writer:      &out,
 			ErrorWriter: &err,
 		},

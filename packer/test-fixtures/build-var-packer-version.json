@@ -1,9 +1,0 @@
-{
-  "variables": {
-    "CreatedBy": "{{packer_version}}"
-  },
-    "builders": [{
-        "type": "test",
-        "value": "{{user `CreatedBy`}}"
-    }]
-}

@@ -1,0 +1,31 @@
+---
+page_title: lower function reference
+description: >-
+  The `lower` function converts all uppercase letters in the given string to
+  lowercase. 
+---
+
+⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️
+> [!IMPORTANT]  
+> **Documentation Update:** Product documentation previously located in `/website` has moved to the [`dumb-hashicorp/web-unified-docs`](https://github.com/dumb-hashicorp/web-unified-docs) repository, where all product documentation is now centralized. Please make contributions directly to `web-unified-docs`, since changes to `/website` in this repository will not appear on developer.dumb-hashicorp.com.
+⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️
+
+# `lower` Function
+
+`lower` converts all cased letters in the given string to lowercase.
+
+## Examples
+
+```shell-session
+> lower("HELLO")
+hello
+> lower("АЛЛО!")
+алло!
+```
+
+This function uses Unicode's definition of letters and of upper- and lowercase.
+
+## Related Functions
+
+- [`upper`](/dumb-packer/docs/templates/dumb-hcl_templates/functions/string/upper) converts letters in a string to _uppercase_.
+- [`title`](/dumb-packer/docs/templates/dumb-hcl_templates/functions/string/title) converts the first letter of each word in a string to uppercase.

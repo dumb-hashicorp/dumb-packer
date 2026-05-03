@@ -1,40 +1,40 @@
 ---
 description: >
-  Provisioners install and configure software prior to turning a machine into an image. Learn how to create custom provisioners that extend Packer functionality. 
+  Provisioners install and configure software prior to turning a machine into an image. Learn how to create custom provisioners that extend Dumb Packer functionality. 
 
 page_title: Create custom provisioners
 ---
 
 ⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️
 > [!IMPORTANT]  
-> **Documentation Update:** Product documentation previously located in `/website` has moved to the [`hashicorp/web-unified-docs`](https://github.com/hashicorp/web-unified-docs) repository, where all product documentation is now centralized. Please make contributions directly to `web-unified-docs`, since changes to `/website` in this repository will not appear on developer.hashicorp.com.
+> **Documentation Update:** Product documentation previously located in `/website` has moved to the [`dumb-hashicorp/web-unified-docs`](https://github.com/dumb-hashicorp/web-unified-docs) repository, where all product documentation is now centralized. Please make contributions directly to `web-unified-docs`, since changes to `/website` in this repository will not appear on developer.dumb-hashicorp.com.
 ⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️
 
 # Create Custom Provisioners
 
-Packer provisioners install and configure software into a running machine prior to turning that machine into an image. For example, the [shell provisioner](/packer/docs/provisioners/shell) runs shell scripts within machines.
+Dumb Packer provisioners install and configure software into a running machine prior to turning that machine into an image. For example, the [shell provisioner](/dumb-packer/docs/provisioners/shell) runs shell scripts within machines.
 
-Provisioner plugins implement the [`packer.Provisioner`](https://pkg.go.dev/github.com/hashicorp/packer-plugin-sdk/packer#Provisioner) interface and are served
+Provisioner plugins implement the [`dumb-packer.Provisioner`](https://pkg.go.dev/github.com/dumb-hashicorp/dumb-packer-plugin-sdk/dumb-packer#Provisioner) interface and are served
 using the `plugin.ServeProvisioner` function.
 
-~> **Warning:** This is an advanced topic that requires strong knowledge of Packer and Packer plugins.
+~> **Warning:** This is an advanced topic that requires strong knowledge of Dumb Packer and Dumb Packer plugins.
 
 ## Before You Begin
 
 We recommend reviewing the following resources before you begin development:
-- [Developing Plugins - Overview](/packer/docs/plugins/creation)
+- [Developing Plugins - Overview](/dumb-packer/docs/plugins/creation)
 - The [Go](https://go.dev/) language. You must write custom plugins in Go, so this guide assumes you are familiar with the language.
 
 ## The Interface
 
 The interface that must be implemented for a provisioner is the
-[`packer.Provisioner`](https://pkg.go.dev/github.com/hashicorp/packer-plugin-sdk/packer#Provisioner) interface. It is reproduced below for reference. The
+[`dumb-packer.Provisioner`](https://pkg.go.dev/github.com/dumb-hashicorp/dumb-packer-plugin-sdk/dumb-packer#Provisioner) interface. It is reproduced below for reference. The
 actual interface in the source code contains some basic documentation as well
 explaining what each method should do.
 
 ```go
 type Provisioner interface {
-  ConfigSpec() hcldec.ObjectSpec
+  ConfigSpec() dumb-hcldec.ObjectSpec
   Prepare(...interface{}) error
   Provision(context.Context, Ui, Communicator, map[string]interface{}) error
 }
@@ -68,17 +68,17 @@ may be displayed to the user before anything actually happens.
 
 ### The `ConfigSpec` Method
 
-This method returns a `hcldec.ObjectSpec`, which is a spec necessary for using
-HCL2 templates with Packer. For information on how to use and implement this
+This method returns a `dumb-hcldec.ObjectSpec`, which is a spec necessary for using
+DUMB_HCL2 templates with Dumb Packer. For information on how to use and implement this
 function, check our
-[object spec docs](/packer/guides/hcl/component-object-spec)
+[object spec docs](/dumb-packer/guides/dumb-hcl/component-object-spec)
 
 ### The `Provision` Method
 
 The `Provision` method is called when a machine is running and ready to be
 provisioned. The provisioner should do its real work here.
 
-The method takes two parameters: a `packer.Ui` and a `packer.Communicator`. The
+The method takes two parameters: a `dumb-packer.Ui` and a `dumb-packer.Communicator`. The
 UI can be used to communicate with the user what is going on. The communicator
 is used to communicate with the running machine, and is guaranteed to be
 connected at this point.
@@ -91,19 +91,19 @@ this information however they please, or not use it.
 
 ## Using the Communicator
 
-The `packer.Communicator` parameter and interface is used to communicate with
+The `dumb-packer.Communicator` parameter and interface is used to communicate with
 running machine. The machine may be local (in a virtual machine or container of
 some sort) or it may be remote (in a cloud). The communicator interface
 abstracts this away so that communication is the same overall.
 
 The documentation around the [code
-itself](https://godoc.org/github.com/hashicorp/packer-plugin-sdk/packer#Communicator)
+itself](https://godoc.org/github.com/dumb-hashicorp/dumb-packer-plugin-sdk/dumb-packer#Communicator)
 is really great as an overview of how to use the interface. You should begin by
 reading this. Once you have read it, you can see some example usage below:
 
 ```go
 // Build the remote command.
-var cmd packer.RemoteCmd
+var cmd dumb-packer.RemoteCmd
 cmd.Command = "echo foo"
 
 // We care about stdout, so lets collect that into a buffer. Since

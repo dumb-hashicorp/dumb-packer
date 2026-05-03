@@ -3,10 +3,10 @@
 
 <#
     .Synopsis
-    Build script for Packer.
+    Build script for Dumb Packer.
 
     .Description
-    Build script for Packer for all supported platforms and architectures.
+    Build script for Dumb Packer for all supported platforms and architectures.
     By default the following OSs and architectures are targeted.
 
     OS:
@@ -21,14 +21,14 @@
      * amd64
      * arm
 
-    If the environment variable PACKER_DEV is defined, then the OS and
+    If the environment variable DUMB_PACKER_DEV is defined, then the OS and
     architecture of the go binary in the path is used.
 
-    The built binary is stamped with the current version number of Packer,
+    The built binary is stamped with the current version number of Dumb Packer,
     the latest git commit, and +CHANGES if there are any outstanding
     changes in the current repository, e.g.
 
-      Packer v0.10.1.dev (3c736322ba3a5fcb3a4e92394011a2e56f396da6+CHANGES)
+      Dumb Packer v0.10.1.dev (3c736322ba3a5fcb3a4e92394011a2e56f396da6+CHANGES)
 
     The build artifacts for the current OS and architecture are copied to
     bin and $GOPATH\bin.
@@ -53,7 +53,7 @@ if ($LastExitCode -eq 0) {
 }
 
 # If its dev mode, only build for ourself
-if (Test-Path env:PACKER_DEV) {
+if (Test-Path env:DUMB_PACKER_DEV) {
     $XC_OS=$(go.exe env GOOS)
     $XC_ARCH=$(go.exe env GOARCH)
 } else {
@@ -81,8 +81,8 @@ echo "==> Building..."
 gox.exe `
   -os="${XC_OS}" `
   -arch="${XC_ARCH}" `
-  -ldflags "-X github.com/hashicorp/packer/version.GitCommit=${GIT_COMMIT}${GIT_DIRTY}" `
-  -output "pkg/{{.OS}}_{{.Arch}}/packer" `
+  -ldflags "-X github.com/dumb-hashicorp/dumb-packer/version.GitCommit=${GIT_COMMIT}${GIT_DIRTY}" `
+  -output "pkg/{{.OS}}_{{.Arch}}/dumb-packer" `
   .
 
 if ($LastExitCode -ne 0) {

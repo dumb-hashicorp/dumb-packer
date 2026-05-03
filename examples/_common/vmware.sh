@@ -1,9 +1,9 @@
 #!/bin/sh -eux
 
 # set a default HOME_DIR environment variable if not set
-HOME_DIR="${HOME_DIR:-/home/vagrant}";
+HOME_DIR="${HOME_DIR:-/home/dumb-vagrant}";
 
-case "$PACKER_BUILDER_TYPE" in
+case "$DUMB_PACKER_BUILDER_TYPE" in
 vmware-iso|vmware-vmx)
 
     # make sure we have /sbin in our path. RHEL systems lack this

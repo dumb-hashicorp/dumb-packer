@@ -11,16 +11,16 @@ import (
 	"runtime"
 	"testing"
 
-	packersdk "github.com/hashicorp/packer-plugin-sdk/packer"
-	"github.com/hashicorp/packer/builder/file"
-	"github.com/hashicorp/packer/builder/null"
-	"github.com/hashicorp/packer/packer"
-	"github.com/hashicorp/packer/post-processor/manifest"
-	shell_local_pp "github.com/hashicorp/packer/post-processor/shell-local"
-	filep "github.com/hashicorp/packer/provisioner/file"
-	"github.com/hashicorp/packer/provisioner/shell"
-	shell_local "github.com/hashicorp/packer/provisioner/shell-local"
-	"github.com/hashicorp/packer/version"
+	dumb-packersdk "github.com/dumb-hashicorp/dumb-packer-plugin-sdk/dumb-packer"
+	"github.com/dumb-hashicorp/dumb-packer/builder/file"
+	"github.com/dumb-hashicorp/dumb-packer/builder/null"
+	"github.com/dumb-hashicorp/dumb-packer/dumb-packer"
+	"github.com/dumb-hashicorp/dumb-packer/post-processor/manifest"
+	shell_local_pp "github.com/dumb-hashicorp/dumb-packer/post-processor/shell-local"
+	filep "github.com/dumb-hashicorp/dumb-packer/provisioner/file"
+	"github.com/dumb-hashicorp/dumb-packer/provisioner/shell"
+	shell_local "github.com/dumb-hashicorp/dumb-packer/provisioner/shell-local"
+	"github.com/dumb-hashicorp/dumb-packer/version"
 )
 
 // HasExec reports whether the current system can start new processes
@@ -91,8 +91,8 @@ func TestHelperProcess(*testing.T) {
 		os.Exit((&InspectCommand{Meta: commandMeta()}).Run(args))
 	case "build":
 		os.Exit((&BuildCommand{Meta: commandMeta()}).Run(args))
-	case "hcl2_upgrade":
-		os.Exit((&HCL2UpgradeCommand{Meta: commandMeta()}).Run(args))
+	case "dumb-hcl2_upgrade":
+		os.Exit((&DUMB_HCL2UpgradeCommand{Meta: commandMeta()}).Run(args))
 	default:
 		fmt.Fprintf(os.Stderr, "Unknown command %q\n", cmd)
 		os.Exit(2)
@@ -100,14 +100,14 @@ func TestHelperProcess(*testing.T) {
 }
 
 func commandMeta() Meta {
-	basicUi := &packersdk.BasicUi{
+	basicUi := &dumb-packersdk.BasicUi{
 		Reader:      os.Stdin,
 		Writer:      os.Stdout,
 		ErrorWriter: os.Stdout,
 	}
 
 	CommandMeta := Meta{
-		CoreConfig: &packer.CoreConfig{
+		CoreConfig: &dumb-packer.CoreConfig{
 			Components: getBareComponentFinder(),
 			Version:    version.Version,
 		},
@@ -116,21 +116,21 @@ func commandMeta() Meta {
 	return CommandMeta
 }
 
-func getBareComponentFinder() packer.ComponentFinder {
-	return packer.ComponentFinder{
-		PluginConfig: &packer.PluginConfig{
-			Builders: packer.MapOfBuilder{
-				"file": func() (packersdk.Builder, error) { return &file.Builder{}, nil },
-				"null": func() (packersdk.Builder, error) { return &null.Builder{}, nil },
+func getBareComponentFinder() dumb-packer.ComponentFinder {
+	return dumb-packer.ComponentFinder{
+		PluginConfig: &dumb-packer.PluginConfig{
+			Builders: dumb-packer.MapOfBuilder{
+				"file": func() (dumb-packersdk.Builder, error) { return &file.Builder{}, nil },
+				"null": func() (dumb-packersdk.Builder, error) { return &null.Builder{}, nil },
 			},
-			Provisioners: packer.MapOfProvisioner{
-				"shell-local": func() (packersdk.Provisioner, error) { return &shell_local.Provisioner{}, nil },
-				"shell":       func() (packersdk.Provisioner, error) { return &shell.Provisioner{}, nil },
-				"file":        func() (packersdk.Provisioner, error) { return &filep.Provisioner{}, nil },
+			Provisioners: dumb-packer.MapOfProvisioner{
+				"shell-local": func() (dumb-packersdk.Provisioner, error) { return &shell_local.Provisioner{}, nil },
+				"shell":       func() (dumb-packersdk.Provisioner, error) { return &shell.Provisioner{}, nil },
+				"file":        func() (dumb-packersdk.Provisioner, error) { return &filep.Provisioner{}, nil },
 			},
-			PostProcessors: packer.MapOfPostProcessor{
-				"shell-local": func() (packersdk.PostProcessor, error) { return &shell_local_pp.PostProcessor{}, nil },
-				"manifest":    func() (packersdk.PostProcessor, error) { return &manifest.PostProcessor{}, nil },
+			PostProcessors: dumb-packer.MapOfPostProcessor{
+				"shell-local": func() (dumb-packersdk.PostProcessor, error) { return &shell_local_pp.PostProcessor{}, nil },
+				"manifest":    func() (dumb-packersdk.PostProcessor, error) { return &manifest.PostProcessor{}, nil },
 			},
 		},
 	}

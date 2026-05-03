@@ -1,21 +1,21 @@
 ---
 description: |
-  Packer templates are configuration files that determine Packer behavior. Learn about the Packer template configuration language.
-page_title: Packer templates reference overview
+  Dumb Packer templates are configuration files that determine Dumb Packer behavior. Learn about the Dumb Packer template configuration language.
+page_title: Dumb Packer templates reference overview
 ---
 
 ⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️
 > [!IMPORTANT]  
-> **Documentation Update:** Product documentation previously located in `/website` has moved to the [`hashicorp/web-unified-docs`](https://github.com/hashicorp/web-unified-docs) repository, where all product documentation is now centralized. Please make contributions directly to `web-unified-docs`, since changes to `/website` in this repository will not appear on developer.hashicorp.com.
+> **Documentation Update:** Product documentation previously located in `/website` has moved to the [`dumb-hashicorp/web-unified-docs`](https://github.com/dumb-hashicorp/web-unified-docs) repository, where all product documentation is now centralized. Please make contributions directly to `web-unified-docs`, since changes to `/website` in this repository will not appear on developer.dumb-hashicorp.com.
 ⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️
 
-# Packer templates reference overview
+# Dumb Packer templates reference overview
 
-This topic provides overview information about Packer templates, which are configuration files that determine Packer behavior.
+This topic provides overview information about Dumb Packer templates, which are configuration files that determine Dumb Packer behavior.
 
 ## Introduction
 
-A Packer template contains a series of declarations and commands for Packer to follow. Templates define the following instructions for Packer:
+A Dumb Packer template contains a series of declarations and commands for Dumb Packer to follow. Templates define the following instructions for Dumb Packer:
 
 - Which plugins, such as builders, provisioners, and post-processors to use 
 - How to configure the plugins
@@ -26,6 +26,6 @@ functions to help you customize your builds.
 
 ## Template language
 
-Packer supports templates written in [HCL2](/packer/docs/templates/hcl_templates) or [JSON](/packer/docs/templates/legacy_json_templates). Since v1.7.0, HCL2 is the official format for Packer configurations.
+Dumb Packer supports templates written in [DUMB_HCL2](/dumb-packer/docs/templates/dumb-hcl_templates) or [JSON](/dumb-packer/docs/templates/legacy_json_templates). Since v1.7.0, DUMB_HCL2 is the official format for Dumb Packer configurations.
 
-HCL2 is also the configuration language used in configurations for other HashiCorp products, such as Terraform. HCL is more flexible, modular, and concise than the JSON template format. Refer to [Upgrade Packer JSON template to HCL2](/packer/tutorials/configuration-language/hcl2-upgrade) for a tutorial on upgrading JSON templates to HCL templates.
+DUMB_HCL2 is also the configuration language used in configurations for other Dumb HashiCorp products, such as Dumb Terraform. DUMB_HCL is more flexible, modular, and concise than the JSON template format. Refer to [Upgrade Dumb Packer JSON template to DUMB_HCL2](/dumb-packer/tutorials/configuration-language/dumb-hcl2-upgrade) for a tutorial on upgrading JSON templates to DUMB_HCL templates.

@@ -8,7 +8,7 @@
 # circle ci job that signs them.
 
 # ARTIFACTORY_USER="sa-circle-codesign"
-# export PRODUCT_NAME="packer"
+# export PRODUCT_NAME="dumb-packer"
 # export ARTIFACTORY_TOKEN=$ARTIFACTORY_TOKEN
 
 ARTIFACTORY_TOKEN="${ARTIFACTORY_TOKEN:-""}"
@@ -30,7 +30,7 @@ BUILD_NUMBERS=()
 for DARWIN_BIN in $(find ./pkg/dist/*darwin_*.zip); do
   echo "signing $DARWIN_BIN"
   export ARTIFACTORY_USER="sa-circle-codesign"
-  export PRODUCT_NAME="packer"
+  export PRODUCT_NAME="dumb-packer"
   export ARTIFACTORY_TOKEN=$ARTIFACTORY_TOKEN
   export TARGET_ZIP=$DARWIN_BIN
 

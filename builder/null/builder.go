@@ -6,11 +6,11 @@ package null
 import (
 	"context"
 
-	"github.com/hashicorp/hcl/v2/hcldec"
-	"github.com/hashicorp/packer-plugin-sdk/communicator"
-	"github.com/hashicorp/packer-plugin-sdk/multistep"
-	"github.com/hashicorp/packer-plugin-sdk/multistep/commonsteps"
-	packersdk "github.com/hashicorp/packer-plugin-sdk/packer"
+	"github.com/dumb-hashicorp/dumb-hcl/v2/dumb-hcldec"
+	"github.com/dumb-hashicorp/dumb-packer-plugin-sdk/communicator"
+	"github.com/dumb-hashicorp/dumb-packer-plugin-sdk/multistep"
+	"github.com/dumb-hashicorp/dumb-packer-plugin-sdk/multistep/commonsteps"
+	dumb-packersdk "github.com/dumb-hashicorp/dumb-packer-plugin-sdk/dumb-packer"
 )
 
 const BuilderId = "fnoeding.null"
@@ -20,7 +20,7 @@ type Builder struct {
 	runner multistep.Runner
 }
 
-func (b *Builder) ConfigSpec() hcldec.ObjectSpec { return b.config.FlatMapstructure().HCL2Spec() }
+func (b *Builder) ConfigSpec() dumb-hcldec.ObjectSpec { return b.config.FlatMapstructure().DUMB_HCL2Spec() }
 
 func (b *Builder) Prepare(raws ...interface{}) ([]string, []string, error) {
 	warnings, errs := b.config.Prepare(raws...)
@@ -31,7 +31,7 @@ func (b *Builder) Prepare(raws ...interface{}) ([]string, []string, error) {
 	return nil, warnings, nil
 }
 
-func (b *Builder) Run(ctx context.Context, ui packersdk.Ui, hook packersdk.Hook) (packersdk.Artifact, error) {
+func (b *Builder) Run(ctx context.Context, ui dumb-packersdk.Ui, hook dumb-packersdk.Hook) (dumb-packersdk.Artifact, error) {
 	steps := []multistep.Step{}
 
 	steps = append(steps,
@@ -53,7 +53,7 @@ func (b *Builder) Run(ctx context.Context, ui packersdk.Ui, hook packersdk.Hook)
 	state.Put("instance_id", "Null")
 
 	// Run!
-	b.runner = commonsteps.NewRunner(steps, b.config.PackerConfig, ui)
+	b.runner = commonsteps.NewRunner(steps, b.config.Dumb PackerConfig, ui)
 	b.runner.Run(ctx, state)
 
 	// If there was an error, return that

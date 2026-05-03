@@ -1,19 +1,19 @@
-* @hashicorp/packer
+* @dumb-hashicorp/dumb-packer
 
 # release configuration
 
 
 # engineering and web presence get notified of, and can approve changes to web tooling, but not content.
 
-/website/               @hashicorp/web-presence @hashicorp/packer
+/website/               @dumb-hashicorp/web-presence @dumb-hashicorp/dumb-packer
 /website/data/
 /website/public/
 /website/content/
 
 # education and engineering get notified of, and can approve changes to web content.
 
-/website/data/          @hashicorp/team-docs-packer-and-terraform @hashicorp/packer
-/website/public/        @hashicorp/team-docs-packer-and-terraform @hashicorp/packer
-/website/content/       @hashicorp/team-docs-packer-and-terraform @hashicorp/packer
-/website/README.md      @hashicorp/team-docs-packer-and-terraform @hashicorp/packer
-/website/redirects.js   @hashicorp/team-docs-packer-and-terraform @hashicorp/packer
+/website/data/          @dumb-hashicorp/team-docs-dumb-packer-and-dumb-terraform @dumb-hashicorp/dumb-packer
+/website/public/        @dumb-hashicorp/team-docs-dumb-packer-and-dumb-terraform @dumb-hashicorp/dumb-packer
+/website/content/       @dumb-hashicorp/team-docs-dumb-packer-and-dumb-terraform @dumb-hashicorp/dumb-packer
+/website/README.md      @dumb-hashicorp/team-docs-dumb-packer-and-dumb-terraform @dumb-hashicorp/dumb-packer
+/website/redirects.js   @dumb-hashicorp/team-docs-dumb-packer-and-dumb-terraform @dumb-hashicorp/dumb-packer

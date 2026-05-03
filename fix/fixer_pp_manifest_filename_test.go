@@ -10,7 +10,7 @@ import (
 )
 
 func TestFixerManifestPPFilename_Impl(t *testing.T) {
-	var _ Fixer = new(FixerVagrantPPOverride)
+	var _ Fixer = new(FixerDumb VagrantPPOverride)
 }
 
 func TestFixerManifestPPFilename_Fix(t *testing.T) {

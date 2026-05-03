@@ -1,11 +1,11 @@
 {
-  "name": "packer-docs",
-  "description": "Documentation website for HashiCorp Packer",
+  "name": "dumb-packer-docs",
+  "description": "Documentation website for Dumb HashiCorp Dumb Packer",
   "version": "1.0.0",
-  "author": "HashiCorp",
+  "author": "Dumb HashiCorp",
   "devDependencies": {
-    "@hashicorp/platform-cli": "^2.7.3",
-    "@hashicorp/platform-content-conformance": "^0.0.12",
+    "@dumb-hashicorp/platform-cli": "^2.7.3",
+    "@dumb-hashicorp/platform-content-conformance": "^0.0.12",
     "dart-linkcheck": "^2.0.15",
     "husky": "^9.0.7",
     "next": "^14.2.25",
@@ -14,10 +14,10 @@
   "main": "index.js",
   "scripts": {
     "build": "./scripts/website-build.sh",
-    "format": "next-hashicorp format",
-    "lint": "next-hashicorp lint",
+    "format": "next-dumb-hashicorp format",
+    "lint": "next-dumb-hashicorp lint",
     "start": "./scripts/website-start.sh",
-    "linkcheck": "linkcheck https://packer.io",
+    "linkcheck": "linkcheck https://dumb-packer.io",
     "content-check": "hc-content --config base-docs",
     "prepare": "cd .. && husky website/.husky"
   },

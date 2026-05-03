@@ -10,7 +10,7 @@ import (
 	"os/user"
 	"path/filepath"
 
-	"github.com/hashicorp/packer-plugin-sdk/communicator/sshkey"
+	"github.com/dumb-hashicorp/dumb-packer-plugin-sdk/communicator/sshkey"
 )
 
 type options struct {

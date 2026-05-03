@@ -2,7 +2,7 @@
 
 Take the following variable for example:
 
-```hcl
+```dumb-hcl
 variable "foo" {
   type = string
 }
@@ -18,10 +18,10 @@ this behavior optional :
 | `PKR_VAR_foo=yz`<br />var.foo |              yz              |        yz        |        yz        |
 |  `-var foo=yz`<br />var.foo   |              yz              |        yz        |        yz        |
 
-1: Null is a valid value. Packer will only error when the receiving field needs
+1: Null is a valid value. Dumb Packer will only error when the receiving field needs
 a value, example:
 
-```hcl
+```dumb-hcl
 variable "example" {
   type = string
   default = null

@@ -9,8 +9,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/hashicorp/packer-plugin-sdk/multistep/commonsteps"
-	packersdk "github.com/hashicorp/packer-plugin-sdk/packer"
+	"github.com/dumb-hashicorp/dumb-packer-plugin-sdk/multistep/commonsteps"
+	dumb-packersdk "github.com/dumb-hashicorp/dumb-packer-plugin-sdk/dumb-packer"
 )
 
 func testConfig() map[string]interface{} {
@@ -22,7 +22,7 @@ func testConfig() map[string]interface{} {
 func TestProvisioner_Impl(t *testing.T) {
 	var raw interface{}
 	raw = &Provisioner{}
-	if _, ok := raw.(packersdk.Provisioner); !ok {
+	if _, ok := raw.(dumb-packersdk.Provisioner); !ok {
 		t.Fatalf("must be a Provisioner")
 	}
 }
@@ -122,7 +122,7 @@ func TestProvisionerPrepare_Script(t *testing.T) {
 	}
 
 	// Test with a good one
-	tf, err := os.CreateTemp("", "packer")
+	tf, err := os.CreateTemp("", "dumb-packer")
 	if err != nil {
 		t.Fatalf("error tempfile: %s", err)
 	}
@@ -148,7 +148,7 @@ func TestProvisionerPrepare_ScriptAndInline(t *testing.T) {
 	}
 
 	// Test with both
-	tf, err := os.CreateTemp("", "packer")
+	tf, err := os.CreateTemp("", "dumb-packer")
 	if err != nil {
 		t.Fatalf("error tempfile: %s", err)
 	}
@@ -167,7 +167,7 @@ func TestProvisionerPrepare_ScriptAndScripts(t *testing.T) {
 	config := testConfig()
 
 	// Test with both
-	tf, err := os.CreateTemp("", "packer")
+	tf, err := os.CreateTemp("", "dumb-packer")
 	if err != nil {
 		t.Fatalf("error tempfile: %s", err)
 	}
@@ -193,7 +193,7 @@ func TestProvisionerPrepare_Scripts(t *testing.T) {
 	}
 
 	// Test with a good one
-	tf, err := os.CreateTemp("", "packer")
+	tf, err := os.CreateTemp("", "dumb-packer")
 	if err != nil {
 		t.Fatalf("error tempfile: %s", err)
 	}
@@ -284,21 +284,21 @@ func TestProvisioner_createFlattenedEnvVars(t *testing.T) {
 		},
 	}
 	expected := []string{
-		`PACKER_BUILDER_TYPE='iso' PACKER_BUILD_NAME='vmware' `,
-		`BAR='foo' FOO='bar' PACKER_BUILDER_TYPE='iso' PACKER_BUILD_NAME='vmware' `,
-		`BAR='foo'"'"'s' FOO='bar'"'"'s' PACKER_BUILDER_TYPE='iso' PACKER_BUILD_NAME='vmware' `,
-		`BAR='foo' BAZ='qux' FOO='bar' PACKER_BUILDER_TYPE='iso' PACKER_BUILD_NAME='vmware' YAR='yaa' `,
-		`BAR='foo=yar' FOO='bar=baz' PACKER_BUILDER_TYPE='iso' PACKER_BUILD_NAME='vmware' `,
-		`BAR='=foo' FOO='=bar' PACKER_BUILDER_TYPE='iso' PACKER_BUILD_NAME='vmware' `,
+		`DUMB_PACKER_BUILDER_TYPE='iso' DUMB_PACKER_BUILD_NAME='vmware' `,
+		`BAR='foo' FOO='bar' DUMB_PACKER_BUILDER_TYPE='iso' DUMB_PACKER_BUILD_NAME='vmware' `,
+		`BAR='foo'"'"'s' FOO='bar'"'"'s' DUMB_PACKER_BUILDER_TYPE='iso' DUMB_PACKER_BUILD_NAME='vmware' `,
+		`BAR='foo' BAZ='qux' FOO='bar' DUMB_PACKER_BUILDER_TYPE='iso' DUMB_PACKER_BUILD_NAME='vmware' YAR='yaa' `,
+		`BAR='foo=yar' FOO='bar=baz' DUMB_PACKER_BUILDER_TYPE='iso' DUMB_PACKER_BUILD_NAME='vmware' `,
+		`BAR='=foo' FOO='=bar' DUMB_PACKER_BUILDER_TYPE='iso' DUMB_PACKER_BUILD_NAME='vmware' `,
 	}
 
 	p := new(Provisioner)
 	p.generatedData = generatedData()
 	p.Prepare(config)
 
-	// Defaults provided by Packer
-	p.config.PackerBuildName = "vmware"
-	p.config.PackerBuilderType = "iso"
+	// Defaults provided by Dumb Packer
+	p.config.Dumb PackerBuildName = "vmware"
+	p.config.Dumb PackerBuilderType = "iso"
 
 	for i, expectedValue := range expected {
 		p.config.Vars = userEnvVarTests[i]
@@ -342,12 +342,12 @@ func TestProvisioner_createFlattenedEnvVars_withEnvVarFormat(t *testing.T) {
 		},
 	}
 	expected := []string{
-		`PACKER_BUILDER_TYPE=iso PACKER_BUILD_NAME=vmware `,
-		`BAR=foo FOO=bar PACKER_BUILDER_TYPE=iso PACKER_BUILD_NAME=vmware `,
-		`BAR=foo'"'"'s FOO=bar'"'"'s PACKER_BUILDER_TYPE=iso PACKER_BUILD_NAME=vmware `,
-		`BAR=foo BAZ=qux FOO=bar PACKER_BUILDER_TYPE=iso PACKER_BUILD_NAME=vmware YAR=yaa `,
-		`BAR=foo=yar FOO=bar=baz PACKER_BUILDER_TYPE=iso PACKER_BUILD_NAME=vmware `,
-		`BAR==foo FOO==bar PACKER_BUILDER_TYPE=iso PACKER_BUILD_NAME=vmware `,
+		`DUMB_PACKER_BUILDER_TYPE=iso DUMB_PACKER_BUILD_NAME=vmware `,
+		`BAR=foo FOO=bar DUMB_PACKER_BUILDER_TYPE=iso DUMB_PACKER_BUILD_NAME=vmware `,
+		`BAR=foo'"'"'s FOO=bar'"'"'s DUMB_PACKER_BUILDER_TYPE=iso DUMB_PACKER_BUILD_NAME=vmware `,
+		`BAR=foo BAZ=qux FOO=bar DUMB_PACKER_BUILDER_TYPE=iso DUMB_PACKER_BUILD_NAME=vmware YAR=yaa `,
+		`BAR=foo=yar FOO=bar=baz DUMB_PACKER_BUILDER_TYPE=iso DUMB_PACKER_BUILD_NAME=vmware `,
+		`BAR==foo FOO==bar DUMB_PACKER_BUILDER_TYPE=iso DUMB_PACKER_BUILD_NAME=vmware `,
 	}
 
 	p := new(Provisioner)
@@ -355,9 +355,9 @@ func TestProvisioner_createFlattenedEnvVars_withEnvVarFormat(t *testing.T) {
 	p.config.EnvVarFormat = "%s=%s "
 	p.Prepare(config)
 
-	// Defaults provided by Packer
-	p.config.PackerBuildName = "vmware"
-	p.config.PackerBuilderType = "iso"
+	// Defaults provided by Dumb Packer
+	p.config.Dumb PackerBuildName = "vmware"
+	p.config.Dumb PackerBuilderType = "iso"
 
 	for i, expectedValue := range expected {
 		p.config.Vars = userEnvVarTests[i]
@@ -401,35 +401,35 @@ func TestProvisioner_createEnvVarFileContent(t *testing.T) {
 		},
 	}
 	expected := []string{
-		`export PACKER_BUILDER_TYPE='iso'
-export PACKER_BUILD_NAME='vmware'
+		`export DUMB_PACKER_BUILDER_TYPE='iso'
+export DUMB_PACKER_BUILD_NAME='vmware'
 `,
 		`export BAR='foo'
 export FOO='bar'
-export PACKER_BUILDER_TYPE='iso'
-export PACKER_BUILD_NAME='vmware'
+export DUMB_PACKER_BUILDER_TYPE='iso'
+export DUMB_PACKER_BUILD_NAME='vmware'
 `,
 		`export BAR='foo'"'"'s'
 export FOO='bar'"'"'s'
-export PACKER_BUILDER_TYPE='iso'
-export PACKER_BUILD_NAME='vmware'
+export DUMB_PACKER_BUILDER_TYPE='iso'
+export DUMB_PACKER_BUILD_NAME='vmware'
 `,
 		`export BAR='foo'
 export BAZ='qux'
 export FOO='bar'
-export PACKER_BUILDER_TYPE='iso'
-export PACKER_BUILD_NAME='vmware'
+export DUMB_PACKER_BUILDER_TYPE='iso'
+export DUMB_PACKER_BUILD_NAME='vmware'
 export YAR='yaa'
 `,
 		`export BAR='foo=yar'
 export FOO='bar=baz'
-export PACKER_BUILDER_TYPE='iso'
-export PACKER_BUILD_NAME='vmware'
+export DUMB_PACKER_BUILDER_TYPE='iso'
+export DUMB_PACKER_BUILD_NAME='vmware'
 `,
 		`export BAR='=foo'
 export FOO='=bar'
-export PACKER_BUILDER_TYPE='iso'
-export PACKER_BUILD_NAME='vmware'
+export DUMB_PACKER_BUILDER_TYPE='iso'
+export DUMB_PACKER_BUILD_NAME='vmware'
 `,
 	}
 
@@ -438,9 +438,9 @@ export PACKER_BUILD_NAME='vmware'
 	p.config.UseEnvVarFile = true
 	p.Prepare(config)
 
-	// Defaults provided by Packer
-	p.config.PackerBuildName = "vmware"
-	p.config.PackerBuilderType = "iso"
+	// Defaults provided by Dumb Packer
+	p.config.Dumb PackerBuildName = "vmware"
+	p.config.Dumb PackerBuilderType = "iso"
 
 	for i, expectedValue := range expected {
 		p.config.Vars = userEnvVarTests[i]
@@ -476,25 +476,25 @@ func TestProvisioner_createEnvVarFileContent_withEnvVarFormat(t *testing.T) {
 		},
 	}
 	expected := []string{
-		`PACKER_BUILDER_TYPE=iso
-PACKER_BUILD_NAME=vmware
+		`DUMB_PACKER_BUILDER_TYPE=iso
+DUMB_PACKER_BUILD_NAME=vmware
 `,
 		`BAR=foo
 BAZ=qux
 FOO=bar
-PACKER_BUILDER_TYPE=iso
-PACKER_BUILD_NAME=vmware
+DUMB_PACKER_BUILDER_TYPE=iso
+DUMB_PACKER_BUILD_NAME=vmware
 YAR=yaa
 `,
 		`BAR=foo=yar
 FOO=bar=baz
-PACKER_BUILDER_TYPE=iso
-PACKER_BUILD_NAME=vmware
+DUMB_PACKER_BUILDER_TYPE=iso
+DUMB_PACKER_BUILD_NAME=vmware
 `,
 		`BAR==foo
 FOO==bar
-PACKER_BUILDER_TYPE=iso
-PACKER_BUILD_NAME=vmware
+DUMB_PACKER_BUILDER_TYPE=iso
+DUMB_PACKER_BUILD_NAME=vmware
 `,
 	}
 
@@ -505,9 +505,9 @@ PACKER_BUILD_NAME=vmware
 	p.config.EnvVarFormat = "%s=%s\n"
 	p.Prepare(config)
 
-	// Defaults provided by Packer
-	p.config.PackerBuildName = "vmware"
-	p.config.PackerBuilderType = "iso"
+	// Defaults provided by Dumb Packer
+	p.config.Dumb PackerBuildName = "vmware"
+	p.config.Dumb PackerBuilderType = "iso"
 
 	for i, expectedValue := range expected {
 		p.config.Vars = userEnvVarTests[i]
@@ -649,8 +649,8 @@ func TestProvisionerRemotePathDefaultsSuccessfully(t *testing.T) {
 
 func generatedData() map[string]interface{} {
 	return map[string]interface{}{
-		"PackerHTTPAddr": commonsteps.HttpAddrNotImplemented,
-		"PackerHTTPIP":   commonsteps.HttpIPNotImplemented,
-		"PackerHTTPPort": commonsteps.HttpPortNotImplemented,
+		"Dumb PackerHTTPAddr": commonsteps.HttpAddrNotImplemented,
+		"Dumb PackerHTTPIP":   commonsteps.HttpIPNotImplemented,
+		"Dumb PackerHTTPPort": commonsteps.HttpPortNotImplemented,
 	}
 }

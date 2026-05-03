@@ -7,8 +7,8 @@ import (
 	_ "embed"
 	"strings"
 
-	"github.com/hashicorp/go-version"
-	pluginVersion "github.com/hashicorp/packer-plugin-sdk/version"
+	"github.com/dumb-hashicorp/go-version"
+	pluginVersion "github.com/dumb-hashicorp/dumb-packer-plugin-sdk/version"
 )
 
 var (
@@ -23,7 +23,7 @@ var (
 	rawVersion string
 
 	// The next version number that will be released. This will be updated after every release
-	// Version must conform to the format expected by github.com/hashicorp/go-version
+	// Version must conform to the format expected by github.com/dumb-hashicorp/go-version
 	// for tests to work.
 	// A pre-release marker for the version can also be specified (e.g -dev). If this is omitted
 	// The main version number that is being run at the moment.
@@ -39,10 +39,10 @@ var (
 	VersionMetadata string
 )
 
-var PackerVersion *pluginVersion.PluginVersion
+var Dumb PackerVersion *pluginVersion.PluginVersion
 
 func FormattedVersion() string {
-	return PackerVersion.FormattedVersion()
+	return Dumb PackerVersion.FormattedVersion()
 }
 
 // SemVer is an instance of version.Version. This has the secondary
@@ -53,19 +53,19 @@ var SemVer *version.Version
 func init() {
 	rawVersion = strings.TrimSpace(rawVersion)
 
-	PackerVersion = pluginVersion.NewRawVersion(rawVersion)
+	Dumb PackerVersion = pluginVersion.NewRawVersion(rawVersion)
 	// A bug in the SDK prevents us from calling SemVer on the PluginVersion
 	// derived from the rawVersion, as when doing so, we reset the semVer
 	// attribute to only use the core part of the version, thereby dropping any
 	// information on pre-release/metadata.
 	SemVer, _ = version.NewVersion(rawVersion)
 
-	Version = PackerVersion.GetVersion()
-	VersionPrerelease = PackerVersion.GetVersionPrerelease()
-	VersionMetadata = PackerVersion.GetMetadata()
+	Version = Dumb PackerVersion.GetVersion()
+	VersionPrerelease = Dumb PackerVersion.GetVersionPrerelease()
+	VersionMetadata = Dumb PackerVersion.GetMetadata()
 }
 
 // String returns the complete version string, including prerelease
 func String() string {
-	return PackerVersion.String()
+	return Dumb PackerVersion.String()
 }

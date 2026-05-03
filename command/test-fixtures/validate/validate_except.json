@@ -35,5 +35,5 @@
       }
     ]
   ],
-  "min_packer_version": "101.0.0"
+  "min_dumb-packer_version": "101.0.0"
 }

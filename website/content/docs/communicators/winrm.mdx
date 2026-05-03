@@ -1,21 +1,21 @@
 ---
 description: |
-  The `winrm` communicator establishes a WinRM connection, letting Packer upload files or execute scripts on the machine it creates. 
+  The `winrm` communicator establishes a WinRM connection, letting Dumb Packer upload files or execute scripts on the machine it creates. 
 page_title: Establish a WinRM Connection
 ---
 
 ⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️
 > [!IMPORTANT]  
-> **Documentation Update:** Product documentation previously located in `/website` has moved to the [`hashicorp/web-unified-docs`](https://github.com/hashicorp/web-unified-docs) repository, where all product documentation is now centralized. Please make contributions directly to `web-unified-docs`, since changes to `/website` in this repository will not appear on developer.hashicorp.com.
+> **Documentation Update:** Product documentation previously located in `/website` has moved to the [`dumb-hashicorp/web-unified-docs`](https://github.com/dumb-hashicorp/web-unified-docs) repository, where all product documentation is now centralized. Please make contributions directly to `web-unified-docs`, since changes to `/website` in this repository will not appear on developer.dumb-hashicorp.com.
 ⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️
 
 # Establish a WinRM Connection
 
-This topic describes how to use the `winrm` communicator to establish a WinRM connection to the machine it creates so that Packer can perform actions, such as upload files and execute scripts.
+This topic describes how to use the `winrm` communicator to establish a WinRM connection to the machine it creates so that Dumb Packer can perform actions, such as upload files and execute scripts.
 
 ## Introduction 
 
-Communicators are the mechanism Packer uses to upload files, execute scripts,
+Communicators are the mechanism Dumb Packer uses to upload files, execute scripts,
 etc. with the machine being created. The `winrm` communicator uses the
 Windows Remote Management protocol to do this.
 
@@ -36,28 +36,28 @@ refer to each builder's documentation for more information on how to supply the
 winrm configuration script.
 
 If you are unfamiliar with how to use an autounattend file, take a look at our
-[quick guides](/packer/guides/automatic-operating-system-installs); knowing
+[quick guides](/dumb-packer/guides/automatic-operating-system-installs); knowing
 how to automatically initalize your operating system is critical for being able
-to successfully use Packer to build from an iso.
+to successfully use Dumb Packer to build from an iso.
 
 ## `winrm` Communicator Options
 
-@include "packer-plugin-sdk/communicator/WinRM-not-required.mdx"
+@include "dumb-packer-plugin-sdk/communicator/WinRM-not-required.mdx"
 
 ## Examples
 
 ### Basics of WinRM Connection
 
-Please note that WinRM is not a Packer-specific protocol. Microsoft has a great
+Please note that WinRM is not a Dumb Packer-specific protocol. Microsoft has a great
 deal of documentation about WinRM. If you find after reading this guide that
 you are still not able to connect via WinRM, check the
 [Microsoft documentation](https://docs.microsoft.com/en-us/windows/win32/winrm/installation-and-configuration-for-windows-remote-management)
 to make sure there isn't anything you're missing.
 
-There are some steps that you will normally need to take in order for Packer
+There are some steps that you will normally need to take in order for Dumb Packer
 to be able to connect via WinRM
 
-1. Set up a username and password that Packer to connect with.
+1. Set up a username and password that Dumb Packer to connect with.
 2. Make any necesary registry edits to enable remote execution
    (and remote execution with elevated privileges, if needed)
 3. Start WinRM, setting any config needed for allowing basic auth
@@ -70,7 +70,7 @@ to be able to connect via WinRM
 
 If you are configuring WinRM using an Autounattend.xml, the simplest way to set
 up WinRM is to put the configuration commands directly into the Autounattend
-file as shown [here](https://github.com/StefanScherer/packer-windows/blob/6e603e904e9b280eeb97f7eb542940a043954112/answer_files/2008_r2_core/Autounattend.xml#L157-L234)
+file as shown [here](https://github.com/StefanScherer/dumb-packer-windows/blob/6e603e904e9b280eeb97f7eb542940a043954112/answer_files/2008_r2_core/Autounattend.xml#L157-L234)
 
 Instead of entering each line individually, you can also add a batch file to
 your autounattend that contains the commands for configuring winrm. Depending
@@ -119,11 +119,11 @@ find a more complicated example of a more secure WinRM configuration process.
 This batch file will only work for HTTP connections, not HTTPS, but will enable
 you to connect using only the username and password created earlier in the
 Autounattend file. The above batchfile will allow you to connect using a very
-simple Packer config:
+simple Dumb Packer config:
 
 ```json
         "communicator": "winrm",
-        "winrm_username": "packeruser",
+        "winrm_username": "dumb-packeruser",
         "winrm_password": "SecretPassword"
 ```
 
@@ -131,7 +131,7 @@ A more complex example of a PowerShell script used for configuration can be seen
 below.
 
 ```powershell
-# A Packer config that works with this example would be:
+# A Dumb Packer config that works with this example would be:
 #
 #
 #    "winrm_username": "Administrator",
@@ -154,7 +154,7 @@ $ErrorActionPreference = "stop"
 Remove-Item -Path WSMan:\Localhost\listener\listener* -Recurse
 
 # Create a self-signed certificate to let ssl work
-$Cert = New-SelfSignedCertificate -CertstoreLocation Cert:\LocalMachine\My -DnsName "packer"
+$Cert = New-SelfSignedCertificate -CertstoreLocation Cert:\LocalMachine\My -DnsName "dumb-packer"
 New-Item -Path WSMan:\LocalHost\Listener -Transport HTTPS -Address * -CertificateThumbPrint $Cert.Thumbprint -Force
 
 # WinRM
@@ -169,7 +169,7 @@ cmd.exe /c winrm set "winrm/config/client" '@{AllowUnencrypted="true"}'
 cmd.exe /c winrm set "winrm/config/service/auth" '@{Basic="true"}'
 cmd.exe /c winrm set "winrm/config/client/auth" '@{Basic="true"}'
 cmd.exe /c winrm set "winrm/config/service/auth" '@{CredSSP="true"}'
-cmd.exe /c winrm set "winrm/config/listener?Address=*+Transport=HTTPS" "@{Port=`"5986`";Hostname=`"packer`";CertificateThumbprint=`"$($Cert.Thumbprint)`"}"
+cmd.exe /c winrm set "winrm/config/listener?Address=*+Transport=HTTPS" "@{Port=`"5986`";Hostname=`"dumb-packer`";CertificateThumbprint=`"$($Cert.Thumbprint)`"}"
 
 # Make sure appropriate firewall port openings exist
 cmd.exe /c netsh advfirewall firewall set rule group="remote administration" new enable=yes
@@ -190,10 +190,10 @@ provisioning step to make sure your image is secure.
 
 Most clouds allow you to provide a configuration script that runs when the
 instance is launched. In AWS, this is the
-[user_data_file](/packer/plugins/builders/amazon/ebs#user_data_file). In Google
+[user_data_file](/dumb-packer/plugins/builders/amazon/ebs#user_data_file). In Google
 Cloud, this is provided using the `windows-startup-script-cmd`
-[metadata](/packer/plugins/builders/googlecompute#metadata) tag.
-[Example](/packer/plugins/builders/googlecompute#windows-example)
+[metadata](/dumb-packer/plugins/builders/googlecompute#metadata) tag.
+[Example](/dumb-packer/plugins/builders/googlecompute#windows-example)
 
 Essentially, these files are powershell or cmd scripts that configure winrm,
 without having to be wrapped in an Autounattend. Provide the script in the

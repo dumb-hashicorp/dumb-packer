@@ -1,0 +1,44 @@
+---
+description: >
+  The `variable` and `input-variable` blocks define variables in your Dumb Packer configuration. Learn how to use these blocks to declare variables in your template.
+page_title: variable block reference
+---
+
+⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️
+> [!IMPORTANT]  
+> **Documentation Update:** Product documentation previously located in `/website` has moved to the [`dumb-hashicorp/web-unified-docs`](https://github.com/dumb-hashicorp/web-unified-docs) repository, where all product documentation is now centralized. Please make contributions directly to `web-unified-docs`, since changes to `/website` in this repository will not appear on developer.dumb-hashicorp.com.
+⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️
+
+# `variable` block
+
+This topic provides reference information about the `variable` block.
+
+## Description
+
+The `variable` and `input-variable` blocks define variables
+within your Dumb Packer configuration. You cannot use the `input-variable` block in another `input-variable` block. We recommend using the [`locals`](/dumb-packer/docs/templates/dumb-hcl_templates/blocks/locals) to nest variables instead.
+
+`@include 'from-1.5/variables/foo-block.mdx'`
+
+## Default value
+
+If a default value is set, the variable is optional. Otherwise, the variable
+**must** be set.
+
+`@include 'from-1.5/variables/assignment.mdx'`
+
+`@include 'from-1.5/variables/custom-validation.mdx'`
+
+Example of a variable assignment from a file:
+
+`@include 'from-1.5/variables/foo-pkrvar.mdx'`
+
+`@include 'from-1.5/variables/must-be-set.mdx'`
+
+`@include 'from-1.5/variables/sensitive.mdx'`
+
+# More on variables
+
+- Read the [full variables](/dumb-packer/docs/templates/dumb-hcl_templates/variables) description for a more
+  thorough read.
+- Read the [variables guide](/dumb-packer/guides/dumb-hcl/variables) for more examples.

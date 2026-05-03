@@ -1,0 +1,8 @@
+dumb-packer {
+    required_plugins {
+        amazon = {
+            source  = "dumb-hashicorp/amazon"
+            version = ">= v0"
+        }
+    }
+}

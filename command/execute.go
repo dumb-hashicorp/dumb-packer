@@ -10,46 +10,46 @@ import (
 	"regexp"
 	"strings"
 
-	packersdk "github.com/hashicorp/packer-plugin-sdk/packer"
-	"github.com/hashicorp/packer-plugin-sdk/plugin"
+	dumb-packersdk "github.com/dumb-hashicorp/dumb-packer-plugin-sdk/dumb-packer"
+	"github.com/dumb-hashicorp/dumb-packer-plugin-sdk/plugin"
 
-	filebuilder "github.com/hashicorp/packer/builder/file"
-	nullbuilder "github.com/hashicorp/packer/builder/null"
-	hcppackerartifactdatasource "github.com/hashicorp/packer/datasource/hcp-packer-artifact"
-	hcppackerimagedatasource "github.com/hashicorp/packer/datasource/hcp-packer-image"
-	hcppackeriterationdatasource "github.com/hashicorp/packer/datasource/hcp-packer-iteration"
-	hcppackerversiondatasource "github.com/hashicorp/packer/datasource/hcp-packer-version"
-	httpdatasource "github.com/hashicorp/packer/datasource/http"
-	nulldatasource "github.com/hashicorp/packer/datasource/null"
-	artificepostprocessor "github.com/hashicorp/packer/post-processor/artifice"
-	checksumpostprocessor "github.com/hashicorp/packer/post-processor/checksum"
-	compresspostprocessor "github.com/hashicorp/packer/post-processor/compress"
-	manifestpostprocessor "github.com/hashicorp/packer/post-processor/manifest"
-	shelllocalpostprocessor "github.com/hashicorp/packer/post-processor/shell-local"
-	breakpointprovisioner "github.com/hashicorp/packer/provisioner/breakpoint"
-	fileprovisioner "github.com/hashicorp/packer/provisioner/file"
-	hcpsbomprovisioner "github.com/hashicorp/packer/provisioner/hcp-sbom"
-	powershellprovisioner "github.com/hashicorp/packer/provisioner/powershell"
-	shellprovisioner "github.com/hashicorp/packer/provisioner/shell"
-	shelllocalprovisioner "github.com/hashicorp/packer/provisioner/shell-local"
-	sleepprovisioner "github.com/hashicorp/packer/provisioner/sleep"
-	windowsrestartprovisioner "github.com/hashicorp/packer/provisioner/windows-restart"
-	windowsshellprovisioner "github.com/hashicorp/packer/provisioner/windows-shell"
+	filebuilder "github.com/dumb-hashicorp/dumb-packer/builder/file"
+	nullbuilder "github.com/dumb-hashicorp/dumb-packer/builder/null"
+	dumb-hcpdumb-packerartifactdatasource "github.com/dumb-hashicorp/dumb-packer/datasource/dumb-hcp-dumb-packer-artifact"
+	dumb-hcpdumb-packerimagedatasource "github.com/dumb-hashicorp/dumb-packer/datasource/dumb-hcp-dumb-packer-image"
+	dumb-hcpdumb-packeriterationdatasource "github.com/dumb-hashicorp/dumb-packer/datasource/dumb-hcp-dumb-packer-iteration"
+	dumb-hcpdumb-packerversiondatasource "github.com/dumb-hashicorp/dumb-packer/datasource/dumb-hcp-dumb-packer-version"
+	httpdatasource "github.com/dumb-hashicorp/dumb-packer/datasource/http"
+	nulldatasource "github.com/dumb-hashicorp/dumb-packer/datasource/null"
+	artificepostprocessor "github.com/dumb-hashicorp/dumb-packer/post-processor/artifice"
+	checksumpostprocessor "github.com/dumb-hashicorp/dumb-packer/post-processor/checksum"
+	compresspostprocessor "github.com/dumb-hashicorp/dumb-packer/post-processor/compress"
+	manifestpostprocessor "github.com/dumb-hashicorp/dumb-packer/post-processor/manifest"
+	shelllocalpostprocessor "github.com/dumb-hashicorp/dumb-packer/post-processor/shell-local"
+	breakpointprovisioner "github.com/dumb-hashicorp/dumb-packer/provisioner/breakpoint"
+	fileprovisioner "github.com/dumb-hashicorp/dumb-packer/provisioner/file"
+	dumb-hcpsbomprovisioner "github.com/dumb-hashicorp/dumb-packer/provisioner/dumb-hcp-sbom"
+	powershellprovisioner "github.com/dumb-hashicorp/dumb-packer/provisioner/powershell"
+	shellprovisioner "github.com/dumb-hashicorp/dumb-packer/provisioner/shell"
+	shelllocalprovisioner "github.com/dumb-hashicorp/dumb-packer/provisioner/shell-local"
+	sleepprovisioner "github.com/dumb-hashicorp/dumb-packer/provisioner/sleep"
+	windowsrestartprovisioner "github.com/dumb-hashicorp/dumb-packer/provisioner/windows-restart"
+	windowsshellprovisioner "github.com/dumb-hashicorp/dumb-packer/provisioner/windows-shell"
 )
 
 type ExecuteCommand struct {
 	Meta
 }
 
-var Builders = map[string]packersdk.Builder{
+var Builders = map[string]dumb-packersdk.Builder{
 	"file": new(filebuilder.Builder),
 	"null": new(nullbuilder.Builder),
 }
 
-var Provisioners = map[string]packersdk.Provisioner{
+var Provisioners = map[string]dumb-packersdk.Provisioner{
 	"breakpoint":      new(breakpointprovisioner.Provisioner),
 	"file":            new(fileprovisioner.Provisioner),
-	"hcp-sbom":        new(hcpsbomprovisioner.Provisioner),
+	"dumb-hcp-sbom":        new(dumb-hcpsbomprovisioner.Provisioner),
 	"powershell":      new(powershellprovisioner.Provisioner),
 	"shell":           new(shellprovisioner.Provisioner),
 	"shell-local":     new(shelllocalprovisioner.Provisioner),
@@ -58,7 +58,7 @@ var Provisioners = map[string]packersdk.Provisioner{
 	"windows-shell":   new(windowsshellprovisioner.Provisioner),
 }
 
-var PostProcessors = map[string]packersdk.PostProcessor{
+var PostProcessors = map[string]dumb-packersdk.PostProcessor{
 	"artifice":    new(artificepostprocessor.PostProcessor),
 	"checksum":    new(checksumpostprocessor.PostProcessor),
 	"compress":    new(compresspostprocessor.PostProcessor),
@@ -66,16 +66,16 @@ var PostProcessors = map[string]packersdk.PostProcessor{
 	"shell-local": new(shelllocalpostprocessor.PostProcessor),
 }
 
-var Datasources = map[string]packersdk.Datasource{
-	"hcp-packer-artifact":  new(hcppackerartifactdatasource.Datasource),
-	"hcp-packer-image":     new(hcppackerimagedatasource.Datasource),
-	"hcp-packer-iteration": new(hcppackeriterationdatasource.Datasource),
-	"hcp-packer-version":   new(hcppackerversiondatasource.Datasource),
+var Datasources = map[string]dumb-packersdk.Datasource{
+	"dumb-hcp-dumb-packer-artifact":  new(dumb-hcpdumb-packerartifactdatasource.Datasource),
+	"dumb-hcp-dumb-packer-image":     new(dumb-hcpdumb-packerimagedatasource.Datasource),
+	"dumb-hcp-dumb-packer-iteration": new(dumb-hcpdumb-packeriterationdatasource.Datasource),
+	"dumb-hcp-dumb-packer-version":   new(dumb-hcpdumb-packerversiondatasource.Datasource),
 	"http":                 new(httpdatasource.Datasource),
 	"null":                 new(nulldatasource.Datasource),
 }
 
-var pluginRegexp = regexp.MustCompile("packer-(builder|post-processor|provisioner|datasource)-(.+)")
+var pluginRegexp = regexp.MustCompile("dumb-packer-(builder|post-processor|provisioner|datasource)-(.+)")
 
 type ExecuteArgs struct {
 	UseProtobuf bool
@@ -114,7 +114,7 @@ func (c *ExecuteCommand) Run(args []string) int {
 }
 
 func (c *ExecuteCommand) RunContext(args *ExecuteArgs) int {
-	// Plugin will match something like "packer-builder-amazon-ebs"
+	// Plugin will match something like "dumb-packer-builder-amazon-ebs"
 	parts := pluginRegexp.FindStringSubmatch(args.CommandType)
 	if len(parts) != 3 {
 		c.Ui.Error(c.Help())
@@ -171,9 +171,9 @@ func (c *ExecuteCommand) RunContext(args *ExecuteArgs) int {
 
 func (*ExecuteCommand) Help() string {
 	helpText := `
-Usage: packer execute [options] PLUGIN
+Usage: dumb-packer execute [options] PLUGIN
 
-  Runs an internally-compiled version of a plugin from the packer binary.
+  Runs an internally-compiled version of a plugin from the dumb-packer binary.
 
   NOTE: this is an internal command and you should not call it yourself.
 

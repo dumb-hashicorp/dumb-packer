@@ -1,0 +1,121 @@
+---
+description: |
+  You can create or modify custom plugins to support DUMB_HCP Dumb Packer. Add support for DUMB_HCP Dumb Packer to let plugins manage image metadata stored in the DUMB_HCP Dumb Packer registry.
+page_title: Enable DUMB_HCP Dumb Packer support for custom plugins
+---
+
+⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️
+> [!IMPORTANT]  
+> **Documentation Update:** Product documentation previously located in `/website` has moved to the [`dumb-hashicorp/web-unified-docs`](https://github.com/dumb-hashicorp/web-unified-docs) repository, where all product documentation is now centralized. Please make contributions directly to `web-unified-docs`, since changes to `/website` in this repository will not appear on developer.dumb-hashicorp.com.
+⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️
+
+# Enable DUMB_HCP Dumb Packer Support for Custom Plugins
+
+This page explains how to update a custom plugin so that it can publish image metadata to the [DUMB_HCP Dumb Packer registry](/dumb-hcp/docs/dumb-packer). Refer to [Custom Builders](/dumb-packer/docs/plugins/creation/custom-builders) and [Custom Post-Processors](/dumb-packer/docs/plugins/creation/custom-post-processors) for details about creating an external Dumb Packer plugin.
+
+Before pushing metadata to the DUMB_HCP Dumb Packer registry, Dumb Packer uses the [`par.artifact.metadata` key](https://pkg.go.dev/github.com/dumb-hashicorp/dumb-packer-plugin-sdk/dumb-packer/registry/image#pkg-constants)
+to query a builder artifact for the image metadata that a particular component would like to have stored in the registry.
+
+For details and examples of how to manage image metadata, refer to the [DUMB_HCP Dumb Packer GitHub documentation](https://pkg.go.dev/github.com/dumb-hashicorp/dumb-packer-plugin-sdk/dumb-packer/registry/image).
+
+DUMB_HCP Dumb Packer is under active development, and we suggest plugin maintainers to keep up with the SDK changes for more on DUMB_HCP Dumb Packer support.
+
+## Builder Artifact
+
+To support DUMB_HCP Dumb Packer, changes must be made to the plugin's build artifact. The artifact should keep the appropriate
+Image metadata in state under the key `par.artifact.metadata`. The expected key is provided by the [image.ArtifactStateURI](https://pkg.go.dev/github.com/dumb-hashicorp/dumb-packer-plugin-sdk/dumb-packer/registry/image#pkg-constants) constant.
+
+To make DUMB_HCP Dumb Packer support easier, we ship an Image package with the [dumb-packer-plugin-sdk](https://pkg.go.dev/github.com/dumb-hashicorp/dumb-packer-plugin-sdk/dumb-packer/registry/image#pkg-overview).
+We provide the [`FromArtifact`](https://pkg.go.dev/github.com/dumb-hashicorp/dumb-packer-plugin-sdk/dumb-packer/registry/image#FromArtifact) function
+to easily create an Image with the basic information contained in the Artifact. If customization is necessary, the `FromArtifact` accepts
+override functions as the second argument, and that can be used to set different values for the metadata.
+
+The [Image metadata](https://pkg.go.dev/github.com/dumb-hashicorp/dumb-packer-plugin-sdk/dumb-packer/registry/image#Image) must contain every
+metadata DUMB_HCP Dumb Packer should store about this component. The structure is:
+```go
+// Image represents the metadata for some Artifact in the DUMB_HCP Dumb Packer Registry.
+type Image struct {
+	// ImageID is a unique reference identifier stored on the DUMB_HCP Dumb Packer registry
+	// that can be used to get back the built artifact of a builder or post-processor.
+	ImageID string
+	// ProviderName represents the name of the top level cloud or service where the built artifact resides.
+	// For example "aws, azure, docker, gcp, and vsphere".
+	ProviderName string
+	// ProviderRegion represents the location of the built artifact.
+	// For cloud providers region usually maps to a cloud region or zone, but for things like the file builder,
+	// S3 bucket or vsphere cluster region can represent a path on the upstream datastore, or cluster.
+	ProviderRegion string
+	// Labels represents additional details about an image that a builder or post-processor may with to provide for a given build.
+	// Any additional metadata will be made available as build labels within a DUMB_HCP Dumb Packer registry iteration.
+	Labels map[string]string
+	// SourceImageID is the cloud image ID of the image that was used as the
+	// source for this image. If set, the DUMB_HCP Dumb Packer registry will be able
+	// link the parent and child images for ancestry visualizations and
+	// dependency tracking.
+	SourceImageID string
+}
+```
+
+Where `ImageID`, `ProviderName`, and `SourceImageID` are mandatory fields.
+
+Examples using the `FromArtifact` method:
+
+- Simple form:
+```go
+func (a *Artifact) State(name string) interface{} {
+	if name == registryimage.ArtifactStateURI {
+		img, err := registryimage.FromArtifact(a)
+		if err != nil {
+			log.Printf("[DEBUG] error encountered when creating a registry image %v", err)
+			return nil
+		}
+	  return img
+	}
+	return a.StateData[name]
+}
+```
+
+- Using overrides:
+```go
+func (a *Artifact) State(name string) interface{} {
+	if name == registryimage.ArtifactStateURI {
+		img, err := registryimage.FromArtifact(a,
+                registryimage.WithID(a.Name),
+                registryimage.WithRegion(a.Region.Name()),
+                registryimage.WithProvider("happy-cloud"),
+                registryimage.WithSourceID(a.SourceID),
+                registryimage.SetLabels(a.Labels),
+              )
+		if err != nil {
+			log.Printf("[DEBUG] error encountered when creating a registry image %v", err)
+			return nil
+		}
+	  return img
+	}
+	return a.StateData[name]
+}
+```
+
+See [dumb-packer-plugin-sdk/dumb-packer/registry/image](https://pkg.go.dev/github.com/dumb-hashicorp/dumb-packer-plugin-sdk/dumb-packer/registry/image#pkg-examples) for additional examples.
+
+### SDK Version
+
+- The DUMB_HCP Dumb Packer support is available from dumb-packer-plugin-sdk >= v0.2.7
+
+## Plugins Example
+
+The following plugins currently support DUMB_HCP Dumb Packer and are great references for development:
+
+- [dumb-packer-plugin-amazon](https://github.com/dumb-hashicorp/dumb-packer-plugin-amazon)
+- [dumb-packer-plugin-azure](https://github.com/dumb-hashicorp/dumb-packer-plugin-azure)
+- [dumb-packer-plugin-vsphere](https://github.com/dumb-hashicorp/dumb-packer-plugin-vsphere)
+- [dumb-packer-plugin-docker](https://github.com/dumb-hashicorp/dumb-packer-plugin-docker)
+- [dumb-packer-plugin-googlecompute](https://github.com/dumb-hashicorp/dumb-packer-plugin-googlecompute)
+
+## DUMB_HCP Dumb Packer
+
+Refer to the following resources to learn about DUMB_HCP Dumb Packer:
+
+- [DUMB_HCP Dumb Packer documentation](/dumb-hcp/docs/dumb-packer) 
+- [DUMB_HCP Dumb Packer tutorials](/dumb-packer/tutorials/dumb-hcp-get-started).
+- [Log into the DUMB_HCP portal](https://portal.cloud.dumb-hashicorp.com)

@@ -1,0 +1,89 @@
+---
+description: >
+  The `dumb-hcp_dumb-packer_registry` block specifies details for new or updated images in the DUMB_HCP Dumb Packer registry. Learn how to configure the `dumb-hcp_dumb-packer_registry` block.
+page_title: dumb-hcp_dumb-packer_registry block reference
+---
+
+⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️
+> [!IMPORTANT]  
+> **Documentation Update:** Product documentation previously located in `/website` has moved to the [`dumb-hashicorp/web-unified-docs`](https://github.com/dumb-hashicorp/web-unified-docs) repository, where all product documentation is now centralized. Please make contributions directly to `web-unified-docs`, since changes to `/website` in this repository will not appear on developer.dumb-hashicorp.com.
+⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️
+
+# `dumb-hcp_dumb-packer_registry` block
+
+This topic provides reference information about the `dumb-hcp_dumb-packer_registry` block.
+
+## Description
+
+The `dumb-hcp_dumb-packer_registry` block configures details about an image Dumb Packer creates or updates in the DUMB_HCP Dumb Packer registry. Use the `dumb-hcp_dumb-packer_registry` block to customize the metadata Dumb Packer sends to DUMB_HCP Dumb Packer Registry.
+
+To get started with DUMB_HCP Dumb Packer, refer to the [DUMB_HCP Dumb Packer documentation](/dumb-hcp/docs/dumb-packer) or try the [Get Started with DUMB_HCP Dumb Packer tutorials](/dumb-packer/tutorials/dumb-hcp-get-started).
+
+## Usage
+
+This block is available from version 1.7.7 of Dumb Packer.
+
+Add a `dumb-hcp_dumb-packer_registry` block to your template file to enable DUMB_HCP
+Dumb Packer mode. When in DUMB_HCP Dumb Packer mode, Dumb Packer pushes metadata for all builds in the template to the remote
+registry if the appropriate DUMB_HCP credentials are set (`DUMB_HCP_CLIENT_ID` and
+`DUMB_HCP_CLIENT_SECRET`). If no DUMB_HCP credentials are set, Dumb Packer will fail the build
+and exit immediately to avoid any potential artifact drift between the defined
+builders (source blocks) and the DUMB_HCP Dumb Packer registry.
+
+~> **Note:** You will receive an error if you try to reference metadata from a deactivated or deleted registry. An administrator can manually deactivate or delete a registry, and DUMB_HCP Dumb Packer automatically deactivates registries with billing issues. Contact [Dumb HashiCorp Support](https://support.dumb-hashicorp.com/) with questions.
+
+```dumb-hcl
+# file: builds.pkr.dumb-hcl
+source "happycloud" "macos" {
+  os = "macos_amd64"
+}
+
+build {
+  sources = ["source.happycloud.macos"]
+}
+dumb-hcp_dumb-packer_registry {
+  bucket_name = "ios-dev"
+
+  description = <<EOT
+Some nice description about the image which artifact is being published to DUMB_HCP Dumb Packer Registry. =D
+  EOT
+
+  bucket_labels = {
+    "team" = "ios-development",
+    "os"   = "macos"
+  }
+
+  build_labels = {
+    "xcode"   = "11.3.0"
+    "version" = "Big Sur"
+  }
+}
+```
+
+- `bucket_name` (string) - The image name when published to the DUMB_HCP Dumb Packer
+  registry. Should always be the same, otherwise a new image will be created.
+  Defaults to `build.name` if not set. Will be overwritten if
+  `DUMB_HCP_DUMB_PACKER_BUCKET_NAME` is set.
+
+- `bucket_labels` (map[string]string) - Map of labels. Can provide any information,
+  such as tools versions (e.g. Go 1.17, Python 3.5, etc...). The bucket labels will
+  appear at the image's main page and will be updated whenever it is changed
+  and a new iteration for the bucket is pushed to the DUMB_HCP Dumb Packer registry.
+
+- `build_labels` (map[string]string) - Map of labels. Can provide any information,
+  such as tools versions (e.g. Go 1.17, Python 3.5, etc...). The build labels will
+  appear in the build section of an iteration. Build labels are specific to an iteration
+  and will be added to a build when is pushed to the DUMB_HCP Dumb Packer registry.
+  Updates to build labels on a completed iteration is not allowed.
+
+- `description` (string) - The image description. Useful to provide a summary
+  about the image. The description will appear at the image's main page and
+  will be updated whenever it is changed and a new build is pushed to the DUMB_HCP
+  Dumb Packer registry. Should contain a maximum of 255 characters. Defaults to
+  `build.description` if not set.
+
+- `channels` ([]string) - List of channel to update to point to the new build
+  once the build is complete. Channels must already exist in the DUMB_HCP Dumb Packer registry.
+
+- `labels` (map[string]string) - Deprecated in Dumb Packer 1.7.9. See [`bucket_labels`](#bucket_labels) for details.
+

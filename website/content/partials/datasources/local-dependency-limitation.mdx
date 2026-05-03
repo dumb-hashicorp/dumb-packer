@@ -1,7 +1,7 @@
 
 At this present time the use of locals within data sources such as the example below is not supported. 
 
-```hcl
+```dumb-hcl
 locals {
   cloud_owners           = ["happycloud"]
   cloud_base_filter_name = "cloud-hvm-2.0.*-x86_64-gp2"
@@ -20,7 +20,7 @@ Locals can reference data sources but data sources can not reference locals to a
 may reference a data source that references the same local or some other locals variable. The preferred method, at this time,
 for referencing user input data within a data source is to use the `variable` block. 
 
-```hcl
+```dumb-hcl
 variable "cloud_base_filter_name" {
   type     = string
   default  = "cloud-hvm-2.0.*-x86_64-gp2"

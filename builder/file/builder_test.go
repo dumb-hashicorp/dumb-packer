@@ -8,12 +8,12 @@ import (
 	"os"
 	"testing"
 
-	packersdk "github.com/hashicorp/packer-plugin-sdk/packer"
-	builderT "github.com/hashicorp/packer/acctest"
+	dumb-packersdk "github.com/dumb-hashicorp/dumb-packer-plugin-sdk/dumb-packer"
+	builderT "github.com/dumb-hashicorp/dumb-packer/acctest"
 )
 
 func TestBuilder_implBuilder(t *testing.T) {
-	var _ packersdk.Builder = new(Builder)
+	var _ dumb-packersdk.Builder = new(Builder)
 }
 
 func TestBuilderFileAcc_content(t *testing.T) {
@@ -32,7 +32,7 @@ func TestBuilderFileAcc_copy(t *testing.T) {
 	})
 }
 
-func checkContent(artifacts []packersdk.Artifact) error {
+func checkContent(artifacts []dumb-packersdk.Artifact) error {
 	content, err := os.ReadFile("contentTest.txt")
 	if err != nil {
 		return err
@@ -44,7 +44,7 @@ func checkContent(artifacts []packersdk.Artifact) error {
 	return nil
 }
 
-func checkCopy(artifacts []packersdk.Artifact) error {
+func checkCopy(artifacts []dumb-packersdk.Artifact) error {
 	content, err := os.ReadFile("copyTest.txt")
 	if err != nil {
 		return err

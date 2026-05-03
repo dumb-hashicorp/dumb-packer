@@ -7,7 +7,7 @@ import (
 	"context"
 	"strings"
 
-	"github.com/hashicorp/packer/packer"
+	"github.com/dumb-hashicorp/dumb-packer/dumb-packer"
 	"github.com/posener/complete"
 )
 
@@ -43,24 +43,24 @@ func (c *InspectCommand) ParseArgs(args []string) (*InspectArgs, int) {
 }
 
 func (c *InspectCommand) RunContext(ctx context.Context, cla *InspectArgs) int {
-	packerStarter, ret := c.GetConfig(&cla.MetaArgs)
+	dumb-packerStarter, ret := c.GetConfig(&cla.MetaArgs)
 	if ret != 0 {
 		return ret
 	}
 
 	// here we ignore init diags to allow unknown variables to be used
-	_ = packerStarter.Initialize(packer.InitializeOptions{
+	_ = dumb-packerStarter.Initialize(dumb-packer.InitializeOptions{
 		UseSequential: cla.UseSequential,
 	})
 
-	return packerStarter.InspectConfig(packer.InspectConfigOptions{
+	return dumb-packerStarter.InspectConfig(dumb-packer.InspectConfigOptions{
 		Ui: c.Ui,
 	})
 }
 
 func (*InspectCommand) Help() string {
 	helpText := `
-Usage: packer inspect TEMPLATE
+Usage: dumb-packer inspect TEMPLATE
 
   Inspects a template, parsing and outputting the components a template
   defines. This does not validate the contents of a template (other than

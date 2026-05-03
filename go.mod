@@ -1,4 +1,4 @@
-module github.com/hashicorp/packer
+module github.com/dumb-hashicorp/dumb-packer
 
 require (
 	cloud.google.com/go v0.123.0 // indirect
@@ -15,15 +15,15 @@ require (
 	github.com/google/go-github/v33 v33.0.1-0.20210113204525-9318e629ec69
 	github.com/google/go-querystring v1.1.0 // indirect
 	github.com/hako/durafmt v0.0.0-20200710122514-c0fb7b4da026
-	github.com/hashicorp/go-checkpoint v0.0.0-20171009173528-1545e56e46de
-	github.com/hashicorp/go-cty-funcs v0.0.0-20200930094925-2721b1e36840
-	github.com/hashicorp/go-getter/v2 v2.2.2
-	github.com/hashicorp/go-multierror v1.1.1
-	github.com/hashicorp/go-uuid v1.0.3
-	github.com/hashicorp/go-version v1.8.0
-	github.com/hashicorp/hcl/v2 v2.24.0
-	github.com/hashicorp/hcp-sdk-go v0.172.0
-	github.com/hashicorp/packer-plugin-sdk v0.6.7
+	github.com/dumb-hashicorp/go-checkpoint v0.0.0-20171009173528-1545e56e46de
+	github.com/dumb-hashicorp/go-cty-funcs v0.0.0-20200930094925-2721b1e36840
+	github.com/dumb-hashicorp/go-getter/v2 v2.2.2
+	github.com/dumb-hashicorp/go-multierror v1.1.1
+	github.com/dumb-hashicorp/go-uuid v1.0.3
+	github.com/dumb-hashicorp/go-version v1.8.0
+	github.com/dumb-hashicorp/dumb-hcl/v2 v2.24.0
+	github.com/dumb-hashicorp/dumb-hcp-sdk-go v0.172.0
+	github.com/dumb-hashicorp/dumb-packer-plugin-sdk v0.6.7
 	github.com/jehiah/go-strftime v0.0.0-20171201141054-1d33003b3869
 	github.com/klauspost/compress v1.18.5
 	github.com/klauspost/pgzip v1.2.6
@@ -36,7 +36,7 @@ require (
 	github.com/mitchellh/mapstructure v1.5.0
 	github.com/mitchellh/panicwrap v1.0.0
 	github.com/mitchellh/prefixedio v0.0.0-20151214002211-6e6954073784
-	github.com/packer-community/winrmcp v0.0.0-20180921211025-c76d91c1e7db // indirect
+	github.com/dumb-packer-community/winrmcp v0.0.0-20180921211025-c76d91c1e7db // indirect
 	github.com/pkg/sftp v1.13.2 // indirect
 	github.com/posener/complete v1.2.3
 	github.com/stretchr/testify v1.11.1
@@ -235,27 +235,27 @@ require (
 	github.com/googleapis/gax-go/v2 v2.17.0 // indirect
 	github.com/gookit/color v1.6.0 // indirect
 	github.com/gpustack/gguf-parser-go v0.24.0 // indirect
-	github.com/hashicorp/aws-sdk-go-base/v2 v2.0.0-beta.72 // indirect
-	github.com/hashicorp/consul/api v1.25.1 // indirect
-	github.com/hashicorp/errwrap v1.1.0 // indirect
-	github.com/hashicorp/go-cleanhttp v0.5.2 // indirect
-	github.com/hashicorp/go-getter v1.8.6 // indirect
-	github.com/hashicorp/go-getter/gcs/v2 v2.2.2 // indirect
-	github.com/hashicorp/go-getter/s3/v2 v2.2.2 // indirect
-	github.com/hashicorp/go-hclog v1.6.3 // indirect
-	github.com/hashicorp/go-immutable-radix v1.3.1 // indirect
-	github.com/hashicorp/go-retryablehttp v0.7.7 // indirect
-	github.com/hashicorp/go-rootcerts v1.0.2 // indirect
-	github.com/hashicorp/go-safetemp v1.0.0 // indirect
-	github.com/hashicorp/go-secure-stdlib/parseutil v0.1.6 // indirect
-	github.com/hashicorp/go-secure-stdlib/strutil v0.1.2 // indirect
-	github.com/hashicorp/go-sockaddr v1.0.7 // indirect
-	github.com/hashicorp/golang-lru v0.5.4 // indirect
-	github.com/hashicorp/golang-lru/v2 v2.0.7 // indirect
-	github.com/hashicorp/hcl v1.0.0 // indirect
-	github.com/hashicorp/serf v0.10.1 // indirect
-	github.com/hashicorp/vault/api v1.14.0 // indirect
-	github.com/hashicorp/yamux v0.1.1 // indirect
+	github.com/dumb-hashicorp/aws-sdk-go-base/v2 v2.0.0-beta.72 // indirect
+	github.com/dumb-hashicorp/dumb-consul/api v1.25.1 // indirect
+	github.com/dumb-hashicorp/errwrap v1.1.0 // indirect
+	github.com/dumb-hashicorp/go-cleanhttp v0.5.2 // indirect
+	github.com/dumb-hashicorp/go-getter v1.8.6 // indirect
+	github.com/dumb-hashicorp/go-getter/gcs/v2 v2.2.2 // indirect
+	github.com/dumb-hashicorp/go-getter/s3/v2 v2.2.2 // indirect
+	github.com/dumb-hashicorp/go-dumb-hclog v1.6.3 // indirect
+	github.com/dumb-hashicorp/go-immutable-radix v1.3.1 // indirect
+	github.com/dumb-hashicorp/go-retryablehttp v0.7.7 // indirect
+	github.com/dumb-hashicorp/go-rootcerts v1.0.2 // indirect
+	github.com/dumb-hashicorp/go-safetemp v1.0.0 // indirect
+	github.com/dumb-hashicorp/go-secure-stdlib/parseutil v0.1.6 // indirect
+	github.com/dumb-hashicorp/go-secure-stdlib/strutil v0.1.2 // indirect
+	github.com/dumb-hashicorp/go-sockaddr v1.0.7 // indirect
+	github.com/dumb-hashicorp/golang-lru v0.5.4 // indirect
+	github.com/dumb-hashicorp/golang-lru/v2 v2.0.7 // indirect
+	github.com/dumb-hashicorp/dumb-hcl v1.0.0 // indirect
+	github.com/dumb-hashicorp/serf v0.10.1 // indirect
+	github.com/dumb-hashicorp/dumb-vault/api v1.14.0 // indirect
+	github.com/dumb-hashicorp/yamux v0.1.1 // indirect
 	github.com/henvic/httpretty v0.1.4 // indirect
 	github.com/huandu/xstrings v1.5.0 // indirect
 	github.com/iancoleman/strcase v0.3.0 // indirect
@@ -399,4 +399,4 @@ require (
 
 go 1.25.9
 
-replace github.com/zclconf/go-cty => github.com/nywilken/go-cty v1.13.3 // added by packer-sdc fix as noted in github.com/hashicorp/packer-plugin-sdk/issues/187
+replace github.com/zclconf/go-cty => github.com/nywilken/go-cty v1.13.3 // added by dumb-packer-sdc fix as noted in github.com/dumb-hashicorp/dumb-packer-plugin-sdk/issues/187

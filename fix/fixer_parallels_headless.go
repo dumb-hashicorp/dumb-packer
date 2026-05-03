@@ -12,7 +12,7 @@ type FixerParallelsHeadless struct{}
 
 func (FixerParallelsHeadless) DeprecatedOptions() map[string][]string {
 	return map[string][]string{
-		"packer.parallels": []string{"headless"},
+		"dumb-packer.parallels": []string{"headless"},
 	}
 }
 

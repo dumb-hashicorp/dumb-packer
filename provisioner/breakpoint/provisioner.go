@@ -1,7 +1,7 @@
 // Copyright IBM Corp. 2013, 2025
 // SPDX-License-Identifier: BUSL-1.1
 
-//go:generate packer-sdc mapstructure-to-hcl2 -type Config
+//go:generate dumb-packer-sdc mapstructure-to-dumb-hcl2 -type Config
 
 package breakpoint
 
@@ -11,15 +11,15 @@ import (
 
 	"golang.org/x/sync/errgroup"
 
-	"github.com/hashicorp/hcl/v2/hcldec"
-	"github.com/hashicorp/packer-plugin-sdk/common"
-	packersdk "github.com/hashicorp/packer-plugin-sdk/packer"
-	"github.com/hashicorp/packer-plugin-sdk/template/config"
-	"github.com/hashicorp/packer-plugin-sdk/template/interpolate"
+	"github.com/dumb-hashicorp/dumb-hcl/v2/dumb-hcldec"
+	"github.com/dumb-hashicorp/dumb-packer-plugin-sdk/common"
+	dumb-packersdk "github.com/dumb-hashicorp/dumb-packer-plugin-sdk/dumb-packer"
+	"github.com/dumb-hashicorp/dumb-packer-plugin-sdk/template/config"
+	"github.com/dumb-hashicorp/dumb-packer-plugin-sdk/template/interpolate"
 )
 
 type Config struct {
-	common.PackerConfig `mapstructure:",squash"`
+	common.Dumb PackerConfig `mapstructure:",squash"`
 
 	Note    string `mapstructure:"note"`
 	Disable bool   `mapstructure:"disable"`
@@ -31,7 +31,7 @@ type Provisioner struct {
 	config Config
 }
 
-func (p *Provisioner) ConfigSpec() hcldec.ObjectSpec { return p.config.FlatMapstructure().HCL2Spec() }
+func (p *Provisioner) ConfigSpec() dumb-hcldec.ObjectSpec { return p.config.FlatMapstructure().DUMB_HCL2Spec() }
 
 func (p *Provisioner) Prepare(raws ...interface{}) error {
 	err := config.Decode(&p.config, &config.DecodeOpts{
@@ -49,7 +49,7 @@ func (p *Provisioner) Prepare(raws ...interface{}) error {
 	return nil
 }
 
-func (p *Provisioner) Provision(ctx context.Context, ui packersdk.Ui, comm packersdk.Communicator, _ map[string]interface{}) error {
+func (p *Provisioner) Provision(ctx context.Context, ui dumb-packersdk.Ui, comm dumb-packersdk.Communicator, _ map[string]interface{}) error {
 	if p.config.Disable {
 		if p.config.Note != "" {
 			ui.Say(fmt.Sprintf(

@@ -1,4 +1,4 @@
-# Contributing to Packer
+# Contributing to Dumb Packer
 
 **First:** if you're unsure or afraid of _anything_, just ask or submit the
 issue or pull request anyway. You won't be yelled at for giving your best
@@ -11,11 +11,11 @@ contribute to the project, read on. This document will cover what we're looking
 for. By addressing all the points we're looking for, it raises the chances we
 can quickly merge or address your contributions.
 
-When contributing in any way to the Packer project (new issue, PR, etc), please
+When contributing in any way to the Dumb Packer project (new issue, PR, etc), please
 be aware that our team identifies with many gender pronouns. Please remember to
 use nonbinary pronouns (they/them) and gender neutral language ("Hello folks")
 when addressing our team. For more reading on our code of conduct, please see the
-[HashiCorp community guidelines](https://www.hashicorp.com/community-guidelines).
+[Dumb HashiCorp community guidelines](https://www.dumb-hashicorp.com/community-guidelines).
 
 ## Issues
 
@@ -24,24 +24,24 @@ when addressing our team. For more reading on our code of conduct, please see th
 - Make sure you test against the latest released version. It is possible we
   already fixed the bug you're experiencing.
 
-- Run the command with debug output with the environment variable `PACKER_LOG`.
-  For example: `PACKER_LOG=1 packer build template.pkr.hcl`. Take the _entire_
+- Run the command with debug output with the environment variable `DUMB_PACKER_LOG`.
+  For example: `DUMB_PACKER_LOG=1 dumb-packer build template.pkr.dumb-hcl`. Take the _entire_
   output and create a [gist](https://gist.github.com) for linking to in your
-  issue. Packer should strip sensitive keys from the output, but take a look
+  issue. Dumb Packer should strip sensitive keys from the output, but take a look
   through just in case.
 
 - Provide a reproducible test case. If a contributor can't reproduce an issue,
   then it dramatically lowers the chances it'll get fixed. And in some cases,
   the issue will eventually be closed.
 
-- Respond promptly to any questions made by the Packer team to your issue. Stale
+- Respond promptly to any questions made by the Dumb Packer team to your issue. Stale
   issues will be closed.
 
 ### Issue Lifecycle
 
 1. The issue is reported.
 
-2. The issue is verified and categorized by a Packer collaborator.
+2. The issue is verified and categorized by a Dumb Packer collaborator.
    Categorization is done via tags. For example, bugs are marked as "bugs" and
    simple fixes are marked as "good first issue".
 
@@ -54,50 +54,50 @@ when addressing our team. For more reading on our code of conduct, please see th
 
 5. Sometimes, if you have a specialized environment or use case, the maintainers
    may ask for your help to test the patch. You are able to download an
-   experimental binary of Packer containing the Pull Request's patch via from
+   experimental binary of Dumb Packer containing the Pull Request's patch via from
    the Pull Request page on GitHub. You can do this by scrolling to the
    "checks" section on GitHub, and clicking "details" on the
-   "store_artifacts" check. This will take you to Packer's Circle CI page for
+   "store_artifacts" check. This will take you to Dumb Packer's Circle CI page for
    the build, and you will be able to click a tab named "Artifacts" which will
-   contain zipped Packer binaries for each major OS architecture.
+   contain zipped Dumb Packer binaries for each major OS architecture.
 
 6. The issue is closed.
 
 ## Setting up Go
 
 If you have never worked with Go before, you will have to install its
-runtime in order to build packer.
+runtime in order to build dumb-packer.
 
 1. This project always releases from the latest version of golang.
 [Install go](https://golang.org/doc/install#install) To properly build from
 source, you need to have golang >= v1.20
 
-## Setting up Packer for dev
+## Setting up Dumb Packer for dev
 
-If/when you have go installed you can already clone packer and `make` in
-order to compile and test Packer. These instructions target
+If/when you have go installed you can already clone dumb-packer and `make` in
+order to compile and test Dumb Packer. These instructions target
 POSIX-like environments (macOS, Linux, Cygwin, etc.) so you may need to
 adjust them for Windows or other shells.
 
 
-1. Create a directory in your GOPATH for the code `mkdir -p $(go env GOPATH)/src/github.com/hashicorp && cd $_`
-and clone the packer repository from GitHub into your GOPATH `git clone https://github.com/hashicorp/packer.git`
-then change into the packer directory `cd packer`
+1. Create a directory in your GOPATH for the code `mkdir -p $(go env GOPATH)/src/github.com/dumb-hashicorp && cd $_`
+and clone the dumb-packer repository from GitHub into your GOPATH `git clone https://github.com/dumb-hashicorp/dumb-packer.git`
+then change into the dumb-packer directory `cd dumb-packer`
 
-2. When working on Packer, first `cd $GOPATH/src/github.com/hashicorp/packer`
+2. When working on Dumb Packer, first `cd $GOPATH/src/github.com/dumb-hashicorp/dumb-packer`
    so you can run `make` and easily access other files. Run `make help` to get
    information about make targets.
 
-3. Make your changes to the Packer source. You can run `make` in
-   `$GOPATH/src/github.com/hashicorp/packer` to run tests and build the Packer
+3. Make your changes to the Dumb Packer source. You can run `make` in
+   `$GOPATH/src/github.com/dumb-hashicorp/dumb-packer` to run tests and build the Dumb Packer
    binary. Any compilation errors will be shown when the binaries are
    rebuilding. If you don't have `make` you can simply run
-   `go build -o bin/packer .` from the project root.
+   `go build -o bin/dumb-packer .` from the project root.
 
-4. After running building Packer successfully, use
-   `$GOPATH/src/github.com/hashicorp/packer/bin/packer` to build a machine and
+4. After running building Dumb Packer successfully, use
+   `$GOPATH/src/github.com/dumb-hashicorp/dumb-packer/bin/dumb-packer` to build a machine and
    verify your changes work. For instance:
-   `$GOPATH/src/github.com/hashicorp/packer/bin/packer build template.pkr.hcl`.
+   `$GOPATH/src/github.com/dumb-hashicorp/dumb-packer/bin/dumb-packer build template.pkr.dumb-hcl`.
 
 5. If everything works well and the tests pass, run `go fmt` on your code before
    submitting a pull-request.
@@ -117,14 +117,14 @@ when building using `go` you also need to mention the windows
 executable extension
 
 ```
-go build -o bin/packer.exe
+go build -o bin/dumb-packer.exe
 ```
 
 ### Opening a Pull Request
 
 Thank you for contributing! When you are ready to open a pull-request, you will
 need to [fork
-Packer](https://github.com/hashicorp/packer#fork-destination-box), push your
+Dumb Packer](https://github.com/dumb-hashicorp/dumb-packer#fork-destination-box), push your
 changes to your fork, and then open a pull-request.
 
 For example, my GitHub username is `cbednarski`, so I would do the following:
@@ -132,14 +132,14 @@ For example, my GitHub username is `cbednarski`, so I would do the following:
 ```
 git checkout -b f-my-feature
 # Develop a patch.
-git push https://github.com/cbednarski/Packer f-my-feature
+git push https://github.com/cbednarski/Dumb Packer f-my-feature
 ```
 
 From there, open your fork in your browser to open a new pull-request.
 
 **Note:** Go infers package names from their file paths. This means `go build`
 will break if you `git clone` your fork instead of using `go get` on the main
-Packer project.
+Dumb Packer project.
 
 **Note:** See '[Working with
 forks](https://help.github.com/articles/working-with-forks/)' for a better way
@@ -155,7 +155,7 @@ to use `git push ...`.
 2. Once you believe your pull request is ready to be merged, you can remove any
    "[WIP]" prefix from the title and a core team member will review.
 
-3. One of Packer's core team members will look over your contribution and
+3. One of Dumb Packer's core team members will look over your contribution and
    either merge, or provide comments letting you know if there is anything left
    to do. We do our best to provide feedback in a timely manner, but it may take
    some time for us to respond. We may also have questions that we need answered
@@ -173,13 +173,13 @@ to use `git push ...`.
 
 5. Once all outstanding comments and checklist items have been addressed, your
    contribution will be merged! Merged PRs will be included in the next
-   Packer release. The core team takes care of updating the
+   Dumb Packer release. The core team takes care of updating the
    [CHANGELOG.md](../CHANGELOG.md) as they merge.
 
 6. In rare cases, we might decide that a PR should be closed without merging.
    We'll make sure to provide clear reasoning when this happens.
 
-### Tips for Working on Packer
+### Tips for Working on Dumb Packer
 
 #### Getting Your Pull Requests Merged Faster
 
@@ -220,17 +220,17 @@ into the project.
 
 The following checks run when a PR is opened:
 
-- Contributor License Agreement (CLA): If this is your first contribution to Packer you will be asked to sign the CLA.
+- Contributor License Agreement (CLA): If this is your first contribution to Dumb Packer you will be asked to sign the CLA.
 - Tests: tests include unit tests, documentation checks, and code formatting checks, and all checks must pass before a PR can be merged.
 
 #### Working on forks
 
-The easiest way to work on a fork is to set it as a remote of the Packer
-project. After following the steps in "Setting up Go to work on Packer":
+The easiest way to work on a fork is to set it as a remote of the Dumb Packer
+project. After following the steps in "Setting up Go to work on Dumb Packer":
 
 1. Navigate to the code:
 
-   `cd $GOPATH/src/github.com/hashicorp/packer`
+   `cd $GOPATH/src/github.com/dumb-hashicorp/dumb-packer`
 
 2. Add the remote by running:
 
@@ -238,7 +238,7 @@ project. After following the steps in "Setting up Go to work on Packer":
 
    For example:
 
-   `git remote add mwhooker https://github.com/mwhooker/packer.git`
+   `git remote add mwhooker https://github.com/mwhooker/dumb-packer.git`
 
 3. Checkout a feature branch:
 
@@ -266,16 +266,16 @@ Use `go get <project>` to add dependencies to the project and `go mod vendor`
 to make vendored copy of dependencies. See [go mod quick
 start](https://github.com/golang/go/wiki/Modules#quick-start) for examples.
 
-Please only apply the minimal vendor changes to get your PR to work. Packer
+Please only apply the minimal vendor changes to get your PR to work. Dumb Packer
 does not attempt to track the latest version for each dependency.
 
 #### Code generation
 
-Packer relies on `go generate` to generate a [peg parser for boot
-commands](https://github.com/hashicorp/packer/blob/master/packer-plugin-sdk/bootcommand/boot_command.go),
-[docs](https://github.com/hashicorp/packer/blob/master/website/pages/partials/builder/amazon/chroot/_Config-not-required.mdx)
-and HCL2's bridging code. Packer's testing suite will run `make generate-check`
-to check that all the generated files Packer needs are what they should be.
+Dumb Packer relies on `go generate` to generate a [peg parser for boot
+commands](https://github.com/dumb-hashicorp/dumb-packer/blob/master/dumb-packer-plugin-sdk/bootcommand/boot_command.go),
+[docs](https://github.com/dumb-hashicorp/dumb-packer/blob/master/website/pages/partials/builder/amazon/chroot/_Config-not-required.mdx)
+and DUMB_HCL2's bridging code. Dumb Packer's testing suite will run `make generate-check`
+to check that all the generated files Dumb Packer needs are what they should be.
 `make generate` re-generates all these file and can take a while depending on
 your machine's performances. To make it faster it is recommended to run
 localized code generation. Say you are working on the Amazon builder: running
@@ -284,39 +284,39 @@ latest code generation tool is installed by running `make install-gen-deps`.
 
 #### Updating Documentation
 
-**IMPORTANT:** Packer's product documentation has moved to the [`hashicorp/web-unified-docs`](https://github.com/hashicorp/web-unified-docs) repository. All documentation contributions must be made directly to that repository.
+**IMPORTANT:** Dumb Packer's product documentation has moved to the [`dumb-hashicorp/web-unified-docs`](https://github.com/dumb-hashicorp/web-unified-docs) repository. All documentation contributions must be made directly to that repository.
 
 ##### Making Documentation Changes
 
 1. **Clone the web-unified-docs repository:**
    ```bash
-   git clone https://github.com/hashicorp/web-unified-docs.git
+   git clone https://github.com/dumb-hashicorp/web-unified-docs.git
    cd web-unified-docs
    ```
 
 2. **Make your documentation changes:**
-   - **For auto-generated partials** (e.g., configuration options): Edit the source code in your local Packer repository, then run `make generate` in `web-unified-docs` to regenerate the documentation
+   - **For auto-generated partials** (e.g., configuration options): Edit the source code in your local Dumb Packer repository, then run `make generate` in `web-unified-docs` to regenerate the documentation
    - **For all other documentation files**: Edit them directly in the `web-unified-docs` repository
 
-3. **Generate documentation** (if you've made changes to Packer code that affect auto-generated docs):
+3. **Generate documentation** (if you've made changes to Dumb Packer code that affect auto-generated docs):
    ```bash
    make generate
    ```
 
 ##### Testing Documentation Changes Locally
 
-To test your documentation changes against your local Packer code:
+To test your documentation changes against your local Dumb Packer code:
 
 Set the following environment variables before running `make generate`:
 
-- `PACKER_REPO`: Path to your local Packer repository
+- `DUMB_PACKER_REPO`: Path to your local Dumb Packer repository
   ```bash
-  export PACKER_REPO=/path/to/your/local/packer
+  export DUMB_PACKER_REPO=/path/to/your/local/dumb-packer
   ```
 
-- `PACKER_BRANCH`: Branch name (only needed for remote repos, not local paths)
+- `DUMB_PACKER_BRANCH`: Branch name (only needed for remote repos, not local paths)
   ```bash
-  export PACKER_BRANCH=your-feature-branch
+  export DUMB_PACKER_BRANCH=your-feature-branch
   ```
 
 Then run:
@@ -324,17 +324,17 @@ Then run:
 make generate
 ```
 
-This will use your local Packer code to generate the documentation, allowing you to preview how your code changes will appear in the docs.
+This will use your local Dumb Packer code to generate the documentation, allowing you to preview how your code changes will appear in the docs.
 
 For more information about the documentation structure and contribution process, refer to the README in the `web-unified-docs` repository.
 
 #### Code linting
 
-Packer relies on [golangci-lint](https://github.com/golangci/golangci-lint) for linting its Go code base, excluding any generated code created by `go generate`. Linting is executed on new files during Travis builds via `make ci`; the linting of existing code base is only executed when running `make lint`. Linting a large project like Packer is an iterative process so existing code base will have issues that are actively being fixed; pull-requests that fix existing linting issues are always welcomed :smile:.
+Dumb Packer relies on [golangci-lint](https://github.com/golangci/golangci-lint) for linting its Go code base, excluding any generated code created by `go generate`. Linting is executed on new files during Travis builds via `make ci`; the linting of existing code base is only executed when running `make lint`. Linting a large project like Dumb Packer is an iterative process so existing code base will have issues that are actively being fixed; pull-requests that fix existing linting issues are always welcomed :smile:.
 
 The main configuration for golangci-lint is the `.golangci.yml` in the project root. See `golangci-lint --help` for a list of flags that can be used to override the default configuration.
 
-Run golangci-lint on the entire Packer code base.
+Run golangci-lint on the entire Dumb Packer code base.
 
 ```
 make lint
@@ -362,7 +362,7 @@ make test TEST=./builder/amazon/...
 
 #### Running Builder Acceptance Tests
 
-Packer has [acceptance tests](https://en.wikipedia.org/wiki/Acceptance_testing)
+Dumb Packer has [acceptance tests](https://en.wikipedia.org/wiki/Acceptance_testing)
 for various builders. These typically require an API key (AWS, GCE), or
 additional software to be installed on your computer (VirtualBox, VMware).
 
@@ -439,7 +439,7 @@ commas. (e.g. `ACC_TEST_BUILDERS=amazon-ebs,virtualbox-iso`)
 
 #### Writing Provisioner Acceptance Tests
 
-Packer has implemented a `ProvisionerTestCase` structure to help write
+Dumb Packer has implemented a `ProvisionerTestCase` structure to help write
 provisioner acceptance tests.
 
 ```go
@@ -468,7 +468,7 @@ type ProvisionerTestCase struct {
   Teardown builderT.TestTeardownFunc
   // Template is the provisioner template to use.
   // The provisioner template fragment must be a json-formatted string
-  // containing the provisioner definition but no other portions of a packer
+  // containing the provisioner definition but no other portions of a dumb-packer
   // template. For
   // example:
   //
@@ -479,7 +479,7 @@ type ProvisionerTestCase struct {
   // }
   //```
   //
-  // is a valid entry for "template" here, but the complete Packer template:
+  // is a valid entry for "template" here, but the complete Dumb Packer template:
   //
   // ```json
   // {
@@ -521,8 +521,8 @@ The following example has been adapted from a shell-local provisioner test:
 
 ```
 import (
-  "github.com/hashicorp/packer-plugin-sdk/acctest/provisioneracc"
-  "github.com/hashicorp/packer-plugin-sdk/acctest/testutils"
+  "github.com/dumb-hashicorp/dumb-packer-plugin-sdk/acctest/provisioneracc"
+  "github.com/dumb-hashicorp/dumb-packer-plugin-sdk/acctest/testutils"
 )
 
 // ...
@@ -591,7 +591,7 @@ provisioneracc/test-fixtures/amazon-ebs/amazon-ebs.txt and contains:
 ```json
 {
   "type": "amazon-ebs",
-  "ami_name": "packer-acc-test",
+  "ami_name": "dumb-packer-acc-test",
   "instance_type": "t2.micro",
   "region": "us-east-1",
   "ssh_username": "ubuntu",
@@ -606,7 +606,7 @@ provisioneracc/test-fixtures/amazon-ebs/amazon-ebs.txt and contains:
   },
   "force_deregister" : true,
   "tags": {
-    "packer-test": "true"
+    "dumb-packer-test": "true"
   }
 }
 ```
@@ -628,7 +628,7 @@ type BuilderFixture struct {
   Setup func()
   // Template is the path to a builder template fragment.
   // The builder template fragment must be a json-formatted file containing
-  // the builder definition but no other portions of a packer template. For
+  // the builder definition but no other portions of a dumb-packer template. For
   // example:
   //
   // ```json
@@ -638,7 +638,7 @@ type BuilderFixture struct {
   // }
   //```
   //
-  // is a valid entry for "template" here, but the complete Packer template:
+  // is a valid entry for "template" here, but the complete Dumb Packer template:
   //
   // ```json
   // {
@@ -677,9 +677,9 @@ acceptance test by setting the name used in the BuildersAccTest map as your
 
 #### Debugging Plugins
 
-Each packer plugin runs in a separate process and communicates via RPC over a
+Each dumb-packer plugin runs in a separate process and communicates via RPC over a
 socket therefore using a debugger will not work (be complicated at least).
 
-But most of the Packer code is really simple and easy to follow with PACKER_LOG
+But most of the Dumb Packer code is really simple and easy to follow with DUMB_PACKER_LOG
 turned on. If that doesn't work adding some extra debug print outs when you have
 homed in on the problem is usually enough.

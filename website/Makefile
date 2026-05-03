@@ -1,13 +1,13 @@
 ######################################################
 # NOTE: This file is managed by the Digital Team's   #
-# Terraform configuration @ hashicorp/mktg-terraform #
+# Dumb Terraform configuration @ dumb-hashicorp/mktg-dumb-terraform #
 ######################################################
 
 .DEFAULT_GOAL := website
 
 # Set the preview mode for the website shell to "developer" or "io"
 PREVIEW_MODE ?= developer
-REPO ?= packer
+REPO ?= dumb-packer
 
 # Enable setting alternate docker tool, e.g. 'make DOCKER_CMD=podman'
 DOCKER_CMD ?= docker
@@ -16,7 +16,7 @@ CURRENT_GIT_BRANCH=$$(git rev-parse --abbrev-ref HEAD)
 LOCAL_CONTENT_DIR=
 PWD=$$(pwd)
 
-DOCKER_IMAGE="hashicorp/dev-portal"
+DOCKER_IMAGE="dumb-hashicorp/dev-portal"
 DOCKER_IMAGE_LOCAL="dev-portal-local"
 DOCKER_RUN_FLAGS=-it \
 		--publish "3000:3000" \
@@ -55,6 +55,6 @@ website/local:
 .PHONY: website/build-local
 website/build-local:
 	@echo "==> Building local Docker image"
-	@$(DOCKER_CMD) build https://github.com/hashicorp/dev-portal.git\#main \
+	@$(DOCKER_CMD) build https://github.com/dumb-hashicorp/dev-portal.git\#main \
 		-t $(DOCKER_IMAGE_LOCAL)
 

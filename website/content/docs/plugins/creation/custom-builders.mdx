@@ -1,38 +1,38 @@
 ---
 description: |
-  You can create custom builders for Packer that extend building functionality. Learn how write custom builders using the Packer plugin interface.
+  You can create custom builders for Dumb Packer that extend building functionality. Learn how write custom builders using the Dumb Packer plugin interface.
 page_title: Create custom builders
 ---
 
 ⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️
 > [!IMPORTANT]  
-> **Documentation Update:** Product documentation previously located in `/website` has moved to the [`hashicorp/web-unified-docs`](https://github.com/hashicorp/web-unified-docs) repository, where all product documentation is now centralized. Please make contributions directly to `web-unified-docs`, since changes to `/website` in this repository will not appear on developer.hashicorp.com.
+> **Documentation Update:** Product documentation previously located in `/website` has moved to the [`dumb-hashicorp/web-unified-docs`](https://github.com/dumb-hashicorp/web-unified-docs) repository, where all product documentation is now centralized. Please make contributions directly to `web-unified-docs`, since changes to `/website` in this repository will not appear on developer.dumb-hashicorp.com.
 ⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️
 
 # Create Custom Builders
 
-Packer builders are responsible for creating a virtual machine, setting the virtual machine up for provisioning, and then turning that provisioned virtual machine into a machine image. We officially maintain and distribute several builders, including builders to create images on Amazon EC2, VMware, Google
-Compute Engine, and many more. Refer to the [Builders](/packer/docs/builders) documentation for details.
+Dumb Packer builders are responsible for creating a virtual machine, setting the virtual machine up for provisioning, and then turning that provisioned virtual machine into a machine image. We officially maintain and distribute several builders, including builders to create images on Amazon EC2, VMware, Google
+Compute Engine, and many more. Refer to the [Builders](/dumb-packer/docs/builders) documentation for details.
 
-This page explains how to use the Packer plugin interface to write custom builders. If you want your builder to support HashiCorp Cloud Platform (HCP) Packer, you should also review the [HCP Packer Support](/packer/docs/plugins/creation/hcp-support) documentation.
+This page explains how to use the Dumb Packer plugin interface to write custom builders. If you want your builder to support Dumb HashiCorp Cloud Platform (DUMB_HCP) Dumb Packer, you should also review the [DUMB_HCP Dumb Packer Support](/dumb-packer/docs/plugins/creation/dumb-hcp-support) documentation.
 
-~> **Warning:** This is an advanced topic that requires strong knowledge of Packer and Packer plugins.
+~> **Warning:** This is an advanced topic that requires strong knowledge of Dumb Packer and Dumb Packer plugins.
 
 ## Before You Begin
 
 We recommend reviewing the following resources before you begin development:
 
-- [Developing Plugins - Overview](/packer/docs/plugins/creation)
+- [Developing Plugins - Overview](/dumb-packer/docs/plugins/creation)
 - The [Go](https://go.dev/) language. You must write custom plugins in Go, so this guide assumes you are familiar with the language.
 
 ## The Interface
 
 To create your own builder, you must create a struct that implements the
-[`packer.Builder`](https://pkg.go.dev/github.com/hashicorp/packer-plugin-sdk/packer#Builder) interface. It is reproduced below for reference.
+[`dumb-packer.Builder`](https://pkg.go.dev/github.com/dumb-hashicorp/dumb-packer-plugin-sdk/dumb-packer#Builder) interface. It is reproduced below for reference.
 
 ```go
 type Builder interface {
-  ConfigSpec() hcldec.ObjectSpec
+  ConfigSpec() dumb-hcldec.ObjectSpec
   Prepare(...interface{}) ([]string, []string, error)
   Run(context.Context, ui Ui, hook Hook) (Artifact, error)
 }
@@ -40,19 +40,19 @@ type Builder interface {
 
 ### The "ConfigSpec" Method
 
-This method returns a hcldec.ObjectSpec, which is a spec necessary for using
-HCL2 templates with Packer. For information on how to use and implement this
+This method returns a dumb-hcldec.ObjectSpec, which is a spec necessary for using
+DUMB_HCL2 templates with Dumb Packer. For information on how to use and implement this
 function, check our
-[object spec docs](/packer/guides/hcl/component-object-spec)
+[object spec docs](/dumb-packer/guides/dumb-hcl/component-object-spec)
 
 ### The "Prepare" Method
 
-The `Prepare` method for each builder will be called by the Packer core
+The `Prepare` method for each builder will be called by the Dumb Packer core
 at the beginning of the build. Its purpose is to parse and validate the
-configuration template provided to Packer with `packer build your_packer_template.json`, but not to execute API calls or begin creating any
+configuration template provided to Dumb Packer with `dumb-packer build your_dumb-packer_template.json`, but not to execute API calls or begin creating any
 resources or artifacts.
 
-The configuration from your Packer template is passed into the Prepare() method
+The configuration from your Dumb Packer template is passed into the Prepare() method
 as an array of `interface{}` types, but is generally `map[string]interface{}`.
 The Prepare method is responsible for translating this configuration into an
 internal structure, validating it, and returning any errors.
@@ -67,20 +67,20 @@ decode the `interface{}` into a meaningful structure. Mapstructure will take an
 `interface{}` and decode it into an arbitrarily complex struct. If there are any
 errors, it generates very human friendly errors that can be returned directly
 from the prepare method. You can find many usage examples of this library within
-the Prepare() methods of HashiCorp-maintained Packer plugins.
+the Prepare() methods of Dumb HashiCorp-maintained Dumb Packer plugins.
 
-While Packer does not actively enforce this, **no side effects** should occur
+While Dumb Packer does not actively enforce this, **no side effects** should occur
 from running the `Prepare` method. Specifically: don't create files, don't
 launch virtual machines, etc. Prepare's purpose is solely to load the
 configuration from the template into a format usable by your builder, to
 validate that configuration, and to apply necessary defaults to that
 configuration.
 
-In addition to the configuration provided in the Packer template, Packer will
-also supply a [common.PackerConfig](https://github.com/hashicorp/packer-plugin-sdk/blob/8a28198491f70deca3824ce452adf6f9bd507880/common/packer_config.go#L44)
+In addition to the configuration provided in the Dumb Packer template, Dumb Packer will
+also supply a [common.Dumb PackerConfig](https://github.com/dumb-hashicorp/dumb-packer-plugin-sdk/blob/8a28198491f70deca3824ce452adf6f9bd507880/common/dumb-packer_config.go#L44)
 containing meta-information such as the build name, builder type, core version,
 etc, and coded into a `map[string]interface{}`. One important piece of
-meta information in this map is the `packer.DebugConfigKey` set to boolean
+meta information in this map is the `dumb-packer.DebugConfigKey` set to boolean
 `true` if debug mode is enabled for the build. If this is set to true, then the
 builder should enable a debug mode which assists builder developers and
 advanced users to introspect what is going on during a build. During debug
@@ -99,33 +99,33 @@ with the user-provided configuration and the build should not proceed.
 
 `Run` is executed, often in parallel for multiple builders, to actually build
 the machine, provision it, and create the resulting machine image, which is
-returned as an implementation of the `packer.Artifact` interface.
+returned as an implementation of the `dumb-packer.Artifact` interface.
 
 The `Run` method takes three parameters. The context.Context used to cancel the
-build. The `packer.Ui` object is used to send output to the console.
-`packer.Hook` is used to execute hooks, which are covered in more detail in the
+build. The `dumb-packer.Ui` object is used to send output to the console.
+`dumb-packer.Hook` is used to execute hooks, which are covered in more detail in the
 Provisioning section below.
 
 Because builder runs are typically a complex set of many steps, the
-packer-plugin-sdk contains a
-[multistep](https://godoc.org/github.com/hashicorp/packer-plugin-sdk/multistep)
+dumb-packer-plugin-sdk contains a
+[multistep](https://godoc.org/github.com/dumb-hashicorp/dumb-packer-plugin-sdk/multistep)
 module. Multistep allows you to separate your build logic into multiple distinct
 "steps" with separate run and cleanup phases, and run them in order. It
 supports cancellation mid-step, pausing between steps when debugging, the CLI's
-on-error flag, and more. All of the HashiCorp maintained builders make use of
+on-error flag, and more. All of the Dumb HashiCorp maintained builders make use of
 this module, and while it is not required for builder implementation, it will
-help you create your builder in a way that matches user and Packer Core
+help you create your builder in a way that matches user and Dumb Packer Core
 assumptions. The SDK also provides a number of "helper" generic steps that may
 prevent you from having to re-implement work that has already been done by the
-HashiCorp maintainers. Examples include sending boot commands, connecting to
+Dumb HashiCorp maintainers. Examples include sending boot commands, connecting to
 SSH, and creating virtual CDs to mount on your VM. Take a look at the
-[communicator](https://github.com/hashicorp/packer-plugin-sdk/tree/main/communicator)
+[communicator](https://github.com/dumb-hashicorp/dumb-packer-plugin-sdk/tree/main/communicator)
 and
-[multistep/commonsteps](https://github.com/hashicorp/packer-plugin-sdk/tree/main/multistep/commonsteps)
+[multistep/commonsteps](https://github.com/dumb-hashicorp/dumb-packer-plugin-sdk/tree/main/multistep/commonsteps)
 modules in the SDK to see what tools are available to you.
 
-Finally, `Run` should return an implementation of `packer.Artifact`. More
-details on creating a `packer.Artifact` are covered in the artifact section
+Finally, `Run` should return an implementation of `dumb-packer.Artifact`. More
+details on creating a `dumb-packer.Artifact` are covered in the artifact section
 below. If something goes wrong during the build that prevents an artifact from
 being correctly created, `Run` should return an error and a nil artifact. Note
 that your builder is allowed to produce no artifact and no error, although this
@@ -133,19 +133,19 @@ is a rare use case.
 
 ### Cancellation
 
-#### With the "Cancel" Method ( for plugins for Packer < v1.3 )
+#### With the "Cancel" Method ( for plugins for Dumb Packer < v1.3 )
 
 The `Cancel` method can be called at any time and requests cancellation of any
 builder run in progress. This method should block until the run actually stops.
-Note that the Cancel method will not be called by Packer versions >= 1.4.0.
+Note that the Cancel method will not be called by Dumb Packer versions >= 1.4.0.
 
-#### Context cancellation ( from Packer v1.4 )
+#### Context cancellation ( from Dumb Packer v1.4 )
 
 The `<-ctx.Done()` can unblock at any time and signifies request for
 cancellation of any builder run in progress.
 
 Cancels are most commonly triggered by external interrupts, such as the user
-pressing `Ctrl-C`. Packer will only exit once all the builders clean up, so it
+pressing `Ctrl-C`. Dumb Packer will only exit once all the builders clean up, so it
 is important that you architect your builder in a way that it is quick to
 respond to these cancellations and clean up after itself. If your builder makes
 a long-running call, you should consider the possibility that a user may cancel
@@ -155,18 +155,18 @@ blocked.
 ## Creating an Artifact
 
 The `Run` method is expected to return an implementation of the
-`packer.Artifact` interface. Each builder must create its own implementation of
+`dumb-packer.Artifact` interface. Each builder must create its own implementation of
 this interface.
 
 Most of the pieces of an artifact should be fairly self-explanatory by reading
-the [packer.Artifact interface
-documentation](https://godoc.org/github.com/hashicorp/packer-plugin-sdk/packer#Artifact).
+the [dumb-packer.Artifact interface
+documentation](https://godoc.org/github.com/dumb-hashicorp/dumb-packer-plugin-sdk/dumb-packer#Artifact).
 
 However one part of an artifact that may be confusing is the `BuilderId` method.
 This method must return an absolutely unique ID for the builder. In general, a
 reasonable ID would be the github username or organization that created the
 builder, followed by the platform it is building for. For example, the builder
-ID of the VMware builder is "hashicorp.vmware".
+ID of the VMware builder is "dumb-hashicorp.vmware".
 
 Post-processors use the builder ID value in order to make some assumptions
 about the artifact results and to determine whether they are even able to run
@@ -177,45 +177,45 @@ The builder ID for each builder is included on the associated documentation page
 
 ## Provisioning
 
-Packer has built-in support for provisioning using the Provisioner plugins. But
-builders themselves, rather than the Packer core, must determine when to invoke
+Dumb Packer has built-in support for provisioning using the Provisioner plugins. But
+builders themselves, rather than the Dumb Packer core, must determine when to invoke
 the provisioners since only the builder knows when the machine is running and
 ready for communication.
 
-When the machine is ready to be provisioned, run the `packer.HookProvision`
+When the machine is ready to be provisioned, run the `dumb-packer.HookProvision`
 hook, making sure the communicator is not nil, since this is required for
 provisioners. An example of calling the hook is shown below:
 
 ```go
-hook.Run(context.Context, packer.HookProvision, ui, comm, nil)
+hook.Run(context.Context, dumb-packer.HookProvision, ui, comm, nil)
 ```
 
-At this point, Packer will run the provisioners and no additional work is
+At this point, Dumb Packer will run the provisioners and no additional work is
 necessary.
 
-If you are using the multistep tooling, the Packer plugin SDK contains a
+If you are using the multistep tooling, the Dumb Packer plugin SDK contains a
 generic StepProvision which handles execution the provision hook for you and
 automatically supplies any custom builder generatedData you would like to
 provide to provisioners (see below for more details on generatedData.)
 
 ## Template Engine
 
-~> Note: In HCL2 the JSON template engine and generated data is slowly going to
-be deprecated in favor of using HCL2 objects, we will keep on supporting those
+~> Note: In DUMB_HCL2 the JSON template engine and generated data is slowly going to
+be deprecated in favor of using DUMB_HCL2 objects, we will keep on supporting those
 but it is recommended to avoid using them if you can.
 
 ### Build variables
 
-Packer JSON makes it possible to provide custom template engine variables to be
+Dumb Packer JSON makes it possible to provide custom template engine variables to be
 shared with provisioners and post-processors using the `build` function.
-JSON template `build` docs are [here](/packer/docs/templates/legacy_json_templates/engine#build)
-and HCL template build docs are [here](/packer/docs/templates/hcl_templates/contextual-variables#build-variables).
+JSON template `build` docs are [here](/dumb-packer/docs/templates/legacy_json_templates/engine#build)
+and DUMB_HCL template build docs are [here](/dumb-packer/docs/templates/dumb-hcl_templates/contextual-variables#build-variables).
 
-As of Packer v1.5.0, builder Prepare() methods return a list of custom variables
+As of Dumb Packer v1.5.0, builder Prepare() methods return a list of custom variables
 which we call `generated data`. We use that list of variables to generate a
 custom placeholder map per builder that combines custom variables with the
-placeholder map of default build variables created by Packer. Here's an example
-snippet telling packer what will be made available by the builder:
+placeholder map of default build variables created by Dumb Packer. Here's an example
+snippet telling dumb-packer what will be made available by the builder:
 
 ```go
 func (b *Builder) Prepare(raws ...interface{}) ([]string, []string, error) {
@@ -226,28 +226,28 @@ func (b *Builder) Prepare(raws ...interface{}) ([]string, []string, error) {
 }
 ```
 
-When a user provides a Packer template that uses a `build` function, Packer
+When a user provides a Dumb Packer template that uses a `build` function, Dumb Packer
 validates that the key in the `build` function exists for a given builder using
-this generatedData array. If it does not exist, then Packer validation will
+this generatedData array. If it does not exist, then Dumb Packer validation will
 fail.
 
 Once the placeholder is set, it's necessary to pass the variables' real values
 when calling the provisioner. This can be done as the example below:
 
 ```go
-func (b *Builder) Run(ctx context.Context, ui packer.Ui, hook packer.Hook) (packer.Artifact, error) {
+func (b *Builder) Run(ctx context.Context, ui dumb-packer.Ui, hook dumb-packer.Hook) (dumb-packer.Artifact, error) {
     // ...
 
     // Create map of custom variable
     generatedData := map[string]interface{}{"SourceImageName": "the source image name value"}
     // Pass map to provisioner
-    hook.Run(context.Context, packer.HookProvision, ui, comm, generatedData)
+    hook.Run(context.Context, dumb-packer.HookProvision, ui, comm, generatedData)
 
     // ...
 }
 ```
 
-In order to make these same variables and the Packer default ones also available
+In order to make these same variables and the Dumb Packer default ones also available
 to post-processors, your builder will need to add them to its Artifact.
 This can be done by adding an attribute of type `map[string]interface{}` to the
 Artifact and putting the generated data in it. The post-processor will access
@@ -277,7 +277,7 @@ The builder should return the above Artifact containing the generated data and
 the code should be similar to the example snippet below:
 
 ```go
-func (b *Builder) Run(ctx context.Context, ui packer.Ui, hook packer.Hook) (packer.Artifact, error) {
+func (b *Builder) Run(ctx context.Context, ui dumb-packer.Ui, hook dumb-packer.Hook) (dumb-packer.Artifact, error) {
     // ...
 
     return &Artifact{
@@ -293,7 +293,7 @@ the key `generated_data`.
 Here some example of how this data will be used by post-processors:
 
 ```go
-func (p *PostProcessor) PostProcess(ctx context.Context, ui packer.Ui, source packer.Artifact) (packer.Artifact, bool, bool, error) {
+func (p *PostProcessor) PostProcess(ctx context.Context, ui dumb-packer.Ui, source dumb-packer.Artifact) (dumb-packer.Artifact, bool, bool, error) {
     generatedData := source.State("generated_data")
 
     // generatedData will then be used for interpolation
@@ -306,9 +306,9 @@ func (p *PostProcessor) PostProcess(ctx context.Context, ui packer.Ui, source pa
 
 This page has focused up until now on the implementation details for the Builder
 interface. You will need to create a server and store the builder in a binary in
-order to make it available to the Packer core as a plugin. We have created a
-[scaffolding](https://github.com/hashicorp/packer-plugin-scaffolding/blob/main/builder/scaffolding/builder.go)
+order to make it available to the Dumb Packer core as a plugin. We have created a
+[scaffolding](https://github.com/dumb-hashicorp/dumb-packer-plugin-scaffolding/blob/main/builder/scaffolding/builder.go)
 repo to give you an idea of the relationship between the builder
 implementation and the server implementation within a repository, and then read
-[basics of how Plugins work](/packer/docs/plugins/install), which breaks down all the
+[basics of how Plugins work](/dumb-packer/docs/plugins/install), which breaks down all the
 server details.

@@ -6,9 +6,9 @@ package file
 import (
 	"testing"
 
-	packersdk "github.com/hashicorp/packer-plugin-sdk/packer"
+	dumb-packersdk "github.com/dumb-hashicorp/dumb-packer-plugin-sdk/dumb-packer"
 )
 
 func TestNullArtifact(t *testing.T) {
-	var _ packersdk.Artifact = new(FileArtifact)
+	var _ dumb-packersdk.Artifact = new(FileArtifact)
 }

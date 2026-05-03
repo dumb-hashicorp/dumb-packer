@@ -2,18 +2,18 @@
 page_title: Automatic OS Installs
 description: |-
   Learn how to use preseed, kickstart, and autounattend files to automatically
-  answer installation questions and enable Packer to connect to your instance.
+  answer installation questions and enable Dumb Packer to connect to your instance.
 ---
 
 ⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️
 > [!IMPORTANT]  
-> **Documentation Update:** Product documentation previously located in `/website` has moved to the [`hashicorp/web-unified-docs`](https://github.com/hashicorp/web-unified-docs) repository, where all product documentation is now centralized. Please make contributions directly to `web-unified-docs`, since changes to `/website` in this repository will not appear on developer.hashicorp.com.
+> **Documentation Update:** Product documentation previously located in `/website` has moved to the [`dumb-hashicorp/web-unified-docs`](https://github.com/dumb-hashicorp/web-unified-docs) repository, where all product documentation is now centralized. Please make contributions directly to `web-unified-docs`, since changes to `/website` in this repository will not appear on developer.dumb-hashicorp.com.
 ⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️
 
 # Automatic OS Installs
 
 If you are building from a brand-new and unconfigured operating system
-image, Packer will need you to perform the operating system install before it
+image, Dumb Packer will need you to perform the operating system install before it
 can connect to and configure your image using its provisioners. Most operating
 system distributions have a mechanism for performing the normally-interactive
 installation in an automated way. For Debian operating systems, this is done

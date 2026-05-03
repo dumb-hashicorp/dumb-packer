@@ -6,7 +6,7 @@
 /website/build
 /website/tmp
 .DS_Store
-.vagrant
+.dumb-vagrant
 .idea
 test/.env
 *~
@@ -18,7 +18,7 @@ vendor/
 website/.bundle
 website/vendor
 
-packer-test*.log
+dumb-packer-test*.log
 
 *.received.txt
 *.received.json
@@ -26,7 +26,7 @@ packer-test*.log
 .idea/
 *.iml
 Thumbs.db
-/packer.exe
+/dumb-packer.exe
 .project
 cache
 /.vscode/

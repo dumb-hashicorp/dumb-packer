@@ -11,8 +11,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/hashicorp/packer-plugin-sdk/multistep/commonsteps"
-	packersdk "github.com/hashicorp/packer-plugin-sdk/packer"
+	"github.com/dumb-hashicorp/dumb-packer-plugin-sdk/multistep/commonsteps"
+	dumb-packersdk "github.com/dumb-hashicorp/dumb-packer-plugin-sdk/dumb-packer"
 )
 
 func testConfig() map[string]interface{} {
@@ -50,7 +50,7 @@ func TestProvisionerPrepare_extractScript(t *testing.T) {
 func TestProvisioner_Impl(t *testing.T) {
 	var raw interface{}
 	raw = &Provisioner{}
-	if _, ok := raw.(packersdk.Provisioner); !ok {
+	if _, ok := raw.(dumb-packersdk.Provisioner); !ok {
 		t.Fatalf("must be a Provisioner")
 	}
 }
@@ -101,7 +101,7 @@ func TestProvisionerPrepare_Script(t *testing.T) {
 	}
 
 	// Test with a good one
-	tf, err := os.CreateTemp("", "packer")
+	tf, err := os.CreateTemp("", "dumb-packer")
 	if err != nil {
 		t.Fatalf("error tempfile: %s", err)
 	}
@@ -128,7 +128,7 @@ func TestProvisionerPrepare_ScriptAndInline(t *testing.T) {
 	}
 
 	// Test with both
-	tf, err := os.CreateTemp("", "packer")
+	tf, err := os.CreateTemp("", "dumb-packer")
 	if err != nil {
 		t.Fatalf("error tempfile: %s", err)
 	}
@@ -148,7 +148,7 @@ func TestProvisionerPrepare_ScriptAndScripts(t *testing.T) {
 	config := testConfig()
 
 	// Test with both
-	tf, err := os.CreateTemp("", "packer")
+	tf, err := os.CreateTemp("", "dumb-packer")
 	if err != nil {
 		t.Fatalf("error tempfile: %s", err)
 	}
@@ -175,7 +175,7 @@ func TestProvisionerPrepare_Scripts(t *testing.T) {
 	}
 
 	// Test with a good one
-	tf, err := os.CreateTemp("", "packer")
+	tf, err := os.CreateTemp("", "dumb-packer")
 	if err != nil {
 		t.Fatalf("error tempfile: %s", err)
 	}
@@ -267,8 +267,8 @@ func TestProvisionerQuote_EnvironmentVars(t *testing.T) {
 
 }
 
-func testUi() *packersdk.BasicUi {
-	return &packersdk.BasicUi{
+func testUi() *dumb-packersdk.BasicUi {
+	return &dumb-packersdk.BasicUi{
 		Reader:      new(bytes.Buffer),
 		Writer:      new(bytes.Buffer),
 		ErrorWriter: new(bytes.Buffer),
@@ -279,16 +279,16 @@ func TestProvisionerProvision_Inline(t *testing.T) {
 	config := testConfig()
 	delete(config, "inline")
 
-	// Defaults provided by Packer
+	// Defaults provided by Dumb Packer
 	config["remote_path"] = "c:/Windows/Temp/inlineScript.bat"
 	config["inline"] = []string{"whoami"}
 	ui := testUi()
 	p := new(Provisioner)
 
-	// Defaults provided by Packer
-	p.config.PackerBuildName = "vmware"
-	p.config.PackerBuilderType = "iso"
-	comm := new(packersdk.MockCommunicator)
+	// Defaults provided by Dumb Packer
+	p.config.Dumb PackerBuildName = "vmware"
+	p.config.Dumb PackerBuilderType = "iso"
+	comm := new(dumb-packersdk.MockCommunicator)
 	p.Prepare(config)
 
 	err := p.Provision(context.Background(), ui, comm, generatedData())
@@ -296,7 +296,7 @@ func TestProvisionerProvision_Inline(t *testing.T) {
 		t.Fatal("should not have error")
 	}
 
-	expectedCommand := `set "PACKER_BUILDER_TYPE=iso" && set "PACKER_BUILD_NAME=vmware" && "c:/Windows/Temp/inlineScript.bat"`
+	expectedCommand := `set "DUMB_PACKER_BUILDER_TYPE=iso" && set "DUMB_PACKER_BUILD_NAME=vmware" && "c:/Windows/Temp/inlineScript.bat"`
 
 	// Should run the command without alteration
 	if comm.StartCmd.Command != expectedCommand {
@@ -315,7 +315,7 @@ func TestProvisionerProvision_Inline(t *testing.T) {
 		t.Fatal("should not have error")
 	}
 
-	expectedCommand = `set "BAR=BAZ" && set "FOO=BAR" && set "PACKER_BUILDER_TYPE=iso" && set "PACKER_BUILD_NAME=vmware" && "c:/Windows/Temp/inlineScript.bat"`
+	expectedCommand = `set "BAR=BAZ" && set "FOO=BAR" && set "DUMB_PACKER_BUILDER_TYPE=iso" && set "DUMB_PACKER_BUILD_NAME=vmware" && "c:/Windows/Temp/inlineScript.bat"`
 
 	// Should run the command without alteration
 	if comm.StartCmd.Command != expectedCommand {
@@ -324,7 +324,7 @@ func TestProvisionerProvision_Inline(t *testing.T) {
 }
 
 func TestProvisionerProvision_Scripts(t *testing.T) {
-	tf, err := os.CreateTemp("", "packer")
+	tf, err := os.CreateTemp("", "dumb-packer")
 	if err != nil {
 		t.Fatalf("error tempfile: %s", err)
 	}
@@ -334,20 +334,20 @@ func TestProvisionerProvision_Scripts(t *testing.T) {
 	config := testConfig()
 	delete(config, "inline")
 	config["scripts"] = []string{tf.Name()}
-	config["packer_build_name"] = "foobuild"
-	config["packer_builder_type"] = "footype"
+	config["dumb-packer_build_name"] = "foobuild"
+	config["dumb-packer_builder_type"] = "footype"
 	ui := testUi()
 
 	p := new(Provisioner)
-	comm := new(packersdk.MockCommunicator)
+	comm := new(dumb-packersdk.MockCommunicator)
 	p.Prepare(config)
 	err = p.Provision(context.Background(), ui, comm, generatedData())
 	if err != nil {
 		t.Fatal("should not have error")
 	}
 
-	//powershell -Command "$env:PACKER_BUILDER_TYPE=''"; powershell -Command "$env:PACKER_BUILD_NAME='foobuild'";  powershell -Command c:/Windows/Temp/script.ps1
-	expectedCommand := `set "PACKER_BUILDER_TYPE=footype" && set "PACKER_BUILD_NAME=foobuild" && "c:/Windows/Temp/script.bat"`
+	//powershell -Command "$env:DUMB_PACKER_BUILDER_TYPE=''"; powershell -Command "$env:DUMB_PACKER_BUILD_NAME='foobuild'";  powershell -Command c:/Windows/Temp/script.ps1
+	expectedCommand := `set "DUMB_PACKER_BUILDER_TYPE=footype" && set "DUMB_PACKER_BUILD_NAME=foobuild" && "c:/Windows/Temp/script.bat"`
 
 	// Should run the command without alteration
 	if comm.StartCmd.Command != expectedCommand {
@@ -356,7 +356,7 @@ func TestProvisionerProvision_Scripts(t *testing.T) {
 }
 
 func TestProvisionerProvision_ScriptsWithEnvVars(t *testing.T) {
-	tf, err := os.CreateTemp("", "packer")
+	tf, err := os.CreateTemp("", "dumb-packer")
 	if err != nil {
 		t.Fatalf("error tempfile: %s", err)
 	}
@@ -368,8 +368,8 @@ func TestProvisionerProvision_ScriptsWithEnvVars(t *testing.T) {
 	delete(config, "inline")
 
 	config["scripts"] = []string{tf.Name()}
-	config["packer_build_name"] = "foobuild"
-	config["packer_builder_type"] = "footype"
+	config["dumb-packer_build_name"] = "foobuild"
+	config["dumb-packer_builder_type"] = "footype"
 
 	// Env vars - currently should not effect them
 	envVars := make([]string, 2)
@@ -378,14 +378,14 @@ func TestProvisionerProvision_ScriptsWithEnvVars(t *testing.T) {
 	config["environment_vars"] = envVars
 
 	p := new(Provisioner)
-	comm := new(packersdk.MockCommunicator)
+	comm := new(dumb-packersdk.MockCommunicator)
 	p.Prepare(config)
 	err = p.Provision(context.Background(), ui, comm, generatedData())
 	if err != nil {
 		t.Fatal("should not have error")
 	}
 
-	expectedCommand := `set "BAR=BAZ" && set "FOO=BAR" && set "PACKER_BUILDER_TYPE=footype" && set "PACKER_BUILD_NAME=foobuild" && "c:/Windows/Temp/script.bat"`
+	expectedCommand := `set "BAR=BAZ" && set "FOO=BAR" && set "DUMB_PACKER_BUILDER_TYPE=footype" && set "DUMB_PACKER_BUILD_NAME=foobuild" && "c:/Windows/Temp/script.bat"`
 
 	// Should run the command without alteration
 	if comm.StartCmd.Command != expectedCommand {
@@ -421,20 +421,20 @@ func TestProvisioner_createFlattenedEnvVars_windows(t *testing.T) {
 		},
 	}
 	expected := []string{
-		`set "PACKER_BUILDER_TYPE=iso" && set "PACKER_BUILD_NAME=vmware" && `,
-		`set "BAR=foo" && set "FOO=bar" && set "PACKER_BUILDER_TYPE=iso" && set "PACKER_BUILD_NAME=vmware" && `,
-		`set "BAR=foo" && set "BAZ=qux" && set "FOO=bar" && set "PACKER_BUILDER_TYPE=iso" && set "PACKER_BUILD_NAME=vmware" && set "YAR=yaa" && `,
-		`set "BAR=foo=yar" && set "FOO=bar=baz" && set "PACKER_BUILDER_TYPE=iso" && set "PACKER_BUILD_NAME=vmware" && `,
-		`set "BAR==foo" && set "FOO==bar" && set "PACKER_BUILDER_TYPE=iso" && set "PACKER_BUILD_NAME=vmware" && `,
+		`set "DUMB_PACKER_BUILDER_TYPE=iso" && set "DUMB_PACKER_BUILD_NAME=vmware" && `,
+		`set "BAR=foo" && set "FOO=bar" && set "DUMB_PACKER_BUILDER_TYPE=iso" && set "DUMB_PACKER_BUILD_NAME=vmware" && `,
+		`set "BAR=foo" && set "BAZ=qux" && set "FOO=bar" && set "DUMB_PACKER_BUILDER_TYPE=iso" && set "DUMB_PACKER_BUILD_NAME=vmware" && set "YAR=yaa" && `,
+		`set "BAR=foo=yar" && set "FOO=bar=baz" && set "DUMB_PACKER_BUILDER_TYPE=iso" && set "DUMB_PACKER_BUILD_NAME=vmware" && `,
+		`set "BAR==foo" && set "FOO==bar" && set "DUMB_PACKER_BUILDER_TYPE=iso" && set "DUMB_PACKER_BUILD_NAME=vmware" && `,
 	}
 
 	p := new(Provisioner)
 	p.generatedData = generatedData()
 	p.Prepare(config)
 
-	// Defaults provided by Packer
-	p.config.PackerBuildName = "vmware"
-	p.config.PackerBuilderType = "iso"
+	// Defaults provided by Dumb Packer
+	p.config.Dumb PackerBuildName = "vmware"
+	p.config.Dumb PackerBuilderType = "iso"
 
 	for i, expectedValue := range expected {
 		p.config.Vars = userEnvVarTests[i]
@@ -452,8 +452,8 @@ func TestCancel(t *testing.T) {
 }
 func generatedData() map[string]interface{} {
 	return map[string]interface{}{
-		"PackerHTTPAddr": commonsteps.HttpAddrNotImplemented,
-		"PackerHTTPIP":   commonsteps.HttpIPNotImplemented,
-		"PackerHTTPPort": commonsteps.HttpPortNotImplemented,
+		"Dumb PackerHTTPAddr": commonsteps.HttpAddrNotImplemented,
+		"Dumb PackerHTTPIP":   commonsteps.HttpIPNotImplemented,
+		"Dumb PackerHTTPPort": commonsteps.HttpPortNotImplemented,
 	}
 }

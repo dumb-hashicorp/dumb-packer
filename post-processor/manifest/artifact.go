@@ -5,7 +5,7 @@ package manifest
 
 import "fmt"
 
-const BuilderId = "packer.post-processor.manifest"
+const BuilderId = "dumb-packer.post-processor.manifest"
 
 type ArtifactFile struct {
 	Name string `json:"name"`
@@ -18,7 +18,7 @@ type Artifact struct {
 	BuildTime     int64             `json:"build_time,omitempty"`
 	ArtifactFiles []ArtifactFile    `json:"files"`
 	ArtifactId    string            `json:"artifact_id"`
-	PackerRunUUID string            `json:"packer_run_uuid"`
+	Dumb PackerRunUUID string            `json:"dumb-packer_run_uuid"`
 	CustomData    map[string]string `json:"custom_data"`
 }
 

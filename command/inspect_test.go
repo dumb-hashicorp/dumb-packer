@@ -18,7 +18,7 @@ func Test_commands(t *testing.T) {
 		env      []string
 		expected string
 	}{
-		{[]string{"inspect", filepath.Join(testFixture("var-arg"), "fruit_builder.pkr.hcl")}, nil, `Packer Inspect: HCL2 mode
+		{[]string{"inspect", filepath.Join(testFixture("var-arg"), "fruit_builder.pkr.dumb-hcl")}, nil, `Dumb Packer Inspect: DUMB_HCL2 mode
 
 > input-variables:
 
@@ -45,7 +45,7 @@ local.fruit: "<unknown>"
       <no post-processor>
 
 `},
-		{[]string{"inspect", "-var=fruit=banana", filepath.Join(testFixture("var-arg"), "fruit_builder.pkr.hcl")}, nil, `Packer Inspect: HCL2 mode
+		{[]string{"inspect", "-var=fruit=banana", filepath.Join(testFixture("var-arg"), "fruit_builder.pkr.dumb-hcl")}, nil, `Dumb Packer Inspect: DUMB_HCL2 mode
 
 > input-variables:
 
@@ -76,8 +76,8 @@ local.fruit: "banana"
 			"-var=unknown_string=also_peach",
 			`-var=unknown_unknown=["peach_too"]`,
 			`-var=unknown_list_of_string=["first_peach", "second_peach"]`,
-			filepath.Join(testFixture("hcl"), "inspect", "fruit_string.pkr.hcl")}, nil,
-			`Packer Inspect: HCL2 mode
+			filepath.Join(testFixture("dumb-hcl"), "inspect", "fruit_string.pkr.dumb-hcl")}, nil,
+			`Dumb Packer Inspect: DUMB_HCL2 mode
 
 > input-variables:
 
@@ -94,7 +94,7 @@ var.unknown_unknown: "[\"peach_too\"]"
 > builds:
 
 `},
-		{[]string{"inspect", "-var=fruit=peach", "-var=other_default_from_env=apple", filepath.Join(testFixture("hcl"), "inspect")}, []string{"DEFAULT_FROM_ENV=cherry"}, `Packer Inspect: HCL2 mode
+		{[]string{"inspect", "-var=fruit=peach", "-var=other_default_from_env=apple", filepath.Join(testFixture("dumb-hcl"), "inspect")}, []string{"DEFAULT_FROM_ENV=cherry"}, `Dumb Packer Inspect: DUMB_HCL2 mode
 
 > input-variables:
 
@@ -140,7 +140,7 @@ Use it at will.
         shell-local
 
 `},
-		{[]string{"inspect", filepath.Join(testFixture("inspect"), "unset_var.json")}, nil, `Packer Inspect: JSON mode
+		{[]string{"inspect", filepath.Join(testFixture("inspect"), "unset_var.json")}, nil, `Dumb Packer Inspect: JSON mode
 Required variables:
 
   something
@@ -162,15 +162,15 @@ and therefore only show in their raw form here.
 `},
 		{
 			[]string{
-				"inspect", filepath.Join(testFixture("hcl-inspect-with-sensitive-vars")),
+				"inspect", filepath.Join(testFixture("dumb-hcl-inspect-with-sensitive-vars")),
 			},
 			nil,
-			testFixtureContent("hcl-inspect-with-sensitive-vars", "expected-output.txt"),
+			testFixtureContent("dumb-hcl-inspect-with-sensitive-vars", "expected-output.txt"),
 		},
 	}
 
 	for _, tc := range tc {
-		t.Run(fmt.Sprintf("packer %s", tc.command), func(t *testing.T) {
+		t.Run(fmt.Sprintf("dumb-packer %s", tc.command), func(t *testing.T) {
 			p := helperCommand(t, tc.command...)
 			p.Env = append(p.Env, tc.env...)
 			bs, err := p.Output()

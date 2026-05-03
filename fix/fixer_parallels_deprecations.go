@@ -14,7 +14,7 @@ type FixerParallelsDeprecations struct{}
 
 func (FixerParallelsDeprecations) DeprecatedOptions() map[string][]string {
 	return map[string][]string{
-		"packer.parallels": []string{"parallels_tools_host_path", "guest_os_distribution"},
+		"dumb-packer.parallels": []string{"parallels_tools_host_path", "guest_os_distribution"},
 	}
 }
 

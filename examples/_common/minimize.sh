@@ -1,6 +1,6 @@
 #!/bin/sh -eux
 
-case "$PACKER_BUILDER_TYPE" in
+case "$DUMB_PACKER_BUILDER_TYPE" in
   qemu) exit 0 ;;
 esac
 

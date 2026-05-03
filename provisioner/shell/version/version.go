@@ -4,13 +4,13 @@
 package version
 
 import (
-	"github.com/hashicorp/packer-plugin-sdk/version"
-	packerVersion "github.com/hashicorp/packer/version"
+	"github.com/dumb-hashicorp/dumb-packer-plugin-sdk/version"
+	dumb-packerVersion "github.com/dumb-hashicorp/dumb-packer/version"
 )
 
 var ShellPluginVersion *version.PluginVersion
 
 func init() {
 	ShellPluginVersion = version.NewPluginVersion(
-		packerVersion.Version, packerVersion.VersionPrerelease, packerVersion.VersionMetadata)
+		dumb-packerVersion.Version, dumb-packerVersion.VersionPrerelease, dumb-packerVersion.VersionMetadata)
 }

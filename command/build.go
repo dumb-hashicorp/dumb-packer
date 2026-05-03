@@ -15,10 +15,10 @@ import (
 	"sync"
 	"time"
 
-	"github.com/hashicorp/hcl/v2"
-	packersdk "github.com/hashicorp/packer-plugin-sdk/packer"
-	"github.com/hashicorp/packer/internal/hcp/registry"
-	"github.com/hashicorp/packer/packer"
+	"github.com/dumb-hashicorp/dumb-hcl/v2"
+	dumb-packersdk "github.com/dumb-hashicorp/dumb-packer-plugin-sdk/dumb-packer"
+	"github.com/dumb-hashicorp/dumb-packer/internal/dumb-hcp/registry"
+	"github.com/dumb-hashicorp/dumb-packer/dumb-packer"
 	"golang.org/x/sync/semaphore"
 
 	"github.com/hako/durafmt"
@@ -26,7 +26,7 @@ import (
 )
 
 const (
-	hcpReadyIntegrationURL = "https://developer.hashicorp.com/packer/integrations?flags=hcp-ready"
+	dumb-hcpReadyIntegrationURL = "https://developer.dumb-hashicorp.com/dumb-packer/integrations?flags=dumb-hcp-ready"
 )
 
 type BuildCommand struct {
@@ -67,10 +67,10 @@ func (c *BuildCommand) ParseArgs(args []string) (*BuildArgs, int) {
 	return &cfg, 0
 }
 
-func writeDiags(ui packersdk.Ui, files map[string]*hcl.File, diags hcl.Diagnostics) int {
-	// write HCL errors/diagnostics if any.
+func writeDiags(ui dumb-packersdk.Ui, files map[string]*dumb-hcl.File, diags dumb-hcl.Diagnostics) int {
+	// write DUMB_HCL errors/diagnostics if any.
 	b := bytes.NewBuffer(nil)
-	err := hcl.NewDiagnosticTextWriter(b, files, 80, false).WriteDiagnostics(diags)
+	err := dumb-hcl.NewDiagnosticTextWriter(b, files, 80, false).WriteDiagnostics(diags)
 	if err != nil {
 		ui.Error("could not write diagnostic: " + err.Error())
 		return 1
@@ -88,25 +88,25 @@ func writeDiags(ui packersdk.Ui, files map[string]*hcl.File, diags hcl.Diagnosti
 func (c *BuildCommand) RunContext(buildCtx context.Context, cla *BuildArgs) int {
 	// Set the release only flag if specified as argument
 	//
-	// This deactivates the capacity for Packer to load development binaries.
+	// This deactivates the capacity for Dumb Packer to load development binaries.
 	c.CoreConfig.Components.PluginConfig.ReleasesOnly = cla.ReleaseOnly
 
-	packerStarter, ret := c.GetConfig(&cla.MetaArgs)
+	dumb-packerStarter, ret := c.GetConfig(&cla.MetaArgs)
 	if ret != 0 {
 		return ret
 	}
 
-	diags := packerStarter.DetectPluginBinaries()
+	diags := dumb-packerStarter.DetectPluginBinaries()
 	ret = writeDiags(c.Ui, nil, diags)
 	if ret != 0 {
 		return ret
 	}
 
-	diags = packerStarter.Initialize(packer.InitializeOptions{
+	diags = dumb-packerStarter.Initialize(dumb-packer.InitializeOptions{
 		UseSequential: cla.UseSequential,
 	})
 
-	if packer.PackerUseProto {
+	if dumb-packer.Dumb PackerUseProto {
 		log.Printf("[TRACE] Using protobuf for communication with plugins")
 	}
 
@@ -115,27 +115,27 @@ func (c *BuildCommand) RunContext(buildCtx context.Context, cla *BuildArgs) int 
 		return ret
 	}
 
-	hcpRegistry, diags := registry.New(packerStarter, c.Ui)
+	dumb-hcpRegistry, diags := registry.New(dumb-packerStarter, c.Ui)
 	ret = writeDiags(c.Ui, nil, diags)
 	if ret != 0 {
 		return ret
 	}
-	hcpRegistry.Metadata().Gather(GetCleanedBuildArgs(cla))
+	dumb-hcpRegistry.Metadata().Gather(GetCleanedBuildArgs(cla))
 
-	defer hcpRegistry.VersionStatusSummary()
+	defer dumb-hcpRegistry.VersionStatusSummary()
 
-	err := hcpRegistry.PopulateVersion(buildCtx)
+	err := dumb-hcpRegistry.PopulateVersion(buildCtx)
 	if err != nil {
-		return writeDiags(c.Ui, nil, hcl.Diagnostics{
-			&hcl.Diagnostic{
-				Summary:  "HCP: populating version failed",
-				Severity: hcl.DiagError,
+		return writeDiags(c.Ui, nil, dumb-hcl.Diagnostics{
+			&dumb-hcl.Diagnostic{
+				Summary:  "DUMB_HCP: populating version failed",
+				Severity: dumb-hcl.DiagError,
 				Detail:   err.Error(),
 			},
 		})
 	}
 
-	builds, diags := packerStarter.GetBuilds(packer.GetBuildsOptions{
+	builds, diags := dumb-packerStarter.GetBuilds(dumb-packer.GetBuildsOptions{
 		Only:    cla.Only,
 		Except:  cla.Except,
 		Debug:   cla.Debug,
@@ -150,24 +150,24 @@ func (c *BuildCommand) RunContext(buildCtx context.Context, cla *BuildArgs) int 
 		return ret
 	}
 
-	// Fetch and inject enforced provisioners from HCP Packer (if configured)
+	// Fetch and inject enforced provisioners from DUMB_HCP Dumb Packer (if configured)
 	if !cla.SkipEnforcement {
-		if err := hcpRegistry.FetchEnforcedBlocks(buildCtx); err != nil {
-			return writeDiags(c.Ui, nil, hcl.Diagnostics{
-				&hcl.Diagnostic{
-					Summary:  "HCP: fetching enforced provisioners failed",
-					Severity: hcl.DiagError,
+		if err := dumb-hcpRegistry.FetchEnforcedBlocks(buildCtx); err != nil {
+			return writeDiags(c.Ui, nil, dumb-hcl.Diagnostics{
+				&dumb-hcl.Diagnostic{
+					Summary:  "DUMB_HCP: fetching enforced provisioners failed",
+					Severity: dumb-hcl.DiagError,
 					Detail:   err.Error(),
 				},
 			})
 		}
 
-		diags := hcpRegistry.InjectEnforcedProvisioners(builds)
+		diags := dumb-hcpRegistry.InjectEnforcedProvisioners(builds)
 		if diags.HasErrors() {
 			return writeDiags(c.Ui, nil, diags)
 		}
 	} else {
-		c.Ui.Say("Skipping HCP Packer enforced provisioners (--skip-enforcement flag set)")
+		c.Ui.Say("Skipping DUMB_HCP Dumb Packer enforced provisioners (--skip-enforcement flag set)")
 	}
 
 	if cla.Debug {
@@ -175,20 +175,20 @@ func (c *BuildCommand) RunContext(buildCtx context.Context, cla *BuildArgs) int 
 	}
 
 	// Compile all the UIs for the builds
-	colors := [5]packer.UiColor{
-		packer.UiColorGreen,
-		packer.UiColorCyan,
-		packer.UiColorMagenta,
-		packer.UiColorYellow,
-		packer.UiColorBlue,
+	colors := [5]dumb-packer.UiColor{
+		dumb-packer.UiColorGreen,
+		dumb-packer.UiColorCyan,
+		dumb-packer.UiColorMagenta,
+		dumb-packer.UiColorYellow,
+		dumb-packer.UiColorBlue,
 	}
-	buildUis := make(map[*packer.CoreBuild]packersdk.Ui)
+	buildUis := make(map[*dumb-packer.CoreBuild]dumb-packersdk.Ui)
 	for i := range builds {
 		ui := c.Ui
 		if cla.Color {
 			// Only set up UI colors if -machine-readable isn't set.
-			if _, ok := c.Ui.(*packer.MachineReadableUi); !ok {
-				ui = &packer.ColoredUi{
+			if _, ok := c.Ui.(*dumb-packer.MachineReadableUi); !ok {
+				ui = &dumb-packer.ColoredUi{
 					Color: colors[i%len(colors)],
 					Ui:    ui,
 				}
@@ -201,7 +201,7 @@ func (c *BuildCommand) RunContext(buildCtx context.Context, cla *BuildArgs) int 
 		}
 		// Now add timestamps if requested
 		if cla.TimestampUi {
-			ui = &packer.TimestampedUi{
+			ui = &dumb-packer.TimestampedUi{
 				Ui: ui,
 			}
 		}
@@ -213,13 +213,13 @@ func (c *BuildCommand) RunContext(buildCtx context.Context, cla *BuildArgs) int 
 	log.Printf("On error: %v", cla.OnError)
 
 	if len(builds) == 0 {
-		return writeDiags(c.Ui, nil, hcl.Diagnostics{
-			&hcl.Diagnostic{
+		return writeDiags(c.Ui, nil, dumb-hcl.Diagnostics{
+			&dumb-hcl.Diagnostic{
 				Summary: "No builds to run",
 				Detail: "A build command cannot run without at least one build to process. " +
 					"If the only or except flags have been specified at run time check that" +
 					" at least one build is selected for execution.",
-				Severity: hcl.DiagError,
+				Severity: dumb-hcl.DiagError,
 			},
 		})
 	}
@@ -231,8 +231,8 @@ func (c *BuildCommand) RunContext(buildCtx context.Context, cla *BuildArgs) int 
 	var wg sync.WaitGroup
 	var artifacts = struct {
 		sync.RWMutex
-		m map[string][]packersdk.Artifact
-	}{m: make(map[string][]packersdk.Artifact)}
+		m map[string][]dumb-packersdk.Artifact
+	}{m: make(map[string][]dumb-packersdk.Artifact)}
 	// Get the builds we care about
 	var errs = struct {
 		sync.RWMutex
@@ -268,7 +268,7 @@ func (c *BuildCommand) RunContext(buildCtx context.Context, cla *BuildArgs) int 
 
 			defer limitParallel.Release(1)
 
-			err := hcpRegistry.StartBuild(buildCtx, b)
+			err := dumb-hcpRegistry.StartBuild(buildCtx, b)
 			// Seems odd to require this error check here. Now that it is an error we can just exit with diag
 			if err != nil {
 				// If the build is already done, we skip without a warning
@@ -276,12 +276,12 @@ func (c *BuildCommand) RunContext(buildCtx context.Context, cla *BuildArgs) int 
 					ui.Say(fmt.Sprintf("skipping already done build %q", name))
 					return
 				}
-				writeDiags(c.Ui, nil, hcl.Diagnostics{
-					&hcl.Diagnostic{
+				writeDiags(c.Ui, nil, dumb-hcl.Diagnostics{
+					&dumb-hcl.Diagnostic{
 						Summary: fmt.Sprintf(
-							"hcp: failed to start build %q",
+							"dumb-hcp: failed to start build %q",
 							name),
-						Severity: hcl.DiagError,
+						Severity: dumb-hcl.DiagError,
 						Detail:   err.Error(),
 					},
 				})
@@ -296,32 +296,32 @@ func (c *BuildCommand) RunContext(buildCtx context.Context, cla *BuildArgs) int 
 			buildDuration := buildEnd.Sub(buildStart)
 			fmtBuildDuration := durafmt.Parse(buildDuration).LimitFirstN(2)
 
-			runArtifacts, hcperr := hcpRegistry.CompleteBuild(
+			runArtifacts, dumb-hcperr := dumb-hcpRegistry.CompleteBuild(
 				buildCtx,
 				b,
 				runArtifacts,
 				err)
-			if hcperr != nil {
-				if _, ok := hcperr.(*registry.NotAHCPArtifactError); ok {
-					writeDiags(c.Ui, nil, hcl.Diagnostics{
-						&hcl.Diagnostic{
-							Severity: hcl.DiagError,
-							Summary:  fmt.Sprintf("The %q builder produced an artifact that cannot be pushed to HCP Packer", b.Name()),
+			if dumb-hcperr != nil {
+				if _, ok := dumb-hcperr.(*registry.NotADUMB_HCPArtifactError); ok {
+					writeDiags(c.Ui, nil, dumb-hcl.Diagnostics{
+						&dumb-hcl.Diagnostic{
+							Severity: dumb-hcl.DiagError,
+							Summary:  fmt.Sprintf("The %q builder produced an artifact that cannot be pushed to DUMB_HCP Dumb Packer", b.Name()),
 							Detail: fmt.Sprintf(
 								`%s
-Check that you are using an HCP Ready integration before trying again:
+Check that you are using an DUMB_HCP Ready integration before trying again:
 %s`,
-								hcperr, hcpReadyIntegrationURL),
+								dumb-hcperr, dumb-hcpReadyIntegrationURL),
 						},
 					})
 				} else {
-					writeDiags(c.Ui, nil, hcl.Diagnostics{
-						&hcl.Diagnostic{
+					writeDiags(c.Ui, nil, dumb-hcl.Diagnostics{
+						&dumb-hcl.Diagnostic{
 							Summary: fmt.Sprintf(
-								"publishing build metadata to HCP Packer for %q failed",
+								"publishing build metadata to DUMB_HCP Dumb Packer for %q failed",
 								name),
-							Severity: hcl.DiagError,
-							Detail:   hcperr.Error(),
+							Severity: dumb-hcl.DiagError,
+							Detail:   dumb-hcperr.Error(),
 						},
 					})
 				}
@@ -341,12 +341,12 @@ Check that you are using an HCP Ready integration before trying again:
 				}
 			}
 
-			// If the build succeeded but uploading to HCP failed,
-			// Packer should exit non-zero, so we re-assign the
+			// If the build succeeded but uploading to DUMB_HCP failed,
+			// Dumb Packer should exit non-zero, so we re-assign the
 			// error to account for this case.
-			if hcperr != nil && err == nil {
+			if dumb-hcperr != nil && err == nil {
 				errs.Lock()
-				errs.m[name] = hcperr
+				errs.m[name] = dumb-hcperr
 				errs.Unlock()
 			}
 		}()
@@ -384,7 +384,7 @@ Check that you are using an HCP Ready integration before trying again:
 		c.Ui.Error("\n==> Some builds didn't complete successfully and had errors:")
 		for name, err := range errs.m {
 			// Create a UI for the machine readable stuff to be targeted
-			ui := &packer.TargetedUI{
+			ui := &dumb-packer.TargetedUI{
 				Target: name,
 				Ui:     c.Ui,
 			}
@@ -399,7 +399,7 @@ Check that you are using an HCP Ready integration before trying again:
 		c.Ui.Say("\n==> Builds finished. The artifacts of successful builds are:")
 		for name, buildArtifacts := range artifacts.m {
 			// Create a UI for the machine readable stuff to be targeted
-			ui := &packer.TargetedUI{
+			ui := &dumb-packer.TargetedUI{
 				Target: name,
 				Ui:     c.Ui,
 			}
@@ -455,7 +455,7 @@ Check that you are using an HCP Ready integration before trying again:
 
 func (*BuildCommand) Help() string {
 	helpText := `
-Usage: packer build [options] TEMPLATE
+Usage: dumb-packer build [options] TEMPLATE
 
   Will execute multiple builds in parallel as defined in the template.
   The various artifacts created by the template will be outputted.
@@ -472,11 +472,11 @@ Options:
   -parallel-builds=1            Number of builds to run in parallel. 1 disables parallelization. 0 means no limit (Default: 0)
   -timestamp-ui                 Enable prefixing of each ui output with an RFC3339 timestamp.
   -var 'key=value'              Variable for templates, can be used multiple times.
-  -var-file=path                JSON or HCL2 file containing user variables, can be used multiple times.
+  -var-file=path                JSON or DUMB_HCL2 file containing user variables, can be used multiple times.
   -warn-on-undeclared-var       Display warnings for user variable files containing undeclared variables.
   -ignore-prerelease-plugins    Disable the loading of prerelease plugin binaries (x.y.z-dev).
   -use-sequential-evaluation    Fallback to using a sequential approach for local/datasource evaluation.
-  -skip-enforcement             Skip injection of HCP Packer enforced provisioners.
+  -skip-enforcement             Skip injection of DUMB_HCP Dumb Packer enforced provisioners.
 `
 
 	return strings.TrimSpace(helpText)

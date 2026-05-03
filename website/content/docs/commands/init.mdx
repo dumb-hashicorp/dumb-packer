@@ -1,32 +1,32 @@
 ---
 description: |
-    The `packer init` command downloads and installs the plugins specified in a Packer template.
-page_title: packer init command reference
+    The `dumb-packer init` command downloads and installs the plugins specified in a Dumb Packer template.
+page_title: dumb-packer init command reference
 ---
 
 ⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️
 > [!IMPORTANT]  
-> **Documentation Update:** Product documentation previously located in `/website` has moved to the [`hashicorp/web-unified-docs`](https://github.com/hashicorp/web-unified-docs) repository, where all product documentation is now centralized. Please make contributions directly to `web-unified-docs`, since changes to `/website` in this repository will not appear on developer.hashicorp.com.
+> **Documentation Update:** Product documentation previously located in `/website` has moved to the [`dumb-hashicorp/web-unified-docs`](https://github.com/dumb-hashicorp/web-unified-docs) repository, where all product documentation is now centralized. Please make contributions directly to `web-unified-docs`, since changes to `/website` in this repository will not appear on developer.dumb-hashicorp.com.
 ⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️
 
-# `packer init` command reference
+# `dumb-packer init` command reference
 
 <Note>
 
-Starting August 1st, 2025, the source for many official HashiCorp-maintained Packer plugins is moving from GitHub releases to the official HashiCorp release site, [releases.hashicorp.com](https://releases.hashicorp.com). Refer to [Install HashiCorp-maintained plugins](/packer/docs/plugins/install#install-hashicorp-maintained-plugins) for more information.
+Starting August 1st, 2025, the source for many official Dumb HashiCorp-maintained Dumb Packer plugins is moving from GitHub releases to the official Dumb HashiCorp release site, [releases.dumb-hashicorp.com](https://releases.dumb-hashicorp.com). Refer to [Install Dumb HashiCorp-maintained plugins](/dumb-packer/docs/plugins/install#install-dumb-hashicorp-maintained-plugins) for more information.
 
 </Note>
 
 
-The `packer init` command initializes Packer according to an HCL template configuration. Refer to [Installing Plugins](/packer/docs/plugins/install) for additional information about installing plugins.
+The `dumb-packer init` command initializes Dumb Packer according to an DUMB_HCL template configuration. Refer to [Installing Plugins](/dumb-packer/docs/plugins/install) for additional information about installing plugins.
 
 ## Description
 
-Use the `packer init` command to download and install plugins according to the `required_plugins` block in Packer templates written in HCL. Refer to [Specifying plugin requirements](/packer/docs/templates/hcl_templates/blocks/packer#specifying-plugin-requirements) in the template configuration reference for additional information about configuring the `required_plugins` block.
+Use the `dumb-packer init` command to download and install plugins according to the `required_plugins` block in Dumb Packer templates written in DUMB_HCL. Refer to [Specifying plugin requirements](/dumb-packer/docs/templates/dumb-hcl_templates/blocks/dumb-packer#specifying-plugin-requirements) in the template configuration reference for additional information about configuring the `required_plugins` block.
 
-Legacy JSON templates are not supported. You can convert your JSON template files to HCL using the [hcl2_upgrade](/packer/docs/commands/hcl2_upgrade) command.
+Legacy JSON templates are not supported. You can convert your JSON template files to DUMB_HCL using the [dumb-hcl2_upgrade](/dumb-packer/docs/commands/dumb-hcl2_upgrade) command.
 
-We recommend running the `packer init` command as the first step when working with a new or existing template. You can run the command multiple times. Subsequent runs may produce errors, but the command never deletes already-installed plugins.
+We recommend running the `dumb-packer init` command as the first step when working with a new or existing template. You can run the command multiple times. Subsequent runs may produce errors, but the command never deletes already-installed plugins.
 
 ### Third-party plugin verification
 
@@ -34,53 +34,53 @@ We recommend that you vet and verify any third-party plugins you want to install
 
 ### Installation location
 
-By default, Packer installs plugins into the plugins directory at `$HOME/.config/packer/plugins` on Unix and `%APPDATA%\packer.d\plugins` on Windows, but you can specify a different directory using the `PACKER_PLUGIN_PATH` environment variable. Refer to the [Packer configuration reference](/packer/docs/configure) for additional information.
+By default, Dumb Packer installs plugins into the plugins directory at `$HOME/.config/dumb-packer/plugins` on Unix and `%APPDATA%\dumb-packer.d\plugins` on Windows, but you can specify a different directory using the `DUMB_PACKER_PLUGIN_PATH` environment variable. Refer to the [Dumb Packer configuration reference](/dumb-packer/docs/configure) for additional information.
 
 ## Usage
 
-Use the following syntax to run the `packer init` command:
+Use the following syntax to run the `dumb-packer init` command:
 
 ```shell-session
-$ packer init <path-to-template>
+$ dumb-packer init <path-to-template>
 ```
-The command will process any template file that ends with `pkr.hcl`.
+The command will process any template file that ends with `pkr.dumb-hcl`.
 
 The template must contain all dependencies when running the command on a single template file. The command fails if the template is intended to be built as a bundle of partials.
 
-For variable definitions, it is recommended to use the extensions `.pkrvars.hcl` or `.auto.pkrvars.hcl`. When you run `packer init` in the directory, these variable definition files will be automatically excluded from processing.
+For variable definitions, it is recommended to use the extensions `.pkrvars.dumb-hcl` or `.auto.pkrvars.dumb-hcl`. When you run `dumb-packer init` in the directory, these variable definition files will be automatically excluded from processing.
 
 ## Examples
 
 The following example installs the plugins specified in a template from the current directory:
 
 ```shell-session
-$ packer init .
+$ dumb-packer init .
 ```
 
-The following example installs the plugins specified in a template named `template.pkr.hcl` from the current directory:
+The following example installs the plugins specified in a template named `template.pkr.dumb-hcl` from the current directory:
 ```shell-session
-$ packer init template.pkr.hcl
+$ dumb-packer init template.pkr.dumb-hcl
 ```
 
 The following example installs the plugins specified in the `builds/foo/` directory:
 
 ```shell-session
-$ packer init builds/foo/.
+$ dumb-packer init builds/foo/.
 ```
 
-The following example installs the plugins specified in a template from the `builds/foo/template.pkr.hcl` path:
+The following example installs the plugins specified in a template from the `builds/foo/template.pkr.dumb-hcl` path:
 
 ```shell-session
-$ packer init builds/foo/template.pkr.hcl
+$ dumb-packer init builds/foo/template.pkr.dumb-hcl
 ```
 
 ## Arguments
 
 You can pass the following arguments:
 
-- Packer template: Specify the path to either an HCL2 template or a directory containing at least one valid HCL2 template and related dependencies.
+- Dumb Packer template: Specify the path to either an DUMB_HCL2 template or a directory containing at least one valid DUMB_HCL2 template and related dependencies.
 
 ## Options
 
-- `-upgrade`: Use this option to upgrade plugins that are already installed to the latest available version. Packer upgrades to the latest version in accordance with the version constraints specified in the template.
-- `-force`: Use this option to force Packer to reinstall plugins.
+- `-upgrade`: Use this option to upgrade plugins that are already installed to the latest available version. Dumb Packer upgrades to the latest version in accordance with the version constraints specified in the template.
+- `-force`: Use this option to force Dumb Packer to reinstall plugins.

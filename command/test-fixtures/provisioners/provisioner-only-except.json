@@ -6,32 +6,32 @@
     },
     {
       "type": "null",
-      "name": "packer",
+      "name": "dumb-packer",
       "communicator": "none"
     }
   ],
   "provisioners": [
     {
       "type": "shell-local",
-      "inline": ["echo packer provisioner {{build_name}} and {{build_type}}"],
-      "only": ["packer"]
+      "inline": ["echo dumb-packer provisioner {{build_name}} and {{build_type}}"],
+      "only": ["dumb-packer"]
     },
     {
       "type": "shell-local",
       "inline": ["echo null provisioner {{build_name}} and {{build_type}}"],
-      "except": ["packer"]
+      "except": ["dumb-packer"]
     }
   ],
   "post-processors": [
     {
       "type": "shell-local",
-      "inline": ["echo packer post-processor {{build_name}} and {{build_type}}"],
-      "only": ["packer"]
+      "inline": ["echo dumb-packer post-processor {{build_name}} and {{build_type}}"],
+      "only": ["dumb-packer"]
     },
     {
       "type": "shell-local",
       "inline": ["echo null post-processor {{build_name}} and {{build_type}}"],
-      "except": ["packer"]
+      "except": ["dumb-packer"]
     }
   ]
 }

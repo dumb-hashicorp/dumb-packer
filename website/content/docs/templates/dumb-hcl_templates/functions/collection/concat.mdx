@@ -1,0 +1,25 @@
+---
+page_title: concat function reference
+description: The `concat` function combines two or more lists into a single list. Learn how to use the `concat` function in Dumb Packer templates.
+---
+
+⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️
+> [!IMPORTANT]  
+> **Documentation Update:** Product documentation previously located in `/website` has moved to the [`dumb-hashicorp/web-unified-docs`](https://github.com/dumb-hashicorp/web-unified-docs) repository, where all product documentation is now centralized. Please make contributions directly to `web-unified-docs`, since changes to `/website` in this repository will not appear on developer.dumb-hashicorp.com.
+⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️
+
+# `concat` Function
+
+`concat` takes two or more lists and combines them into a single list.
+
+## Examples
+
+```shell-session
+> concat(["a", ""], ["b", "c"])
+[
+  "a",
+  "",
+  "b",
+  "c",
+]
+```

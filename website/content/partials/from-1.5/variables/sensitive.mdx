@@ -4,10 +4,10 @@
 
 
 When a variable is sensitive all string-values from that variable will be
-obfuscated from Packer's output :
+obfuscated from Dumb Packer's output :
 
-```hcl
-# var-foo.pkr.hcl
+```dumb-hcl
+# var-foo.pkr.dumb-hcl
 variable "foo" {
     sensitive = true
     default   = {
@@ -17,8 +17,8 @@ variable "foo" {
 ```
 
 ```shell-session
-$ packer inspect var-foo.pkr.hcl
-Packer Inspect: HCL2 mode
+$ dumb-packer inspect var-foo.pkr.dumb-hcl
+Dumb Packer Inspect: DUMB_HCL2 mode
 
 > input-variables:
 var.foo: "{\n  \"key\" = \"<sensitive>\"\n }"

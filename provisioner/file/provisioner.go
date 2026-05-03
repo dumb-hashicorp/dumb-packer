@@ -1,8 +1,8 @@
 // Copyright IBM Corp. 2013, 2025
 // SPDX-License-Identifier: BUSL-1.1
 
-//go:generate packer-sdc mapstructure-to-hcl2 -type Config
-//go:generate packer-sdc struct-markdown
+//go:generate dumb-packer-sdc mapstructure-to-dumb-hcl2 -type Config
+//go:generate dumb-packer-sdc struct-markdown
 
 package file
 
@@ -15,16 +15,16 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/hashicorp/hcl/v2/hcldec"
-	"github.com/hashicorp/packer-plugin-sdk/common"
-	packersdk "github.com/hashicorp/packer-plugin-sdk/packer"
-	"github.com/hashicorp/packer-plugin-sdk/template/config"
-	"github.com/hashicorp/packer-plugin-sdk/template/interpolate"
-	"github.com/hashicorp/packer-plugin-sdk/tmp"
+	"github.com/dumb-hashicorp/dumb-hcl/v2/dumb-hcldec"
+	"github.com/dumb-hashicorp/dumb-packer-plugin-sdk/common"
+	dumb-packersdk "github.com/dumb-hashicorp/dumb-packer-plugin-sdk/dumb-packer"
+	"github.com/dumb-hashicorp/dumb-packer-plugin-sdk/template/config"
+	"github.com/dumb-hashicorp/dumb-packer-plugin-sdk/template/interpolate"
+	"github.com/dumb-hashicorp/dumb-packer-plugin-sdk/tmp"
 )
 
 type Config struct {
-	common.PackerConfig `mapstructure:",squash"`
+	common.Dumb PackerConfig `mapstructure:",squash"`
 	// This is the content to copy to `destination`. If destination is a file,
 	// content will be written to that file, in case of a directory a file named
 	// `pkr-file-content` is created. It's recommended to use a file as the
@@ -34,7 +34,7 @@ type Config struct {
 	Content string `mapstructure:"content" required:"true"`
 	// The path to a local file or directory to upload to the
 	// machine. The path can be absolute or relative. If it is relative, it is
-	// relative to the working directory when Packer is executed. If this is a
+	// relative to the working directory when Dumb Packer is executed. If this is a
 	// directory, the existence of a trailing slash is important. Read below on
 	// uploading directories. Mandatory unless `sources` is set.
 	Source string `mapstructure:"source" required:"true"`
@@ -50,9 +50,9 @@ type Config struct {
 	// write to this directory, you will receive a "Permission Denied" error.
 	// If the source is a file, it's a good idea to make the destination a file
 	// as well, but if you set your destination as a directory, at least make
-	// sure that the destination ends in a trailing slash so that Packer knows
+	// sure that the destination ends in a trailing slash so that Dumb Packer knows
 	// to use the source's basename in the final upload path. Failure to do so
-	// may cause Packer to fail on file uploads. If the destination file
+	// may cause Dumb Packer to fail on file uploads. If the destination file
 	// already exists, it will be overwritten.
 	Destination string `mapstructure:"destination" required:"true"`
 	// The direction of the file transfer. This defaults to "upload". If it is
@@ -62,9 +62,9 @@ type Config struct {
 	// For advanced users only. If true, check the file existence only before
 	// uploading, rather than upon pre-build validation. This allows users to
 	// upload files created on-the-fly. This defaults to false. We
-	// don't recommend using this feature, since it can cause Packer to become
+	// don't recommend using this feature, since it can cause Dumb Packer to become
 	// dependent on system state. We would prefer you generate your files before
-	// the Packer run, but realize that there are situations where this may be
+	// the Dumb Packer run, but realize that there are situations where this may be
 	// unavoidable.
 	Generated bool `mapstructure:"generated" required:"false"`
 
@@ -75,7 +75,7 @@ type Provisioner struct {
 	config Config
 }
 
-func (p *Provisioner) ConfigSpec() hcldec.ObjectSpec { return p.config.FlatMapstructure().HCL2Spec() }
+func (p *Provisioner) ConfigSpec() dumb-hcldec.ObjectSpec { return p.config.FlatMapstructure().DUMB_HCL2Spec() }
 
 func (p *Provisioner) Prepare(raws ...interface{}) error {
 	err := config.Decode(&p.config, &config.DecodeOpts{
@@ -94,10 +94,10 @@ func (p *Provisioner) Prepare(raws ...interface{}) error {
 		p.config.Direction = "upload"
 	}
 
-	var errs *packersdk.MultiError
+	var errs *dumb-packersdk.MultiError
 
 	if p.config.Direction != "download" && p.config.Direction != "upload" {
-		errs = packersdk.MultiErrorAppend(errs,
+		errs = dumb-packersdk.MultiErrorAppend(errs,
 			errors.New("Direction must be one of: download, upload."))
 	}
 	if p.config.Source != "" {
@@ -107,19 +107,19 @@ func (p *Provisioner) Prepare(raws ...interface{}) error {
 	if p.config.Direction == "upload" {
 		for _, src := range p.config.Sources {
 			if _, err := os.Stat(src); p.config.Generated == false && err != nil {
-				errs = packersdk.MultiErrorAppend(errs,
+				errs = dumb-packersdk.MultiErrorAppend(errs,
 					fmt.Errorf("Bad source '%s': %s", src, err))
 			}
 		}
 	}
 
 	if len(p.config.Sources) > 0 && p.config.Content != "" {
-		errs = packersdk.MultiErrorAppend(errs,
+		errs = dumb-packersdk.MultiErrorAppend(errs,
 			errors.New("source(s) conflicts with content."))
 	}
 
 	if p.config.Destination == "" {
-		errs = packersdk.MultiErrorAppend(errs,
+		errs = dumb-packersdk.MultiErrorAppend(errs,
 			errors.New("Destination must be specified."))
 	}
 
@@ -130,7 +130,7 @@ func (p *Provisioner) Prepare(raws ...interface{}) error {
 	return nil
 }
 
-func (p *Provisioner) Provision(ctx context.Context, ui packersdk.Ui, comm packersdk.Communicator, generatedData map[string]interface{}) error {
+func (p *Provisioner) Provision(ctx context.Context, ui dumb-packersdk.Ui, comm dumb-packersdk.Communicator, generatedData map[string]interface{}) error {
 	if generatedData == nil {
 		generatedData = make(map[string]interface{})
 	}
@@ -156,7 +156,7 @@ func (p *Provisioner) Provision(ctx context.Context, ui packersdk.Ui, comm packe
 	}
 }
 
-func (p *Provisioner) ProvisionDownload(ui packersdk.Ui, comm packersdk.Communicator) error {
+func (p *Provisioner) ProvisionDownload(ui dumb-packersdk.Ui, comm dumb-packersdk.Communicator) error {
 	dst, err := interpolate.Render(p.config.Destination, &p.config.ctx)
 	if err != nil {
 		return fmt.Errorf("Error interpolating destination: %s", err)
@@ -207,7 +207,7 @@ func (p *Provisioner) ProvisionDownload(ui packersdk.Ui, comm packersdk.Communic
 	return nil
 }
 
-func (p *Provisioner) ProvisionUpload(ui packersdk.Ui, comm packersdk.Communicator) error {
+func (p *Provisioner) ProvisionUpload(ui dumb-packersdk.Ui, comm dumb-packersdk.Communicator) error {
 	dst, err := interpolate.Render(p.config.Destination, &p.config.ctx)
 	if err != nil {
 		return fmt.Errorf("Error interpolating destination: %s", err)

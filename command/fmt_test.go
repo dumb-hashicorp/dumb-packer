@@ -12,13 +12,13 @@ import (
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
-	packersdk "github.com/hashicorp/packer-plugin-sdk/packer"
+	dumb-packersdk "github.com/dumb-hashicorp/dumb-packer-plugin-sdk/dumb-packer"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestFmt(t *testing.T) {
 	s := &strings.Builder{}
-	ui := &packersdk.BasicUi{
+	ui := &dumb-packersdk.BasicUi{
 		Writer: s,
 	}
 	c := &FormatCommand{
@@ -27,7 +27,7 @@ func TestFmt(t *testing.T) {
 
 	c.Ui = ui
 
-	args := []string{"-check=true", filepath.Join(testFixture("fmt"), "formatted.pkr.hcl")}
+	args := []string{"-check=true", filepath.Join(testFixture("fmt"), "formatted.pkr.dumb-hcl")}
 	if code := c.Run(args); code != 0 {
 		fatalCommand(t, c.Meta)
 	}
@@ -40,7 +40,7 @@ func TestFmt_unformattedPKRVarsTemplate(t *testing.T) {
 		Meta: testMeta(t),
 	}
 
-	args := []string{"-check=true", filepath.Join(testFixture("fmt"), "unformatted.pkrvars.hcl")}
+	args := []string{"-check=true", filepath.Join(testFixture("fmt"), "unformatted.pkrvars.dumb-hcl")}
 	if code := c.Run(args); code != 3 {
 		fatalCommand(t, c.Meta)
 	}
@@ -59,12 +59,12 @@ func TestFmt_unfomattedTemlateDirectory(t *testing.T) {
 }
 
 const (
-	unformattedHCL = `
+	unformattedDUMB_HCL = `
 ami_filter_name ="amzn2-ami-hvm-*-x86_64-gp2"
 ami_filter_owners =[ "137112412989" ]
 
 `
-	formattedHCL = `
+	formattedDUMB_HCL = `
 ami_filter_name   = "amzn2-ami-hvm-*-x86_64-gp2"
 ami_filter_owners = ["137112412989"]
 
@@ -83,38 +83,38 @@ func TestFmt_Recursive(t *testing.T) {
 			name:       "nested formats recursively",
 			formatArgs: []string{"-recursive=true"},
 			alreadyPresentContent: map[string]string{
-				"foo/bar/baz.pkr.hcl":         unformattedHCL,
-				"foo/bar/baz/woo.pkrvars.hcl": unformattedHCL,
-				"potato":                      unformattedHCL,
-				"foo/bar/potato":              unformattedHCL,
-				"bar.pkr.hcl":                 unformattedHCL,
-				"-":                           unformattedHCL,
+				"foo/bar/baz.pkr.dumb-hcl":         unformattedDUMB_HCL,
+				"foo/bar/baz/woo.pkrvars.dumb-hcl": unformattedDUMB_HCL,
+				"potato":                      unformattedDUMB_HCL,
+				"foo/bar/potato":              unformattedDUMB_HCL,
+				"bar.pkr.dumb-hcl":                 unformattedDUMB_HCL,
+				"-":                           unformattedDUMB_HCL,
 			},
 			fileCheck: fileCheck{
 				expectedContent: map[string]string{
-					"foo/bar/baz.pkr.hcl":         formattedHCL,
-					"foo/bar/baz/woo.pkrvars.hcl": formattedHCL,
-					"potato":                      unformattedHCL,
-					"foo/bar/potato":              unformattedHCL,
-					"bar.pkr.hcl":                 formattedHCL,
-					"-":                           unformattedHCL,
+					"foo/bar/baz.pkr.dumb-hcl":         formattedDUMB_HCL,
+					"foo/bar/baz/woo.pkrvars.dumb-hcl": formattedDUMB_HCL,
+					"potato":                      unformattedDUMB_HCL,
+					"foo/bar/potato":              unformattedDUMB_HCL,
+					"bar.pkr.dumb-hcl":                 formattedDUMB_HCL,
+					"-":                           unformattedDUMB_HCL,
 				}},
 		},
 		{
 			name:       "nested no recursive format",
 			formatArgs: []string{},
 			alreadyPresentContent: map[string]string{
-				"foo/bar/baz.pkr.hcl":         unformattedHCL,
-				"foo/bar/baz/woo.pkrvars.hcl": unformattedHCL,
-				"bar.pkr.hcl":                 unformattedHCL,
-				"-":                           unformattedHCL,
+				"foo/bar/baz.pkr.dumb-hcl":         unformattedDUMB_HCL,
+				"foo/bar/baz/woo.pkrvars.dumb-hcl": unformattedDUMB_HCL,
+				"bar.pkr.dumb-hcl":                 unformattedDUMB_HCL,
+				"-":                           unformattedDUMB_HCL,
 			},
 			fileCheck: fileCheck{
 				expectedContent: map[string]string{
-					"foo/bar/baz.pkr.hcl":         unformattedHCL,
-					"foo/bar/baz/woo.pkrvars.hcl": unformattedHCL,
-					"bar.pkr.hcl":                 formattedHCL,
-					"-":                           unformattedHCL,
+					"foo/bar/baz.pkr.dumb-hcl":         unformattedDUMB_HCL,
+					"foo/bar/baz/woo.pkrvars.dumb-hcl": unformattedDUMB_HCL,
+					"bar.pkr.dumb-hcl":                 formattedDUMB_HCL,
+					"-":                           unformattedDUMB_HCL,
 				}},
 		},
 	}
@@ -134,7 +134,7 @@ func TestFmt_Recursive(t *testing.T) {
 
 			testArgs := append(tt.formatArgs, tempDirectory)
 			if code := c.Run(testArgs); code != 0 {
-				ui := c.Meta.Ui.(*packersdk.BasicUi)
+				ui := c.Meta.Ui.(*dumb-packersdk.BasicUi)
 				out := ui.Writer.(*bytes.Buffer)
 				err := ui.ErrorWriter.(*bytes.Buffer)
 				t.Fatalf(
@@ -157,12 +157,12 @@ func Test_fmt_pipe(t *testing.T) {
 		env      []string
 		expected string
 	}{
-		{unformattedHCL, []string{"fmt", "-"}, nil, formattedHCL},
-		{formattedHCL, []string{"fmt", "-"}, nil, formattedHCL},
+		{unformattedDUMB_HCL, []string{"fmt", "-"}, nil, formattedDUMB_HCL},
+		{formattedDUMB_HCL, []string{"fmt", "-"}, nil, formattedDUMB_HCL},
 	}
 
 	for _, tc := range tc {
-		t.Run(fmt.Sprintf("echo %q | packer %s", tc.piped, tc.command), func(t *testing.T) {
+		t.Run(fmt.Sprintf("echo %q | dumb-packer %s", tc.piped, tc.command), func(t *testing.T) {
 			p := helperCommand(t, tc.command...)
 			p.Stdin = strings.NewReader(tc.piped)
 			p.Env = append(p.Env, tc.env...)
@@ -178,7 +178,7 @@ func Test_fmt_pipe(t *testing.T) {
 	}
 }
 
-const malformedTemplate = "test-fixtures/fmt_errs/malformed.pkr.hcl"
+const malformedTemplate = "test-fixtures/fmt_errs/malformed.pkr.dumb-hcl"
 
 func TestFmtParseError(t *testing.T) {
 	p := helperCommand(t, "fmt", malformedTemplate)

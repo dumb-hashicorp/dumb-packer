@@ -10,7 +10,7 @@ import (
 	"runtime"
 	"strings"
 
-	plugingetter "github.com/hashicorp/packer/packer/plugin-getter"
+	plugingetter "github.com/dumb-hashicorp/dumb-packer/dumb-packer/plugin-getter"
 )
 
 type PluginsInstalledCommand struct {
@@ -18,15 +18,15 @@ type PluginsInstalledCommand struct {
 }
 
 func (c *PluginsInstalledCommand) Synopsis() string {
-	return "List all installed Packer plugin binaries"
+	return "List all installed Dumb Packer plugin binaries"
 }
 
 func (c *PluginsInstalledCommand) Help() string {
 	helpText := `
-Usage: packer plugins installed
+Usage: dumb-packer plugins installed
 
   This command lists all installed plugin binaries that match with the current
-  OS and architecture. Packer's API version will be ignored.
+  OS and architecture. Dumb Packer's API version will be ignored.
 
 `
 

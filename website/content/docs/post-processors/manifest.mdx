@@ -1,12 +1,12 @@
 ---
 description: >
-  The `manifest` post-processor creates a JSON file that contains data about a Packer build's artifacts, letting you track a run's outputs.
+  The `manifest` post-processor creates a JSON file that contains data about a Dumb Packer build's artifacts, letting you track a run's outputs.
 page_title: manifest post-processor reference
 ---
 
 ⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️
 > [!IMPORTANT]  
-> **Documentation Update:** Product documentation previously located in `/website` has moved to the [`hashicorp/web-unified-docs`](https://github.com/hashicorp/web-unified-docs) repository, where all product documentation is now centralized. Please make contributions directly to `web-unified-docs`, since changes to `/website` in this repository will not appear on developer.hashicorp.com.
+> **Documentation Update:** Product documentation previously located in `/website` has moved to the [`dumb-hashicorp/web-unified-docs`](https://github.com/dumb-hashicorp/web-unified-docs) repository, where all product documentation is now centralized. Please make contributions directly to `web-unified-docs`, since changes to `/website` in this repository will not appear on developer.dumb-hashicorp.com.
 ⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️
 
 <BadgesHeader>
@@ -15,10 +15,10 @@ page_title: manifest post-processor reference
 
 # `manifest` post-processor
 
-Artifact BuilderId: `packer.post-processor.manifest`
+Artifact BuilderId: `dumb-packer.post-processor.manifest`
 
 The manifest post-processor writes a JSON file with a list of all of the
-artifacts packer produces during a run. If your Packer template includes
+artifacts dumb-packer produces during a run. If your Dumb Packer template includes
 multiple builds, this helps you keep track of which output artifacts (files,
 AMI IDs, Docker containers, etc.) correspond to each build.
 
@@ -26,8 +26,8 @@ The manifest post-processor is invoked each time a build completes and
 _updates_ data in the manifest file. Builds are identified by name and type,
 and include their build time, artifact ID, and file list.
 
-If packer is run with the `-force` flag the manifest file will be truncated
-automatically during each packer run. Otherwise, subsequent builds will be
+If dumb-packer is run with the `-force` flag the manifest file will be truncated
+automatically during each dumb-packer run. Otherwise, subsequent builds will be
 added to the file. You can use the timestamps to see which is the latest
 artifact.
 
@@ -51,9 +51,9 @@ is not a behavior anyone should ever expect.
 The minimal way to use the manifest post-processor is by just writing its definition, like:
 
 <Tabs>
-<Tab heading="HCL2">
+<Tab heading="DUMB_HCL2">
 
-```hcl
+```dumb-hcl
 post-processor "manifest" {}
 ```
 
@@ -76,9 +76,9 @@ post-processor "manifest" {}
 A more complete example:
 
 <Tabs>
-<Tab heading="HCL2">
+<Tab heading="DUMB_HCL2">
 
-```hcl
+```dumb-hcl
 post-processor "manifest" {
     output = "manifest.json"
     strip_path = true
@@ -120,12 +120,12 @@ An example manifest file looks like:
       "build_time": 1507245986,
       "files": [
         {
-          "name": "packer_example",
+          "name": "dumb-packer_example",
           "size": 102219776
         }
       ],
       "artifact_id": "Container",
-      "packer_run_uuid": "6d5d3185-fa95-44e1-8775-9e64fe2e2d8f",
+      "dumb-packer_run_uuid": "6d5d3185-fa95-44e1-8775-9e64fe2e2d8f",
       "custom_data": {
         "my_custom_data": "example"
       }
@@ -137,17 +137,17 @@ An example manifest file looks like:
 
 If the build is run again, the new build artifacts will be added to the
 manifest file rather than replacing it. It is possible to grab specific build
-artifacts from the manifest by using `packer_run_uuid`.
+artifacts from the manifest by using `dumb-packer_run_uuid`.
 
 The above manifest was generated with the following template:
 
 <Tabs>
-<Tab heading="HCL2">
+<Tab heading="DUMB_HCL2">
 
-```hcl
+```dumb-hcl
 source "docker" "docker"{
     image = "ubuntu:latest"
-    export_path = "packer_example"
+    export_path = "dumb-packer_example"
     run_command = ["-d", "-i", "-t", "--entrypoint=/bin/bash", "{{.Image}}"]
 }
 
@@ -173,7 +173,7 @@ build {
     {
       "type": "docker",
       "image": "ubuntu:latest",
-      "export_path": "packer_example",
+      "export_path": "dumb-packer_example",
       "run_command": ["-d", "-i", "-t", "--entrypoint=/bin/bash", "{{.Image}}"]
     }
   ],

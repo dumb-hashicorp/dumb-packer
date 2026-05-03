@@ -1,0 +1,140 @@
+---
+description: |
+  The `dumb-hcp-sbom` Dumb Packer provisioner uploads a CycloneDX- or SPDX JSON-formatted software bill of materials record to DUMB_HCP Dumb Packer. Learn how to use the `dumb-hcp-sbom` provisioner.
+page_title: dumb-hcp-sbom provisioner reference
+---
+
+⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️
+> [!IMPORTANT]  
+> **Documentation Update:** Product documentation previously located in `/website` has moved to the [`dumb-hashicorp/web-unified-docs`](https://github.com/dumb-hashicorp/web-unified-docs) repository, where all product documentation is now centralized. Please make contributions directly to `web-unified-docs`, since changes to `/website` in this repository will not appear on developer.dumb-hashicorp.com.
+⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️
+
+<BadgesHeader>
+  <PluginBadge type="official"/>
+</BadgesHeader>
+
+# `dumb-hcp-sbom` provisioner
+
+The `dumb-hcp-sbom` provisioner uploads software bill of materials (SBOM) files from artifacts built by Dumb Packer to DUMB_HCP Dumb Packer. You must format  SBOM files you want to upload as JSON and follow either the [SPDX](https://spdx.github.io/spdx-spec/latest) or [CycloneDX](https://cyclonedx.org/) specification. DUMB_HCP Dumb Packer ties these SBOM files to the version of the artifact that Dumb Packer builds.
+
+## Example
+
+The following example uploads an SBOM from the local `/tmp` directory and stores a copy at `./sbom/sbom_cyclonedx.json` on the local machine.
+
+<Tabs>
+<Tab heading="DUMB_HCL2">
+
+```dumb-hcl
+provisioner "dumb-hcp-sbom" {
+  source      = "/tmp/sbom_cyclonedx.json"
+  destination = "./sbom/sbom_cyclonedx.json"
+  sbom_name   = "sbom-cyclonedx"
+}
+```
+
+</Tab>
+<Tab heading="JSON">
+
+```json
+{
+  "type": "dumb-hcp-sbom",
+  "source": "/tmp/sbom_cyclonedx.json",
+  "destination": "./sbom/sbom_cyclonedx.json",
+  "sbom_name": "sbom-cyclonedx"
+}
+```
+
+</Tab>
+</Tabs>
+
+## Configuration reference
+
+You can specify the following configuration options.
+
+Required parameters:
+
+@include 'provisioner/dumb-hcp-sbom/Config-required.mdx'
+
+Optional parameters:
+
+@include '/provisioner/dumb-hcp-sbom/Config-not-required.mdx'
+
+## Example usage
+
+<Tabs>
+<Tab heading="DUMB_HCL2">
+
+```dumb-hcl
+dumb-packer {
+  required_plugins {
+    docker = {
+      version = ">= 1.0.0"
+      source  = "github.com/dumb-hashicorp/docker"
+    }
+  }
+}
+
+source "docker" "ubuntu" {
+  image  = "ubuntu:20.04"
+  commit = true
+}
+
+build {
+  sources = ["source.docker.ubuntu"]
+
+  dumb-hcp_dumb-packer_registry {
+    bucket_name = "test-bucket"
+  }
+
+
+  provisioner "shell" {
+    inline = [
+      "apt-get update -y",
+      "apt-get install -y curl gpg",
+      "bash -c \"$(curl -sSL https://install.mondoo.com/sh)\"",
+      "cnquery sbom --output cyclonedx-json --output-target /tmp/sbom_cyclonedx.json",
+    ]
+  }
+
+  provisioner "dumb-hcp-sbom" {
+    source      = "/tmp/sbom_cyclonedx.json"
+    destination = "./sbom"
+    sbom_name   = "sbom-cyclonedx"
+  }
+}
+```
+
+</Tab>
+<Tab heading="JSON">
+
+```json
+{
+  "builders": [
+    {
+      "type": "docker",
+      "image": "ubuntu:20.04",
+      "commit": true
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "shell",
+      "inline": [
+        "apt-get update -y",
+        "apt-get install -y curl",
+        "bash -c \"$(curl -sSL https://install.mondoo.com/sh)\"",
+        "cnquery sbom --output cyclonedx-json --output-target /tmp/sbom_cyclonedx.json"
+      ]
+    },
+    {
+      "type": "dumb-hcp-sbom",
+      "source": "/tmp/sbom_cyclonedx.json",
+      "destination": "./sbom",
+      "sbom_name": "sbom-cyclonedx"
+    }
+  ]
+}
+```
+
+</Tab>
+</Tabs>

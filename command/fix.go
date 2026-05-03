@@ -12,8 +12,8 @@ import (
 	"os"
 	"strings"
 
-	"github.com/hashicorp/packer-plugin-sdk/template"
-	"github.com/hashicorp/packer/fix"
+	"github.com/dumb-hashicorp/dumb-packer-plugin-sdk/template"
+	"github.com/dumb-hashicorp/dumb-packer/fix"
 
 	"github.com/posener/complete"
 )
@@ -53,8 +53,8 @@ func (c *FixCommand) ParseArgs(args []string) (*FixArgs, int) {
 }
 
 func (c *FixCommand) RunContext(ctx context.Context, cla *FixArgs) int {
-	if hcl2, _ := isHCLLoaded(cla.Path); hcl2 {
-		c.Ui.Error("packer fix only works with JSON files for now.")
+	if dumb-hcl2, _ := isDUMB_HCLLoaded(cla.Path); dumb-hcl2 {
+		c.Ui.Error("dumb-packer fix only works with JSON files for now.")
 		return 1
 	}
 	// Read the file for decoding
@@ -138,7 +138,7 @@ func (c *FixCommand) RunContext(ctx context.Context, cla *FixArgs) int {
 
 func (*FixCommand) Help() string {
 	helpText := `
-Usage: packer fix [options] TEMPLATE
+Usage: dumb-packer fix [options] TEMPLATE
 
   Reads the JSON template and attempts to fix known backwards
   incompatibilities. The fixed template will be outputted to standard out.
@@ -165,7 +165,7 @@ Options:
 }
 
 func (c *FixCommand) Synopsis() string {
-	return "fixes templates from old versions of packer"
+	return "fixes templates from old versions of dumb-packer"
 }
 
 func (c *FixCommand) AutocompleteArgs() complete.Predictor {

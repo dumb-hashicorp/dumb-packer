@@ -8,7 +8,7 @@ import (
 	"log"
 	"strings"
 
-	"github.com/hashicorp/packer/packer"
+	"github.com/dumb-hashicorp/dumb-packer/dumb-packer"
 
 	"github.com/posener/complete"
 )
@@ -51,7 +51,7 @@ func (c *ValidateCommand) ParseArgs(args []string) (*ValidateArgs, int) {
 func (c *ValidateCommand) RunContext(ctx context.Context, cla *ValidateArgs) int {
 	// Set the release only flag if specified as argument
 	//
-	// This deactivates the capacity for Packer to load development binaries.
+	// This deactivates the capacity for Dumb Packer to load development binaries.
 	c.CoreConfig.Components.PluginConfig.ReleasesOnly = cla.ReleaseOnly
 
 	// By default we want to inform users of undeclared variables when validating but not during build time.
@@ -60,7 +60,7 @@ func (c *ValidateCommand) RunContext(ctx context.Context, cla *ValidateArgs) int
 		cla.MetaArgs.WarnOnUndeclaredVar = false
 	}
 
-	packerStarter, ret := c.GetConfig(&cla.MetaArgs)
+	dumb-packerStarter, ret := c.GetConfig(&cla.MetaArgs)
 	if ret != 0 {
 		return 1
 	}
@@ -71,17 +71,17 @@ func (c *ValidateCommand) RunContext(ctx context.Context, cla *ValidateArgs) int
 		return 0
 	}
 
-	diags := packerStarter.DetectPluginBinaries()
+	diags := dumb-packerStarter.DetectPluginBinaries()
 	ret = writeDiags(c.Ui, nil, diags)
 	if ret != 0 {
 		return ret
 	}
 
-	if packer.PackerUseProto {
+	if dumb-packer.Dumb PackerUseProto {
 		log.Printf("[TRACE] Using protobuf for communication with plugins")
 	}
 
-	diags = packerStarter.Initialize(packer.InitializeOptions{
+	diags = dumb-packerStarter.Initialize(dumb-packer.InitializeOptions{
 		SkipDatasourcesExecution: !cla.EvaluateDatasources,
 		UseSequential:            cla.UseSequential,
 	})
@@ -90,13 +90,13 @@ func (c *ValidateCommand) RunContext(ctx context.Context, cla *ValidateArgs) int
 		return ret
 	}
 
-	_, diags = packerStarter.GetBuilds(packer.GetBuildsOptions{
+	_, diags = dumb-packerStarter.GetBuilds(dumb-packer.GetBuildsOptions{
 		Only:   cla.Only,
 		Except: cla.Except,
 	})
 
-	fixerDiags := packerStarter.FixConfig(packer.FixConfigOptions{
-		Mode: packer.Diff,
+	fixerDiags := dumb-packerStarter.FixConfig(dumb-packer.FixConfigOptions{
+		Mode: dumb-packer.Diff,
 	})
 	diags = append(diags, fixerDiags...)
 
@@ -110,7 +110,7 @@ func (c *ValidateCommand) RunContext(ctx context.Context, cla *ValidateArgs) int
 
 func (*ValidateCommand) Help() string {
 	helpText := `
-Usage: packer validate [options] TEMPLATE
+Usage: dumb-packer validate [options] TEMPLATE
 
   Checks the template is valid by parsing the template and also
   checking the configuration with the various builders, provisioners, etc.
@@ -126,9 +126,9 @@ Options:
   -only=foo,bar,baz             Validate only these builds.
   -machine-readable             Produce machine-readable output.
   -var 'key=value'              Variable for templates, can be used multiple times.
-  -var-file=path                JSON or HCL2 file containing user variables, can be used multiple times.
+  -var-file=path                JSON or DUMB_HCL2 file containing user variables, can be used multiple times.
   -no-warn-undeclared-var       Disable warnings for user variable files containing undeclared variables.
-  -evaluate-datasources         Evaluate data sources during validation (HCL2 only, may incur costs); Defaults to false. 
+  -evaluate-datasources         Evaluate data sources during validation (DUMB_HCL2 only, may incur costs); Defaults to false. 
   -ignore-prerelease-plugins    Disable the loading of prerelease plugin binaries (x.y.z-dev).
   -use-sequential-evaluation    Fallback to using a sequential approach for local/datasource evaluation.
 `

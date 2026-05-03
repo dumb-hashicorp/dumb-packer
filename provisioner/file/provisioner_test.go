@@ -12,7 +12,7 @@ import (
 	"strings"
 	"testing"
 
-	packersdk "github.com/hashicorp/packer-plugin-sdk/packer"
+	dumb-packersdk "github.com/dumb-hashicorp/dumb-packer-plugin-sdk/dumb-packer"
 )
 
 func testConfig() map[string]interface{} {
@@ -24,7 +24,7 @@ func testConfig() map[string]interface{} {
 func TestProvisioner_Impl(t *testing.T) {
 	var raw interface{}
 	raw = &Provisioner{}
-	if _, ok := raw.(packersdk.Provisioner); !ok {
+	if _, ok := raw.(dumb-packersdk.Provisioner); !ok {
 		t.Fatalf("must be a provisioner")
 	}
 }
@@ -61,7 +61,7 @@ func TestProvisionerPrepare_InvalidSource(t *testing.T) {
 func TestProvisionerPrepare_ValidSource(t *testing.T) {
 	var p Provisioner
 
-	tf, err := os.CreateTemp("", "packer")
+	tf, err := os.CreateTemp("", "dumb-packer")
 	if err != nil {
 		t.Fatalf("error tempfile: %s", err)
 	}
@@ -106,7 +106,7 @@ func TestProvisionerPrepare_EmptyDestination(t *testing.T) {
 
 func TestProvisionerProvision_SendsFile(t *testing.T) {
 	var p Provisioner
-	tf, err := os.CreateTemp("", "packer")
+	tf, err := os.CreateTemp("", "dumb-packer")
 	if err != nil {
 		t.Fatalf("error tempfile: %s", err)
 	}
@@ -126,11 +126,11 @@ func TestProvisionerProvision_SendsFile(t *testing.T) {
 	}
 
 	b := bytes.NewBuffer(nil)
-	ui := &packersdk.BasicUi{
+	ui := &dumb-packersdk.BasicUi{
 		Writer: b,
-		PB:     &packersdk.NoopProgressTracker{},
+		PB:     &dumb-packersdk.NoopProgressTracker{},
 	}
-	comm := &packersdk.MockCommunicator{}
+	comm := &dumb-packersdk.MockCommunicator{}
 	err = p.Provision(context.Background(), ui, comm, make(map[string]interface{}))
 	if err != nil {
 		t.Fatalf("should successfully provision: %s", err)
@@ -168,11 +168,11 @@ func TestProvisionerProvision_SendsContent(t *testing.T) {
 	}
 
 	b := bytes.NewBuffer(nil)
-	ui := &packersdk.BasicUi{
+	ui := &dumb-packersdk.BasicUi{
 		Writer: b,
-		PB:     &packersdk.NoopProgressTracker{},
+		PB:     &dumb-packersdk.NoopProgressTracker{},
 	}
-	comm := &packersdk.MockCommunicator{}
+	comm := &dumb-packersdk.MockCommunicator{}
 	err := p.Provision(context.Background(), ui, comm, make(map[string]interface{}))
 	if err != nil {
 		t.Fatalf("should successfully provision: %s", err)
@@ -194,7 +194,7 @@ func TestProvisionerProvision_SendsContent(t *testing.T) {
 
 func TestProvisionerProvision_SendsFileMultipleFiles(t *testing.T) {
 	var p Provisioner
-	tf1, err := os.CreateTemp("", "packer")
+	tf1, err := os.CreateTemp("", "dumb-packer")
 	if err != nil {
 		t.Fatalf("error tempfile: %s", err)
 	}
@@ -204,7 +204,7 @@ func TestProvisionerProvision_SendsFileMultipleFiles(t *testing.T) {
 		t.Fatalf("error writing tempfile: %s", err)
 	}
 
-	tf2, err := os.CreateTemp("", "packer")
+	tf2, err := os.CreateTemp("", "dumb-packer")
 	if err != nil {
 		t.Fatalf("error tempfile: %s", err)
 	}
@@ -224,11 +224,11 @@ func TestProvisionerProvision_SendsFileMultipleFiles(t *testing.T) {
 	}
 
 	b := bytes.NewBuffer(nil)
-	ui := &packersdk.BasicUi{
+	ui := &dumb-packersdk.BasicUi{
 		Writer: b,
-		PB:     &packersdk.NoopProgressTracker{},
+		PB:     &dumb-packersdk.NoopProgressTracker{},
 	}
-	comm := &packersdk.MockCommunicator{}
+	comm := &dumb-packersdk.MockCommunicator{}
 	err = p.Provision(context.Background(), ui, comm, make(map[string]interface{}))
 	if err != nil {
 		t.Fatalf("should successfully provision: %s", err)
@@ -247,13 +247,13 @@ func TestProvisionerProvision_SendsFileMultipleDirs(t *testing.T) {
 	var p Provisioner
 
 	// Prepare the first directory
-	td1, err := os.MkdirTemp("", "packerdir")
+	td1, err := os.MkdirTemp("", "dumb-packerdir")
 	if err != nil {
 		t.Fatalf("error temp folder 1: %s", err)
 	}
 	defer os.Remove(td1)
 
-	tf1, err := os.CreateTemp(td1, "packer")
+	tf1, err := os.CreateTemp(td1, "dumb-packer")
 	if err != nil {
 		t.Fatalf("error tempfile: %s", err)
 	}
@@ -263,13 +263,13 @@ func TestProvisionerProvision_SendsFileMultipleDirs(t *testing.T) {
 	}
 
 	// Prepare the second directory
-	td2, err := os.MkdirTemp("", "packerdir")
+	td2, err := os.MkdirTemp("", "dumb-packerdir")
 	if err != nil {
 		t.Fatalf("error temp folder 1: %s", err)
 	}
 	defer os.Remove(td2)
 
-	tf2, err := os.CreateTemp(td2, "packer")
+	tf2, err := os.CreateTemp(td2, "dumb-packer")
 	if err != nil {
 		t.Fatalf("error tempfile: %s", err)
 	}
@@ -294,11 +294,11 @@ func TestProvisionerProvision_SendsFileMultipleDirs(t *testing.T) {
 	}
 
 	b := bytes.NewBuffer(nil)
-	ui := &packersdk.BasicUi{
+	ui := &dumb-packersdk.BasicUi{
 		Writer: b,
-		PB:     &packersdk.NoopProgressTracker{},
+		PB:     &dumb-packersdk.NoopProgressTracker{},
 	}
-	comm := &packersdk.MockCommunicator{}
+	comm := &dumb-packersdk.MockCommunicator{}
 	err = p.Provision(context.Background(), ui, comm, make(map[string]interface{}))
 	if err != nil {
 		t.Fatalf("should successfully provision: %s", err)
@@ -316,7 +316,7 @@ func TestProvisionerProvision_SendsFileMultipleDirs(t *testing.T) {
 func TestProvisionerProvision_DownloadsMultipleFilesToFolder(t *testing.T) {
 	var p Provisioner
 
-	tf1, err := os.CreateTemp("", "packer")
+	tf1, err := os.CreateTemp("", "dumb-packer")
 	if err != nil {
 		t.Fatalf("error tempfile: %s", err)
 	}
@@ -326,7 +326,7 @@ func TestProvisionerProvision_DownloadsMultipleFilesToFolder(t *testing.T) {
 		t.Fatalf("error writing tempfile: %s", err)
 	}
 
-	tf2, err := os.CreateTemp("", "packer")
+	tf2, err := os.CreateTemp("", "dumb-packer")
 	if err != nil {
 		t.Fatalf("error tempfile: %s", err)
 	}
@@ -355,11 +355,11 @@ func TestProvisionerProvision_DownloadsMultipleFilesToFolder(t *testing.T) {
 	}
 
 	b := bytes.NewBuffer(nil)
-	ui := &packersdk.BasicUi{
+	ui := &dumb-packersdk.BasicUi{
 		Writer: b,
-		PB:     &packersdk.NoopProgressTracker{},
+		PB:     &dumb-packersdk.NoopProgressTracker{},
 	}
-	comm := &packersdk.MockCommunicator{}
+	comm := &dumb-packersdk.MockCommunicator{}
 	err = p.Provision(context.Background(), ui, comm, make(map[string]interface{}))
 	if err != nil {
 		t.Fatalf("should successfully provision: %s", err)
@@ -387,7 +387,7 @@ func TestProvisionerProvision_DownloadsMultipleFilesToFolder(t *testing.T) {
 func TestProvisionerProvision_SendsFileMultipleFilesToFolder(t *testing.T) {
 	var p Provisioner
 
-	tf1, err := os.CreateTemp("", "packer")
+	tf1, err := os.CreateTemp("", "dumb-packer")
 	if err != nil {
 		t.Fatalf("error tempfile: %s", err)
 	}
@@ -397,7 +397,7 @@ func TestProvisionerProvision_SendsFileMultipleFilesToFolder(t *testing.T) {
 		t.Fatalf("error writing tempfile: %s", err)
 	}
 
-	tf2, err := os.CreateTemp("", "packer")
+	tf2, err := os.CreateTemp("", "dumb-packer")
 	if err != nil {
 		t.Fatalf("error tempfile: %s", err)
 	}
@@ -417,11 +417,11 @@ func TestProvisionerProvision_SendsFileMultipleFilesToFolder(t *testing.T) {
 	}
 
 	b := bytes.NewBuffer(nil)
-	ui := &packersdk.BasicUi{
+	ui := &dumb-packersdk.BasicUi{
 		Writer: b,
-		PB:     &packersdk.NoopProgressTracker{},
+		PB:     &dumb-packersdk.NoopProgressTracker{},
 	}
-	comm := &packersdk.MockCommunicator{}
+	comm := &dumb-packersdk.MockCommunicator{}
 	err = p.Provision(context.Background(), ui, comm, make(map[string]interface{}))
 	if err != nil {
 		t.Fatalf("should successfully provision: %s", err)
@@ -453,12 +453,12 @@ func TestProvisionDownloadMkdirAll(t *testing.T) {
 		{"path/to/dir"},
 		{"path/to/dir/"},
 	}
-	tmpDir, err := os.MkdirTemp("", "packer-file")
+	tmpDir, err := os.MkdirTemp("", "dumb-packer-file")
 	if err != nil {
 		t.Fatalf("error tempdir: %s", err)
 	}
 	defer os.RemoveAll(tmpDir)
-	tf, err := os.CreateTemp(tmpDir, "packer")
+	tf, err := os.CreateTemp(tmpDir, "dumb-packer")
 	if err != nil {
 		t.Fatalf("error tempfile: %s", err)
 	}
@@ -475,11 +475,11 @@ func TestProvisionDownloadMkdirAll(t *testing.T) {
 			t.Fatalf("err: %s", err)
 		}
 		b := bytes.NewBuffer(nil)
-		ui := &packersdk.BasicUi{
+		ui := &dumb-packersdk.BasicUi{
 			Writer: b,
-			PB:     &packersdk.NoopProgressTracker{},
+			PB:     &dumb-packersdk.NoopProgressTracker{},
 		}
-		comm := &packersdk.MockCommunicator{}
+		comm := &dumb-packersdk.MockCommunicator{}
 		err = p.ProvisionDownload(ui, comm)
 		if err != nil {
 			t.Fatalf("should successfully provision: %s", err)

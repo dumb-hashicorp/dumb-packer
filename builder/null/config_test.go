@@ -7,7 +7,7 @@ import (
 	"os"
 	"testing"
 
-	"github.com/hashicorp/packer-plugin-sdk/communicator"
+	"github.com/dumb-hashicorp/dumb-packer-plugin-sdk/communicator"
 )
 
 func testConfig() map[string]interface{} {

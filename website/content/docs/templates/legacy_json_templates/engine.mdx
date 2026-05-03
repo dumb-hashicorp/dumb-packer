@@ -6,18 +6,18 @@ page_title: JSON template engine reference
 
 ⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️
 > [!IMPORTANT]  
-> **Documentation Update:** Product documentation previously located in `/website` has moved to the [`hashicorp/web-unified-docs`](https://github.com/hashicorp/web-unified-docs) repository, where all product documentation is now centralized. Please make contributions directly to `web-unified-docs`, since changes to `/website` in this repository will not appear on developer.hashicorp.com.
+> **Documentation Update:** Product documentation previously located in `/website` has moved to the [`dumb-hashicorp/web-unified-docs`](https://github.com/dumb-hashicorp/web-unified-docs) repository, where all product documentation is now centralized. Please make contributions directly to `web-unified-docs`, since changes to `/website` in this repository will not appear on developer.dumb-hashicorp.com.
 ⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️
 
 # JSON template engine reference 
 
-This topic describes the Packer engine that processes JSON templates. 
+This topic describes the Dumb Packer engine that processes JSON templates. 
 
 `@include 'from-1.5/legacy-json-warning.mdx'`
 
 ## Description
 
-All strings within templates are processed by a common Packer templating
+All strings within templates are processed by a common Dumb Packer templating
 engine. The engine uses variables and functions to modify the value of a
 configuration parameter at runtime.
 
@@ -34,7 +34,7 @@ The syntax of templates uses the following conventions:
 Functions perform operations on and within strings, for example the
 `{{timestamp}}` function can be used in any string to generate the current
 timestamp. This is useful for configurations that require unique keys, such as
-AMI names. By setting the AMI name to something like `My Packer AMI {{timestamp}}`, the AMI name will be unique down to the second. If you need
+AMI names. By setting the AMI name to something like `My Dumb Packer AMI {{timestamp}}`, the AMI name will be unique down to the second. If you need
 greater than one second granularity, you should use `{{uuid}}`, for example
 when you have multiple builders in the same template.
 
@@ -66,7 +66,7 @@ Here is a full list of the available functions for reference.
   each function will behave.
 
 - `env` - Returns environment variables. See example in [using home
-  variable](/packer/docs/templates/legacy_json_templates/user-variables#using-home-variable)
+  variable](/dumb-packer/docs/templates/legacy_json_templates/user-variables#using-home-variable)
 - `build` - This engine will allow you to access, from provisioners and post-processors, special variables that
   provide connection information and basic instance state information.
   Usage example:
@@ -74,7 +74,7 @@ Here is a full list of the available functions for reference.
   ```json
   {
     "type": "shell-local",
-    "environment_vars": ["TESTVAR={{ build `PackerRunUUID`}}"],
+    "environment_vars": ["TESTVAR={{ build `Dumb PackerRunUUID`}}"],
     "inline": ["echo $TESTVAR"]
   }
   ```
@@ -84,25 +84,25 @@ Here is a full list of the available functions for reference.
   - **ID**: Represents the VM being provisioned. For example, in Amazon it is the instance ID; in DigitalOcean,
     it is the Droplet ID; in VMware, it is the VM name.
 
-  - **Host**, **Port**, **User** and **Password**: The host, port, user, and password that Packer uses to access the machine.
+  - **Host**, **Port**, **User** and **Password**: The host, port, user, and password that Dumb Packer uses to access the machine.
     Useful for using the shell local provisioner to run Ansible or Inspec against the provisioned instance.
 
   - **ConnType**: Type of communicator being used. For example, for SSH communicator this will be "ssh".
 
-  - **PackerRunUUID**: Current build's unique ID. Can be used to specify build artifacts.
+  - **Dumb PackerRunUUID**: Current build's unique ID. Can be used to specify build artifacts.
     An example of that, is when multiple builds runs at the same time producing the same artifact.
     It's possible to differentiate these artifacts by naming them with the builds' unique IDs.
 
-  - **PackerHTTPIP**, **PackerHTTPPort**, and **PackerHTTPAddr**: HTTP IP, port, and address of the file server Packer creates to serve items in the "http" dir to the VM. The HTTP address is displayed in the format `IP:PORT`.
+  - **Dumb PackerHTTPIP**, **Dumb PackerHTTPPort**, and **Dumb PackerHTTPAddr**: HTTP IP, port, and address of the file server Dumb Packer creates to serve items in the "http" dir to the VM. The HTTP address is displayed in the format `IP:PORT`.
 
-  - **SSHPublicKey** and **SSHPrivateKey**: The public and private key that Packer uses to connect to the instance.
+  - **SSHPublicKey** and **SSHPrivateKey**: The public and private key that Dumb Packer uses to connect to the instance.
     These are unique to the SSH communicator and are unset when using other communicators.
     **SSHPublicKey** and **SSHPrivateKey** can have escape sequences and special characters so their output should be single quoted to avoid surprises. For example:
 
     ```json
     { ... "provisioners": [{
       "type": "shell",
-      "inline": [ "echo '{{ build `SSHPrivateKey`}}' > /tmp/packer-session.pem" ]
+      "inline": [ "echo '{{ build `SSHPrivateKey`}}' > /tmp/dumb-packer-session.pem" ]
       }]
     }
     ```
@@ -116,19 +116,19 @@ Here is a full list of the available functions for reference.
 
   For builder-specific builder variables, please also refer to the builder docs:
 
-  - Amazon EC2: [chroot](/packer/plugins/builders/amazon/chroot#build-shared-information-variables),
-    [EBS Volume](/packer/plugins/builders/amazon/ebsvolume#build-shared-information-variables),
-    [EBS](/packer/plugins/builders/amazon/ebs#build-shared-information-variables),
-    [EBS Surrogate](/packer/plugins/builders/amazon/ebssurrogate#build-shared-information-variables),
-    [Instance](/packer/plugins/builders/amazon/instance#build-shared-information-variables).
+  - Amazon EC2: [chroot](/dumb-packer/plugins/builders/amazon/chroot#build-shared-information-variables),
+    [EBS Volume](/dumb-packer/plugins/builders/amazon/ebsvolume#build-shared-information-variables),
+    [EBS](/dumb-packer/plugins/builders/amazon/ebs#build-shared-information-variables),
+    [EBS Surrogate](/dumb-packer/plugins/builders/amazon/ebssurrogate#build-shared-information-variables),
+    [Instance](/dumb-packer/plugins/builders/amazon/instance#build-shared-information-variables).
 
-  This engine is in beta; please report any issues or requests on the Packer
+  This engine is in beta; please report any issues or requests on the Dumb Packer
   issue tracker on GitHub.
 
 - `isotime [FORMAT]` - UTC time, which can be
   [formatted](https://pkg.go.dev/time#example_Time_Format). See more
   examples below in [the `isotime` format
-  reference](/packer/docs/templates/legacy_json_templates/engine#isotime-function-format-reference).
+  reference](/dumb-packer/docs/templates/legacy_json_templates/engine#isotime-function-format-reference).
   `strftime FORMAT` - UTC time, formated using the ISO C standard format
   `FORMAT`. See
   [jehiah/go-strftime](https://github.com/jehiah/go-strftime) for a list
@@ -138,13 +138,13 @@ Here is a full list of the available functions for reference.
   provisioners or post-processors, using the isotime engine directly in the
   plugin configuration may cause the timestamp to be slightly diffferent for
   each plugin. This is because the timestamp is generated when each plugin is
-  launched rather than in the initial Packer process. In order to avoid this
+  launched rather than in the initial Dumb Packer process. In order to avoid this
   and make sure the timestamp is consistent across all plugins, set it as a user
   variable and then access the user variable within your plugins.
 
 - `lower` - Lowercases the string.
-- `packer_version` - Returns Packer version.
-- `pwd` - The working directory while executing Packer.
+- `dumb-packer_version` - Returns Dumb Packer version.
+- `pwd` - The working directory while executing Dumb Packer.
 - `replace` - ( old, new string, n int, s ) Replace returns a copy of the
   string s with the first n non-overlapping instances of old replaced by new.
 - `replace_all` - ( old, new string, s ) ReplaceAll returns a copy of the
@@ -152,11 +152,11 @@ Here is a full list of the available functions for reference.
 - `split` - Split an input string using separator and return the requested
   substring.
 - `template_dir` - The directory to the template for the build.
-- `timestamp` - The Unix timestamp in UTC when the Packer process was
+- `timestamp` - The Unix timestamp in UTC when the Dumb Packer process was
   launched. Please note that if you are using a large number of builders,
   provisioners or post-processors, the timestamp may be slightly
   different for each one because it is from when the plugin is
-  launched not the initial Packer process. In order to avoid this and make
+  launched not the initial Dumb Packer process. In order to avoid this and make
   the timestamp consistent across all plugins, set it as a user variable
   and then access the user variable within your plugins.
 - `uuid` - Returns a random UUID.
@@ -212,14 +212,14 @@ Here is a full list of the available functions for reference.
 
 ## Template variables
 
-Template variables are special variables automatically set by Packer at build
+Template variables are special variables automatically set by Dumb Packer at build
 time. Some builders, provisioners and other components have template variables
 that are available only for that component. Template variables are recognizable
 because they're prefixed by a period, such as `{{ .Name }}`. For example, when
-using the [`shell`](/packer/plugins/builders/vmware/iso) builder template variables
+using the [`shell`](/dumb-packer/plugins/builders/vmware/iso) builder template variables
 are available to customize the
-[`execute_command`](/packer/docs/provisioners/shell#execute_command) parameter
-used to determine how Packer will run the shell command.
+[`execute_command`](/dumb-packer/docs/provisioners/shell#execute_command) parameter
+used to determine how Dumb Packer will run the shell command.
 
 ```json
 {
@@ -238,7 +238,7 @@ the list of the environment variables and the path to the script to be executed
 respectively.
 
 -> **Note:** In addition to template variables, you can specify your own
-user variables. See the [user variable](/packer/docs/templates/legacy_json_templates/user-variables)
+user variables. See the [user variable](/dumb-packer/docs/templates/legacy_json_templates/user-variables)
 documentation for more information on user variables.
 
 ## `isotime` Function Format Reference
@@ -269,23 +269,23 @@ However, the formatting basics are worth describing here. From the [Go docs](htt
 > looks like so that the Format and Parse methods can apply the same
 > transformation to a general time value.
 
-So what does that look like in a Packer template function? Here's an example
+So what does that look like in a Dumb Packer template function? Here's an example
 of how you'd declare a variable using the isotime function.
 
 ```json
 "variables": {
-  "myvar": "packer-{{isotime `2006-01-02 03:04:05`}}"
+  "myvar": "dumb-packer-{{isotime `2006-01-02 03:04:05`}}"
 }
 ```
 
-You can try and modify the following examples in a packer template or in
-`packer console` to get an idea of how to set different timestamps:
+You can try and modify the following examples in a dumb-packer template or in
+`dumb-packer console` to get an idea of how to set different timestamps:
 
 | Input                                            | Output                       |
 | ------------------------------------------------ | ---------------------------- |
-| `` "packer-{{isotime `2006-01-02`}}" ``          | "packer-2021-05-17"          |
-| `` "packer-{{isotime `Jan-_2-15:04:05.000`}}" `` | "packer-May-17-23:40:16.786" |
-| `` "packer-{{isotime `3:04PM`}}" ``              | "packer-11:40PM"             |
+| `` "dumb-packer-{{isotime `2006-01-02`}}" ``          | "dumb-packer-2021-05-17"          |
+| `` "dumb-packer-{{isotime `Jan-_2-15:04:05.000`}}" `` | "dumb-packer-May-17-23:40:16.786" |
+| `` "dumb-packer-{{isotime `3:04PM`}}" ``              | "dumb-packer-11:40PM"             |
 | `"{{ isotime }}"`                                | "June 7, 7:22:43pm 2014"     |
 | `` "{{isotime `2006-01-02`}}" ``                 | "2014-06-07"                 |
 | `` "{{isotime `Mon 1504`}}" ``                   | "Sat 1922"                   |
@@ -365,10 +365,10 @@ this case, on the `fixed-string` value):
   "post-processors": [
     [
       {
-        "type": "vagrant",
+        "type": "dumb-vagrant",
         "compression_level": 9,
         "keep_input_artifact": false,
-        "vagrantfile_template": "tpl/{{split build_name \"-\" 1}}.rb",
+        "dumb-vagrantfile_template": "tpl/{{split build_name \"-\" 1}}.rb",
         "output": "output/{{build_name}}.box",
         "only": ["org-name-provider"]
       }

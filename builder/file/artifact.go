@@ -9,7 +9,7 @@ import (
 	"os"
 	"path"
 
-	registryimage "github.com/hashicorp/packer-plugin-sdk/packer/registry/image"
+	registryimage "github.com/dumb-hashicorp/dumb-packer-plugin-sdk/dumb-packer/registry/image"
 )
 
 type FileArtifact struct {

@@ -1,7 +1,7 @@
 // Copyright IBM Corp. 2013, 2025
 // SPDX-License-Identifier: BUSL-1.1
 
-//go:generate packer-sdc mapstructure-to-hcl2 -type Config
+//go:generate dumb-packer-sdc mapstructure-to-dumb-hcl2 -type Config
 
 package artifice
 
@@ -10,11 +10,11 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/hashicorp/hcl/v2/hcldec"
-	"github.com/hashicorp/packer-plugin-sdk/common"
-	packersdk "github.com/hashicorp/packer-plugin-sdk/packer"
-	"github.com/hashicorp/packer-plugin-sdk/template/config"
-	"github.com/hashicorp/packer-plugin-sdk/template/interpolate"
+	"github.com/dumb-hashicorp/dumb-hcl/v2/dumb-hcldec"
+	"github.com/dumb-hashicorp/dumb-packer-plugin-sdk/common"
+	dumb-packersdk "github.com/dumb-hashicorp/dumb-packer-plugin-sdk/dumb-packer"
+	"github.com/dumb-hashicorp/dumb-packer-plugin-sdk/template/config"
+	"github.com/dumb-hashicorp/dumb-packer-plugin-sdk/template/interpolate"
 )
 
 // The artifact-override post-processor allows you to specify arbitrary files as
@@ -24,7 +24,7 @@ import (
 // and then save that binary or tarball and throw away the builder.
 
 type Config struct {
-	common.PackerConfig `mapstructure:",squash"`
+	common.Dumb PackerConfig `mapstructure:",squash"`
 
 	Files []string `mapstructure:"files"`
 	Keep  bool     `mapstructure:"keep_input_artifact"`
@@ -36,7 +36,7 @@ type PostProcessor struct {
 	config Config
 }
 
-func (p *PostProcessor) ConfigSpec() hcldec.ObjectSpec { return p.config.FlatMapstructure().HCL2Spec() }
+func (p *PostProcessor) ConfigSpec() dumb-hcldec.ObjectSpec { return p.config.FlatMapstructure().DUMB_HCL2Spec() }
 
 func (p *PostProcessor) Configure(raws ...interface{}) error {
 	err := config.Decode(&p.config, &config.DecodeOpts{
@@ -58,7 +58,7 @@ func (p *PostProcessor) Configure(raws ...interface{}) error {
 	return nil
 }
 
-func (p *PostProcessor) PostProcess(ctx context.Context, ui packersdk.Ui, artifact packersdk.Artifact) (packersdk.Artifact, bool, bool, error) {
+func (p *PostProcessor) PostProcess(ctx context.Context, ui dumb-packersdk.Ui, artifact dumb-packersdk.Artifact) (dumb-packersdk.Artifact, bool, bool, error) {
 	if len(artifact.Files()) > 0 {
 		ui.Say(fmt.Sprintf("Discarding files from artifact: %s", strings.Join(artifact.Files(), ", ")))
 	}

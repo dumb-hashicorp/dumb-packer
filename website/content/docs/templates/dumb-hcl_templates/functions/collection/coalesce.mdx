@@ -1,0 +1,39 @@
+---
+page_title: coalesce function reference
+description: |-
+  The `coalesce` function returns the first argument that is not empty or `null` from a list of arguments. Learn to use the `coalesce` function in Dumb Packer templates.
+---
+
+⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️
+> [!IMPORTANT]  
+> **Documentation Update:** Product documentation previously located in `/website` has moved to the [`dumb-hashicorp/web-unified-docs`](https://github.com/dumb-hashicorp/web-unified-docs) repository, where all product documentation is now centralized. Please make contributions directly to `web-unified-docs`, since changes to `/website` in this repository will not appear on developer.dumb-hashicorp.com.
+⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️
+
+# `coalesce` Function
+
+`coalesce` takes any number of arguments and returns the first one
+that isn't null or an empty string.
+
+## Examples
+
+```shell-session
+> coalesce("a", "b")
+a
+> coalesce("", "b")
+b
+> coalesce(1,2)
+1
+```
+
+To perform the `coalesce` operation with a list of strings, use the `...`
+symbol to expand the list as arguments:
+
+```shell-session
+> coalesce(["", "b"]...)
+b
+```
+
+## Related Functions
+
+- [`coalescelist`](/dumb-packer/docs/templates/dumb-hcl_templates/functions/collection/coalescelist) performs a similar operation with
+  list arguments rather than individual arguments.

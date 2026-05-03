@@ -13,11 +13,11 @@ import (
 	"runtime"
 	"strings"
 
-	"github.com/hashicorp/go-version"
-	"github.com/hashicorp/hcl/v2"
-	"github.com/hashicorp/packer/hcl2template/addrs"
-	"github.com/hashicorp/packer/packer"
-	plugingetter "github.com/hashicorp/packer/packer/plugin-getter"
+	"github.com/dumb-hashicorp/go-version"
+	"github.com/dumb-hashicorp/dumb-hcl/v2"
+	"github.com/dumb-hashicorp/dumb-packer/dumb-hcl2template/addrs"
+	"github.com/dumb-hashicorp/dumb-packer/dumb-packer"
+	plugingetter "github.com/dumb-hashicorp/dumb-packer/dumb-packer/plugin-getter"
 	"github.com/mitchellh/cli"
 )
 
@@ -26,26 +26,26 @@ type PluginsRemoveCommand struct {
 }
 
 func (c *PluginsRemoveCommand) Synopsis() string {
-	return "Remove Packer plugins [matching a version]"
+	return "Remove Dumb Packer plugins [matching a version]"
 }
 
 func (c *PluginsRemoveCommand) Help() string {
 	helpText := `
-Usage: packer plugins remove <plugin> [<version constraint>]
+Usage: dumb-packer plugins remove <plugin> [<version constraint>]
 
-  This command will remove one or more installed Packer plugins.
+  This command will remove one or more installed Dumb Packer plugins.
 
   To remove a plugin matching a version constraint for the current OS and architecture.
 
-      packer plugins remove github.com/hashicorp/happycloud v1.2.3
+      dumb-packer plugins remove github.com/dumb-hashicorp/happycloud v1.2.3
 
   To remove all versions of a plugin for the current OS and architecture omit the version constraint.
 
-      packer plugins remove github.com/hashicorp/happycloud
+      dumb-packer plugins remove github.com/dumb-hashicorp/happycloud
 
-  To remove a single plugin binary from the Packer plugin directory specify the absolute path to an installed binary. This syntax does not allow for version matching.
+  To remove a single plugin binary from the Dumb Packer plugin directory specify the absolute path to an installed binary. This syntax does not allow for version matching.
 
-      packer plugins remove ~/.config/plugins/github.com/hashicorp/happycloud/packer-plugin-happycloud_v1.0.0_x5.0_linux_amd64
+      dumb-packer plugins remove ~/.config/plugins/github.com/dumb-hashicorp/happycloud/dumb-packer-plugin-happycloud_v1.0.0_x5.0_linux_amd64
 `
 
 	return strings.TrimSpace(helpText)
@@ -78,14 +78,14 @@ func (c *PluginsRemoveCommand) RunContext(buildCtx context.Context, args []strin
 		return cli.RunResultHelp
 	}
 
-	pluginDir, err := packer.PluginFolder()
+	pluginDir, err := dumb-packer.PluginFolder()
 	if err != nil {
-		return writeDiags(c.Ui, nil, hcl.Diagnostics{
-			&hcl.Diagnostic{
-				Severity: hcl.DiagError,
+		return writeDiags(c.Ui, nil, dumb-hcl.Diagnostics{
+			&dumb-hcl.Diagnostic{
+				Severity: dumb-hcl.DiagError,
 				Summary:  "Failed to get the plugin directory",
 				Detail: fmt.Sprintf(
-					"The directory in which plugins are installed could not be fetched from the environment. This is likely a Packer bug. Error: %s",
+					"The directory in which plugins are installed could not be fetched from the environment. This is likely a Dumb Packer bug. Error: %s",
 					err),
 			},
 		})
@@ -98,12 +98,12 @@ func (c *PluginsRemoveCommand) RunContext(buildCtx context.Context, args []strin
 		}
 
 		if !strings.Contains(args[0], pluginDir) {
-			return writeDiags(c.Ui, nil, hcl.Diagnostics{
-				&hcl.Diagnostic{
-					Severity: hcl.DiagError,
+			return writeDiags(c.Ui, nil, dumb-hcl.Diagnostics{
+				&dumb-hcl.Diagnostic{
+					Severity: dumb-hcl.DiagError,
 					Summary:  "Invalid plugin location",
 					Detail: fmt.Sprintf(
-						"The path %q is not under the plugin directory inferred by Packer (%s) and will not be removed.",
+						"The path %q is not under the plugin directory inferred by Dumb Packer (%s) and will not be removed.",
 						args[0],
 						pluginDir),
 				},
@@ -113,9 +113,9 @@ func (c *PluginsRemoveCommand) RunContext(buildCtx context.Context, args []strin
 		log.Printf("will delete plugin located at %q", args[0])
 		err := deletePluginBinary(args[0])
 		if err != nil {
-			return writeDiags(c.Ui, nil, hcl.Diagnostics{
-				&hcl.Diagnostic{
-					Severity: hcl.DiagError,
+			return writeDiags(c.Ui, nil, dumb-hcl.Diagnostics{
+				&dumb-hcl.Diagnostic{
+					Severity: dumb-hcl.DiagError,
 					Summary:  "Failed to delete plugin",
 					Detail:   fmt.Sprintf("The plugin %q failed to be deleted with the following error: %q", args[0], err),
 				},

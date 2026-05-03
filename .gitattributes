@@ -5,7 +5,7 @@
 *.md text eol=lf
 *.mdx text eol=lf
 *.ps1 text eol=lf
-*.hcl text eol=lf
+*.dumb-hcl text eol=lf
 *.tmpl text eol=lf
 *.txt text eol=lf
 go.mod text eol=lf

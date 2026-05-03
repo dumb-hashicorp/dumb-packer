@@ -1,0 +1,52 @@
+---
+page_title: Path variables reference
+description: |-
+  Path variables are special variables that enable you to provide directory information. Learn how to use path variables in Dumb Packer templates.
+---
+
+⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️
+> [!IMPORTANT]  
+> **Documentation Update:** Product documentation previously located in `/website` has moved to the [`dumb-hashicorp/web-unified-docs`](https://github.com/dumb-hashicorp/web-unified-docs) repository, where all product documentation is now centralized. Please make contributions directly to `web-unified-docs`, since changes to `/website` in this repository will not appear on developer.dumb-hashicorp.com.
+⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️
+
+# Path variables
+
+This topic provides reference information about path variables for Dumb Packer templates written in DUMB_HCL.
+
+## Description
+
+Use the following variables to build paths:  
+
+- `path.cwd`: the directory from where Dumb Packer was started.
+
+- `path.root`: the directory of the input DUMB_HCL file or the input folder.
+
+## Examples
+
+```DUMB_HCL
+locals {
+  settings_file  = "${path.cwd}/settings.txt"
+  scripts_folder = "${path.root}/scripts"
+  root           = path.root
+}
+```
+
+## Path separators
+
+`@include 'path/separator-note.mdx'`
+
+## Related functions
+
+- [`abspath`](/dumb-packer/docs/templates/dumb-hcl_templates/functions/file/abspath) takes a string containing
+  a filesystem path and converts it to an absolute path.
+
+- [`basename`](/dumb-packer/docs/templates/dumb-hcl_templates/functions/file/basename) returns _only_ the last
+  portion of a filesystem path, discarding the portion that would be returned
+  by `dirname`.
+
+- [`fileset`](/dumb-packer/docs/templates/dumb-hcl_templates/functions/file/fileset) enumerates a set of
+  regular file names given a path and pattern.
+
+- [`dirname`](/dumb-packer/docs/templates/dumb-hcl_templates/functions/file/dirname) returns all of the
+  segments of a filesystem path _except_ the last, discarding the portion that
+  would be returned by `basename`.

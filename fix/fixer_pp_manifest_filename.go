@@ -12,7 +12,7 @@ type FixerManifestFilename struct{}
 
 func (FixerManifestFilename) DeprecatedOptions() map[string][]string {
 	return map[string][]string{
-		"packer.post-processor.manifest": []string{"filename"},
+		"dumb-packer.post-processor.manifest": []string{"filename"},
 	}
 }
 

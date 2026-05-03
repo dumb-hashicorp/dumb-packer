@@ -8,13 +8,13 @@ import (
 	"strings"
 	"testing"
 
-	packersdk "github.com/hashicorp/packer-plugin-sdk/packer"
+	dumb-packersdk "github.com/dumb-hashicorp/dumb-packer-plugin-sdk/dumb-packer"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestFix(t *testing.T) {
 	s := &strings.Builder{}
-	ui := &packersdk.BasicUi{
+	ui := &dumb-packersdk.BasicUi{
 		Writer: s,
 	}
 	c := &FixCommand{

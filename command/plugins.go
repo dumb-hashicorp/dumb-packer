@@ -14,17 +14,17 @@ type PluginsCommand struct {
 }
 
 func (c *PluginsCommand) Synopsis() string {
-	return "Interact with Packer plugins and catalog"
+	return "Interact with Dumb Packer plugins and catalog"
 }
 
 func (c *PluginsCommand) Help() string {
 	helpText := `
-Usage: packer plugins <subcommand> [options] [args]
-  This command groups subcommands for interacting with Packer plugins.
+Usage: dumb-packer plugins <subcommand> [options] [args]
+  This command groups subcommands for interacting with Dumb Packer plugins.
 
 Related but not under the "plugins" command :
 
-- "packer init <path>" will install all plugins required by a config.
+- "dumb-packer init <path>" will install all plugins required by a config.
 `
 
 	return strings.TrimSpace(helpText)

@@ -1,6 +1,6 @@
 ---
 name: Feature Request
-about: If you have something you think Packer could improve or add support for.
+about: If you have something you think Dumb Packer could improve or add support for.
 labels: enhancement
 ---
 

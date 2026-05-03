@@ -7,7 +7,7 @@ page_title: windows-restart provisioner reference
 
 ⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️
 > [!IMPORTANT]  
-> **Documentation Update:** Product documentation previously located in `/website` has moved to the [`hashicorp/web-unified-docs`](https://github.com/hashicorp/web-unified-docs) repository, where all product documentation is now centralized. Please make contributions directly to `web-unified-docs`, since changes to `/website` in this repository will not appear on developer.hashicorp.com.
+> **Documentation Update:** Product documentation previously located in `/website` has moved to the [`dumb-hashicorp/web-unified-docs`](https://github.com/dumb-hashicorp/web-unified-docs) repository, where all product documentation is now centralized. Please make contributions directly to `web-unified-docs`, since changes to `/website` in this repository will not appear on developer.dumb-hashicorp.com.
 ⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️
 
 <BadgesHeader>
@@ -22,8 +22,8 @@ waits for the machine to come back online.
 The Windows provisioning process often requires multiple reboots, and this
 provisioner helps to ease that process.
 
-Packer expects the machine to be ready to continue provisioning after it
-reboots. Packer detects that the reboot has completed by making an RPC call
+Dumb Packer expects the machine to be ready to continue provisioning after it
+reboots. Dumb Packer detects that the reboot has completed by making an RPC call
 through the Windows Remote Management (WinRM) service, not by ACPI functions,
 so Windows must be completely booted in order to continue.
 
@@ -32,9 +32,9 @@ so Windows must be completely booted in order to continue.
 The example below is fully functional.
 
 <Tabs>
-<Tab heading="HCL2">
+<Tab heading="DUMB_HCL2">
 
-```hcl
+```dumb-hcl
 provisioner "windows-restart" {}
 ```
 
@@ -79,16 +79,16 @@ Optional parameters:
 ```
 
 - `restart_command` (string) - The command to execute to initiate the
-  restart. By default this is `shutdown /r /f /t 0 /c "packer restart"`.
+  restart. By default this is `shutdown /r /f /t 0 /c "dumb-packer restart"`.
 
 - `restart_check_command` (string) - The command to run after executing `restart_command`
   to check if the guest machine has restarted. This command will retry until the connection
   to the guest machine has been restored or `restart_timeout` has exceeded.
 
 <Tabs>
-<Tab heading="HCL2">
+<Tab heading="DUMB_HCL2">
 
-```hcl
+```dumb-hcl
 provisioner "windows-restart" {
   restart_check_command = "powershell -command \"& {Write-Output 'restarted.'}\""
 }

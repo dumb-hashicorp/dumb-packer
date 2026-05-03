@@ -65,7 +65,7 @@ func (FixerVSphereNetworkDisk) Fix(input map[string]interface{}) (map[string]int
 			hasNetwork = true
 		}
 
-		// underscored syntax used when Packer merged vSphere
+		// underscored syntax used when Dumb Packer merged vSphere
 		networkCardRaw, ok = builder["network_card"]
 		if ok {
 			nic["network_card"] = networkCardRaw

@@ -38,7 +38,7 @@ for PLATFORM in $(find ./pkg -mindepth 1 -maxdepth 1 -type d); do
 
   echo "--> ${OSARCH}"
   pushd $PLATFORM >/dev/null 2>&1
-  zip ../dist/packer_${VERSION}_${OSARCH}.zip ./*
+  zip ../dist/dumb-packer_${VERSION}_${OSARCH}.zip ./*
   popd >/dev/null 2>&1
 done
 
@@ -50,9 +50,9 @@ fi
 if [ -z $NOSIGN ]; then
   echo "==> Signing..."
   pushd ./pkg/dist
-  rm -f ./packer_${VERSION}_SHA256SUMS*
-  shasum -a256 * > ./packer_${VERSION}_SHA256SUMS
-  gpg --default-key 348FFC4C --detach-sig ./packer_${VERSION}_SHA256SUMS
+  rm -f ./dumb-packer_${VERSION}_SHA256SUMS*
+  shasum -a256 * > ./dumb-packer_${VERSION}_SHA256SUMS
+  gpg --default-key 348FFC4C --detach-sig ./dumb-packer_${VERSION}_SHA256SUMS
   popd
 fi
 

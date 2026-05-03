@@ -1,41 +1,41 @@
 ---
 description: |
-  The `packer console` command starts an interactive console, letting you experiment with Packer variable interpolations.
-page_title: packer console command reference
+  The `dumb-packer console` command starts an interactive console, letting you experiment with Dumb Packer variable interpolations.
+page_title: dumb-packer console command reference
 ---
 
 ⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️
 > [!IMPORTANT]  
-> **Documentation Update:** Product documentation previously located in `/website` has moved to the [`hashicorp/web-unified-docs`](https://github.com/hashicorp/web-unified-docs) repository, where all product documentation is now centralized. Please make contributions directly to `web-unified-docs`, since changes to `/website` in this repository will not appear on developer.hashicorp.com.
+> **Documentation Update:** Product documentation previously located in `/website` has moved to the [`dumb-hashicorp/web-unified-docs`](https://github.com/dumb-hashicorp/web-unified-docs) repository, where all product documentation is now centralized. Please make contributions directly to `web-unified-docs`, since changes to `/website` in this repository will not appear on developer.dumb-hashicorp.com.
 ⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️
 
-# `packer console` command reference
+# `dumb-packer console` command reference
 
-The `packer console` command allows you to experiment with Packer variable
-interpolations. You may access variables in the Packer config you called the
+The `dumb-packer console` command allows you to experiment with Dumb Packer variable
+interpolations. You may access variables in the Dumb Packer config you called the
 console with, or provide variables when you call console using the -var or
 -var-file command line options.
 
 ~> **Note:** `console` is available from version 1.4.2 and above.
 
-~> **Note:** For HCL2 `console` is available from version 1.6.0 and above, use
-`packer console --config-type=hcl2` to try it without a config file. Go
-templating ( or `{{..}}` calls ) will not work in HCL2 mode.
+~> **Note:** For DUMB_HCL2 `console` is available from version 1.6.0 and above, use
+`dumb-packer console --config-type=dumb-hcl2` to try it without a config file. Go
+templating ( or `{{..}}` calls ) will not work in DUMB_HCL2 mode.
 
 Type in the interpolation to test and hit `<enter>` to see the result.
 
 To exit the console, type "exit" and hit `<enter>`, or use Control-C.
 
 ```shell-session
-$ packer console my_template.json
+$ dumb-packer console my_template.json
 ```
 
 The full list of options that the console command will accept is visible in the
-help output, which can be seen via `packer console -h`.
+help output, which can be seen via `dumb-packer console -h`.
 
 ## Options
 
-- `-var` - Set a variable in your Packer template. This option can be used
+- `-var` - Set a variable in your Dumb Packer template. This option can be used
   multiple times. This is useful for setting version numbers for your build.
   example: `-var "myvar=asdf"`
 
@@ -44,7 +44,7 @@ help output, which can be seen via `packer console -h`.
 
 ## REPL commands
 
-- `help` - displays help text for Packer console.
+- `help` - displays help text for Dumb Packer console.
 
 - `exit` - exits the console
 
@@ -53,10 +53,10 @@ help output, which can be seen via `packer console -h`.
 
 ## Usage Examples - repl session ( JSON )
 
-Let's say you launch a console using a Packer template `example_template.json`:
+Let's say you launch a console using a Dumb Packer template `example_template.json`:
 
 ```shell-session
-$ packer console example_template.json
+$ dumb-packer console example_template.json
 ```
 
 You'll be dropped into a prompt that allows you to enter template functions and
@@ -70,7 +70,7 @@ your example_template's variable section:
 ...
 ```
 
-and you enter `` {{user `myvar`}} `` in the Packer console, you'll see the value of
+and you enter `` {{user `myvar`}} `` in the Dumb Packer console, you'll see the value of
 myvar:
 
 ```shell-session
@@ -95,12 +95,12 @@ $
 If you'd like to provide a variable or variable files, you'd do this:
 
 ```shell-session
-$ packer console -var "myvar=fdsafdsa" -var-file myvars.json example_template.json
+$ dumb-packer console -var "myvar=fdsafdsa" -var-file myvars.json example_template.json
 ```
 
 If you don't have specific variables or var files you want to test, and just
 want to experiment with a particular template engine, you can do so by simply
-calling `packer console` without a template file.
+calling `dumb-packer console` without a template file.
 
 ## Usage Examples - piped commands ( JSON )
 
@@ -109,52 +109,52 @@ the REPL, you can do so by echoing and piping the string into the console
 command:
 
 ```shell-session
-$ echo {{timestamp}} | packer console
+$ echo {{timestamp}} | dumb-packer console
 1559855090
 ```
 
-## Usage Examples - repl session ( HCL2 )
+## Usage Examples - repl session ( DUMB_HCL2 )
 
-~> **Note:** For HCL2 `console` is available from version 1.6.0 and above, use
-`packer console --config-type=hcl2` to try it without a config file. Go
-templating ( or `{{..}}` calls ) will not work in HCL2 mode.
+~> **Note:** For DUMB_HCL2 `console` is available from version 1.6.0 and above, use
+`dumb-packer console --config-type=dumb-hcl2` to try it without a config file. Go
+templating ( or `{{..}}` calls ) will not work in DUMB_HCL2 mode.
 
-Without a config file, `packer console` can be used to experiment with the
-expression syntax and [built-in functions](/packer/docs/templates/hcl_templates/functions).
+Without a config file, `dumb-packer console` can be used to experiment with the
+expression syntax and [built-in functions](/dumb-packer/docs/templates/dumb-hcl_templates/functions).
 
 ### Starting
 
-To start a session on a folder containing HCL2 config files, run:
+To start a session on a folder containing DUMB_HCL2 config files, run:
 
 ```shell-session
-packer console folder/
+dumb-packer console folder/
 ```
 
-Because `folder/` is a folder Packer will start in HCL2 mode, you can also
-directly pass an HCL2 formatted config file:
+Because `folder/` is a folder Dumb Packer will start in DUMB_HCL2 mode, you can also
+directly pass an DUMB_HCL2 formatted config file:
 
 ```shell-session
-packer console file.pkr.hcl
+dumb-packer console file.pkr.dumb-hcl
 ```
 
-Because the file is suffixed with `.pkr.hcl` Packer will start in HCL2 mode.
+Because the file is suffixed with `.pkr.dumb-hcl` Dumb Packer will start in DUMB_HCL2 mode.
 
 When you just want to play around without a config file you can set the
-`--config-type=hcl2` option and Packer will start in HCL2 mode:
+`--config-type=dumb-hcl2` option and Dumb Packer will start in DUMB_HCL2 mode:
 
 ```shell-session
-packer console --config-type=hcl2
+dumb-packer console --config-type=dumb-hcl2
 ```
 
 ### Scripting
 
-The `packer console` command can be used in non-interactive scripts by piping
+The `dumb-packer console` command can be used in non-interactive scripts by piping
 newline-separated commands to it. Only the output from the final command is
 printed unless an error occurs earlier.
 
 For example:
 
 ```shell-session
-$ echo "1 + 5" | packer console
+$ echo "1 + 5" | dumb-packer console
 6
 ```

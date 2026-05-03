@@ -1,12 +1,12 @@
 ---
 description: |
-  The `shell-local` post-processor starts a local shell, letting you automate post-build actions after Packer builds your artifacts.
+  The `shell-local` post-processor starts a local shell, letting you automate post-build actions after Dumb Packer builds your artifacts.
 page_title: shell-local post-processor reference
 ---
 
 ⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️
 > [!IMPORTANT]  
-> **Documentation Update:** Product documentation previously located in `/website` has moved to the [`hashicorp/web-unified-docs`](https://github.com/hashicorp/web-unified-docs) repository, where all product documentation is now centralized. Please make contributions directly to `web-unified-docs`, since changes to `/website` in this repository will not appear on developer.hashicorp.com.
+> **Documentation Update:** Product documentation previously located in `/website` has moved to the [`dumb-hashicorp/web-unified-docs`](https://github.com/dumb-hashicorp/web-unified-docs) repository, where all product documentation is now centralized. Please make contributions directly to `web-unified-docs`, since changes to `/website` in this repository will not appear on developer.dumb-hashicorp.com.
 ⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️
 
 <BadgesHeader>
@@ -17,16 +17,16 @@ page_title: shell-local post-processor reference
 
 The `shell-local` post processor executes scripts locally during the post
 processing stage. Shell local provides a convenient way to automate executing
-some task with packer outputs and variables.
+some task with dumb-packer outputs and variables.
 
 ## Basic example
 
 The example below is a fully functional self-contained build.
 
 <Tabs>
-<Tab heading="HCL2">
+<Tab heading="DUMB_HCL2">
 
-```hcl
+```dumb-hcl
 source "file" "example" {
     content = "example content"
 }
@@ -87,7 +87,7 @@ Exactly _one_ of the following is required:
 
 - `script` (string) - The path to a script to execute. This path can be
   absolute or relative. If it is relative, it is relative to the working
-  directory when Packer is executed.
+  directory when Dumb Packer is executed.
 
 - `scripts` (array of strings) - An array of scripts to execute. The scripts
   will be executed in the order specified. Each script is executed in
@@ -97,13 +97,13 @@ Exactly _one_ of the following is required:
 Optional parameters:
 
 - `env` (map of strings) - A map of key/value pairs to inject prior to the
-  execute_command. Packer injects some environmental variables by default into
+  execute_command. Dumb Packer injects some environmental variables by default into
   the environment, as well, which are covered in the section below. Duplicate
   `env` settings override `environment_vars` settings.
 
 - `environment_vars` (array of strings) - An array of key/value pairs to
   inject prior to the `execute_command`. The format should be `key=value`.
-  Packer injects some environmental variables by default into the
+  Dumb Packer injects some environmental variables by default into the
   environment, as well, which are covered in the section below.
 
 - `env_var_format` (string) - When we parse the environment_vars that you
@@ -126,26 +126,26 @@ Optional parameters:
   ["cmd", "/V", "/C", "{{.Vars}}", "call", "{{.Script}}"]
   ```
 
-  This is treated as a [template engine](/packer/docs/templates/legacy_json_templates/engine).
+  This is treated as a [template engine](/dumb-packer/docs/templates/legacy_json_templates/engine).
   There are several available variables: `Script`, which is the path to the
   script to run, and `Vars`, which is the list of `environment_vars`, if
   configured. In addition, you may access any of the variables stored in the
-  generated data using the [build](/packer/docs/templates/legacy_json_templates/engine) template
+  generated data using the [build](/dumb-packer/docs/templates/legacy_json_templates/engine) template
   function. If you choose to set this option, make sure that the first
   element in the array is the shell program you want to use (for example,
   "sh" or "/usr/local/bin/zsh" or even "powershell.exe" although anything
   other than a flavor of the shell command language is not explicitly
-  supported and may be broken by assumptions made within Packer). It's
+  supported and may be broken by assumptions made within Dumb Packer). It's
   worth noting that if you choose to try to use shell-local for
   Powershell or other Windows commands, the environment variables will
   not be set properly for your environment.
 
   For backwards compatibility, `execute_command` will accept a string instead
   of an array of strings. If a single string or an array of strings with only
-  one element is provided, Packer will replicate past behavior by appending
+  one element is provided, Dumb Packer will replicate past behavior by appending
   your `execute_command` to the array of strings `["sh", "-c"]`. For example,
   if you set `"execute_command": "foo bar"`, the final `execute_command` that
-  Packer runs will be \["sh", "-c", "foo bar"\]. If you set
+  Dumb Packer runs will be \["sh", "-c", "foo bar"\]. If you set
   `"execute_command": ["foo", "bar"]`, the final execute_command will remain
   `["foo", "bar"]`.
 
@@ -162,11 +162,11 @@ Optional parameters:
 
 - `keep_input_artifact` (boolean) - Unlike most other post-processors, the
   keep_input_artifact option will have no effect for the shell-local
-  post-processor. Packer will always retain the input artifact for
+  post-processor. Dumb Packer will always retain the input artifact for
   shell-local, since the shell-local post-processor merely passes forward the
   artifact it receives. If your shell-local post-processor produces a file or
   files which you would like to have replace the input artifact, you may
-  overwrite the input artifact using the [artifice](/packer/docs/post-processors/artifice)
+  overwrite the input artifact using the [artifice](/dumb-packer/docs/post-processors/artifice)
   post-processor after your shell-local processor has run.
 
 - `only_on` (array of strings) - This is an array of [runtime operating
@@ -176,10 +176,10 @@ Optional parameters:
   `only_on` is not set."
 
 - `use_linux_pathing` (bool) - This is only relevant to Windows hosts. If you
-  are running Packer in a Windows environment with the Windows Subsystem for
+  are running Dumb Packer in a Windows environment with the Windows Subsystem for
   Linux feature enabled, and would like to invoke a bash script rather than
   invoking a Cmd script, you'll need to set this flag to true; it tells
-  Packer to use the Linux subsystem path for your script rather than the
+  Dumb Packer to use the Linux subsystem path for your script rather than the
   Windows path. (e.g. /mnt/c/path/to/your/file instead of
   C:/path/to/your/file). Please see the example below for more guidance on
   how to use this feature. If you are not on a Windows host, or you do not
@@ -216,13 +216,13 @@ options instead.
 
 Please note that this feature is still in beta, as the underlying WSL is also
 still in beta. There will be some limitations as a result. For example, it will
-likely not work unless both Packer and the scripts you want to run are both on
+likely not work unless both Dumb Packer and the scripts you want to run are both on
 the C drive.
 
 <Tabs>
-<Tab heading="HCL2">
+<Tab heading="DUMB_HCL2">
 
-```hcl
+```dumb-hcl
 source "null" "example" {
     communicator = "none"
 }
@@ -286,12 +286,12 @@ In addition to being able to specify custom environmental variables using the
 `environment_vars` configuration, the provisioner automatically defines certain
 commonly useful environmental variables:
 
-- `PACKER_BUILD_NAME` is set to the [name of the
-  build](/packer/docs/templates/legacy_json_templates/builders#named-builds) that Packer is running.
-  This is most useful when Packer is making multiple builds and you want to
+- `DUMB_PACKER_BUILD_NAME` is set to the [name of the
+  build](/dumb-packer/docs/templates/legacy_json_templates/builders#named-builds) that Dumb Packer is running.
+  This is most useful when Dumb Packer is making multiple builds and you want to
   distinguish them slightly from a common provisioning script.
 
-- `PACKER_BUILDER_TYPE` is the type of the builder that was used to create
+- `DUMB_PACKER_BUILDER_TYPE` is the type of the builder that was used to create
   the machine that the script is running on. This is useful if you want to
   run only certain parts of the script on systems built with certain
   builders.
@@ -312,7 +312,7 @@ run twice. If you have 3 builders, it will run 3 times, once for each builder.
 ### Interacting with Build Artifacts
 
 In order to interact with build artifacts, you may want to use the [manifest
-post-processor](/packer/docs/post-processors/manifest). This will write the list
+post-processor](/dumb-packer/docs/post-processors/manifest). This will write the list
 of files produced by a `builder` to a json file after each `builder` is run.
 
 For example, if you wanted to package a file from the file builder into a
@@ -349,9 +349,9 @@ tarball, you might write this:
 ```
 
 </Tab>
-<Tab heading="HCL2">
+<Tab heading="DUMB_HCL2">
 
-```hcl
+```dumb-hcl
 source "file" "example" {
     content = "Lorem ipsum dolor sit amet"
     target  = "dummy_artifact.txt"
@@ -381,7 +381,7 @@ file names from the manifest file and passes them to tar.
 
 ### Always Exit Intentionally
 
-If any post-processor fails, the `packer build` stops and all interim artifacts
+If any post-processor fails, the `dumb-packer build` stops and all interim artifacts
 are cleaned up.
 
 For a shell script, that means the script **must** exit with a zero code. You
@@ -394,9 +394,9 @@ _must_ be extra careful to `exit 0` when necessary.
 Example of running a .cmd file on Windows:
 
 <Tabs>
-<Tab heading="HCL2">
+<Tab heading="DUMB_HCL2">
 
-```hcl
+```dumb-hcl
 post-processor "shell-local" {
   environment_vars = ["SHELLLOCALTEST=ShellTest1"]
   scripts          = ["./scripts/test_cmd.cmd"]
@@ -425,9 +425,9 @@ Example of running an inline command on Windows: Required customization:
 tempfile_extension
 
 <Tabs>
-<Tab heading="HCL2">
+<Tab heading="DUMB_HCL2">
 
-```hcl
+```dumb-hcl
 post-processor "shell-local" {
   environment_vars   = ["SHELLLOCALTEST=ShellTest2"],
   tempfile_extension = ".cmd",
@@ -454,9 +454,9 @@ Example of running a bash command on Windows using WSL: Required
 customizations: `use_linux_pathing` and `execute_command`:
 
 <Tabs>
-<Tab heading="HCL2">
+<Tab heading="DUMB_HCL2">
 
-```hcl
+```dumb-hcl
 post-processor "shell-local" {
   environment_vars  = ["SHELLLOCALTEST=ShellTest3"],
   execute_command   = ["bash", "-c", "{{.Vars}} {{.Script}}"]
@@ -490,9 +490,9 @@ Example of running a PowerShell script on Windows:
 Required customizations: `env_var_format` and `execute_command`.
 
 <Tabs>
-<Tab heading="HCL2">
+<Tab heading="DUMB_HCL2">
 
-```hcl
+```dumb-hcl
 post-processor "shell-local" {
   environment_vars = ["SHELLLOCALTEST=ShellTest4"]
   execute_command  = ["powershell.exe", "{{.Vars}} {{.Script}}"]
@@ -521,9 +521,9 @@ Example of running a PowerShell script on Windows as "inline": Required
 customizations: `env_var_format`, `tempfile_extension`, and `execute_command`
 
 <Tabs>
-<Tab heading="HCL2">
+<Tab heading="DUMB_HCL2">
 
-```hcl
+```dumb-hcl
 post-processor "shell-local" {
   tempfile_extension = ".ps1"
   environment_vars   = ["SHELLLOCALTEST=ShellTest5"]
@@ -555,9 +555,9 @@ post-processor "shell-local" {
 Example of running a Shell script on Unix:
 
 <Tabs>
-<Tab heading="HCL2">
+<Tab heading="DUMB_HCL2">
 
-```hcl
+```dumb-hcl
 post-processor "shell-local" {
   environment_vars = ["PROVISIONERTEST=ProvisionerTest1"]
   scripts = ["./scripts/example_bash.sh"]
@@ -581,9 +581,9 @@ post-processor "shell-local" {
 Example of running a bash "inline" on Unix:
 
 <Tabs>
-<Tab heading="HCL2">
+<Tab heading="DUMB_HCL2">
 
-```hcl
+```dumb-hcl
 post-processor "shell-local" {
   environment_vars = ["PROVISIONERTEST=ProvisionerTest2"]
   inline           = ["echo hello", "echo $PROVISIONERTEST"]
@@ -608,12 +608,12 @@ post-processor "shell-local" {
 Example of running a Python script on Unix:
 
 <Tabs>
-<Tab heading="HCL2">
+<Tab heading="DUMB_HCL2">
 
-```hcl
+```dumb-hcl
 post-processor "shell-local" {
   script           = "hello.py"
-  environment_vars = ["HELLO_USER=packeruser"]
+  environment_vars = ["HELLO_USER=dumb-packeruser"]
   execute_command  = [
     "/bin/sh",
     "-c",
@@ -630,7 +630,7 @@ post-processor "shell-local" {
 {
   "type": "shell-local",
   "script": "hello.py",
-  "environment_vars": ["HELLO_USER=packeruser"],
+  "environment_vars": ["HELLO_USER=dumb-packeruser"],
   "execute_command": [
     "/bin/sh",
     "-c",

@@ -13,9 +13,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/hashicorp/packer-plugin-sdk/common"
-	"github.com/hashicorp/packer-plugin-sdk/multistep/commonsteps"
-	packersdk "github.com/hashicorp/packer-plugin-sdk/packer"
+	"github.com/dumb-hashicorp/dumb-packer-plugin-sdk/common"
+	"github.com/dumb-hashicorp/dumb-packer-plugin-sdk/multistep/commonsteps"
+	dumb-packersdk "github.com/dumb-hashicorp/dumb-packer-plugin-sdk/dumb-packer"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -36,7 +36,7 @@ func TestProvisionerPrepare_extractScript(t *testing.T) {
 
 	// File contents should contain 2 lines concatenated by newlines: foo\nbar
 	readFile, err := os.ReadFile(file)
-	expectedContents := "if (Test-Path variable:global:ProgressPreference) {\n         set-variable -name variable:global:ProgressPreference -value 'SilentlyContinue'\n         }\n         \n         $exitCode = 0\n         try {\n         $env:PACKER_BUILDER_TYPE=\"\"; $env:PACKER_BUILD_NAME=\"\"; \n         foo\n         bar\n         \n         $exitCode = 0\n         } catch {\n         Write-Error \"An error occurred: $_\"\n         $exitCode = 1\n         }\n         \n         if ((Test-Path variable:global:LASTEXITCODE) -and $LASTEXITCODE -ne $null -and $LASTEXITCODE -ne 0) {\n         $exitCode = $LASTEXITCODE\n         }\n         exit $exitCode"
+	expectedContents := "if (Test-Path variable:global:ProgressPreference) {\n         set-variable -name variable:global:ProgressPreference -value 'SilentlyContinue'\n         }\n         \n         $exitCode = 0\n         try {\n         $env:DUMB_PACKER_BUILDER_TYPE=\"\"; $env:DUMB_PACKER_BUILD_NAME=\"\"; \n         foo\n         bar\n         \n         $exitCode = 0\n         } catch {\n         Write-Error \"An error occurred: $_\"\n         $exitCode = 1\n         }\n         \n         if ((Test-Path variable:global:LASTEXITCODE) -and $LASTEXITCODE -ne $null -and $LASTEXITCODE -ne 0) {\n         $exitCode = $LASTEXITCODE\n         }\n         exit $exitCode"
 	normalizedExpectedContent := normalizeWhiteSpace(expectedContents)
 	if err != nil {
 		t.Fatalf("Should not be error: %s", err)
@@ -51,7 +51,7 @@ func TestProvisionerPrepare_extractScript(t *testing.T) {
 func TestProvisioner_Impl(t *testing.T) {
 	var raw interface{}
 	raw = &Provisioner{}
-	if _, ok := raw.(packersdk.Provisioner); !ok {
+	if _, ok := raw.(dumb-packersdk.Provisioner); !ok {
 		t.Fatalf("must be a Provisioner")
 	}
 }
@@ -162,14 +162,14 @@ func TestProvisionerPrepare_Elevated(t *testing.T) {
 	config := testConfig()
 
 	// Add a random key
-	config["elevated_user"] = "vagrant"
+	config["elevated_user"] = "dumb-vagrant"
 	err := p.Prepare(config)
 
 	if err != nil {
 		t.Fatal("should not have error")
 	}
 
-	config["elevated_password"] = "vagrant"
+	config["elevated_password"] = "dumb-vagrant"
 	err = p.Prepare(config)
 
 	if err != nil {
@@ -189,7 +189,7 @@ func TestProvisionerPrepare_Script(t *testing.T) {
 	}
 
 	// Test with a good one
-	tf, err := os.CreateTemp("", "packer")
+	tf, err := os.CreateTemp("", "dumb-packer")
 	if err != nil {
 		t.Fatalf("error tempfile: %s", err)
 	}
@@ -216,7 +216,7 @@ func TestProvisionerPrepare_ScriptAndInline(t *testing.T) {
 	}
 
 	// Test with both
-	tf, err := os.CreateTemp("", "packer")
+	tf, err := os.CreateTemp("", "dumb-packer")
 	if err != nil {
 		t.Fatalf("error tempfile: %s", err)
 	}
@@ -236,7 +236,7 @@ func TestProvisionerPrepare_ScriptAndScripts(t *testing.T) {
 	config := testConfig()
 
 	// Test with both
-	tf, err := os.CreateTemp("", "packer")
+	tf, err := os.CreateTemp("", "dumb-packer")
 	if err != nil {
 		t.Fatalf("error tempfile: %s", err)
 	}
@@ -263,7 +263,7 @@ func TestProvisionerPrepare_Scripts(t *testing.T) {
 	}
 
 	// Test with a good one
-	tf, err := os.CreateTemp("", "packer")
+	tf, err := os.CreateTemp("", "dumb-packer")
 	if err != nil {
 		t.Fatalf("error tempfile: %s", err)
 	}
@@ -373,8 +373,8 @@ func TestProvisionerQuote_EnvironmentVars(t *testing.T) {
 	}
 }
 
-func testUi() *packersdk.BasicUi {
-	return &packersdk.BasicUi{
+func testUi() *dumb-packersdk.BasicUi {
+	return &dumb-packersdk.BasicUi{
 		Reader:      new(bytes.Buffer),
 		Writer:      new(bytes.Buffer),
 		ErrorWriter: new(bytes.Buffer),
@@ -385,17 +385,17 @@ func TestProvisionerProvision_ValidExitCodes(t *testing.T) {
 	config := testConfig()
 	delete(config, "inline")
 
-	// Defaults provided by Packer
+	// Defaults provided by Dumb Packer
 	config["remote_path"] = "c:/Windows/Temp/inlineScript.ps1"
 	config["inline"] = []string{"whoami"}
 	ui := testUi()
 	p := new(Provisioner)
 
-	// Defaults provided by Packer
-	p.config.PackerBuildName = "vmware"
-	p.config.PackerBuilderType = "iso"
+	// Defaults provided by Dumb Packer
+	p.config.Dumb PackerBuildName = "vmware"
+	p.config.Dumb PackerBuilderType = "iso"
 	p.config.ValidExitCodes = []int{0, 200}
-	comm := new(packersdk.MockCommunicator)
+	comm := new(dumb-packersdk.MockCommunicator)
 	comm.StartExitStatus = 200
 	p.Prepare(config)
 	err := p.Provision(context.Background(), ui, comm, generatedData())
@@ -408,19 +408,19 @@ func TestProvisionerProvision_PauseAfter(t *testing.T) {
 	config := testConfig()
 	delete(config, "inline")
 
-	// Defaults provided by Packer
+	// Defaults provided by Dumb Packer
 	config["remote_path"] = "c:/Windows/Temp/inlineScript.ps1"
 	config["inline"] = []string{"whoami"}
 	ui := testUi()
 	p := new(Provisioner)
 
-	// Defaults provided by Packer
-	p.config.PackerBuildName = "vmware"
-	p.config.PackerBuilderType = "iso"
+	// Defaults provided by Dumb Packer
+	p.config.Dumb PackerBuildName = "vmware"
+	p.config.Dumb PackerBuilderType = "iso"
 	p.config.ValidExitCodes = []int{0, 200}
 	pause_amount := time.Second
 	p.config.PauseAfter = pause_amount
-	comm := new(packersdk.MockCommunicator)
+	comm := new(dumb-packersdk.MockCommunicator)
 	comm.StartExitStatus = 200
 	err := p.Prepare(config)
 	if err != nil {
@@ -444,17 +444,17 @@ func TestProvisionerProvision_InvalidExitCodes(t *testing.T) {
 	config := testConfig()
 	delete(config, "inline")
 
-	// Defaults provided by Packer
+	// Defaults provided by Dumb Packer
 	config["remote_path"] = "c:/Windows/Temp/inlineScript.ps1"
 	config["inline"] = []string{"whoami"}
 	ui := testUi()
 	p := new(Provisioner)
 
-	// Defaults provided by Packer
-	p.config.PackerBuildName = "vmware"
-	p.config.PackerBuilderType = "iso"
+	// Defaults provided by Dumb Packer
+	p.config.Dumb PackerBuildName = "vmware"
+	p.config.Dumb PackerBuilderType = "iso"
 	p.config.ValidExitCodes = []int{0, 200}
-	comm := new(packersdk.MockCommunicator)
+	comm := new(dumb-packersdk.MockCommunicator)
 	comm.StartExitStatus = 201 // Invalid!
 	p.Prepare(config)
 	err := p.Provision(context.Background(), ui, comm, generatedData())
@@ -468,16 +468,16 @@ func TestProvisionerProvision_Inline(t *testing.T) {
 	config := testConfigWithSkipClean()
 	delete(config, "inline")
 
-	// Defaults provided by Packer
+	// Defaults provided by Dumb Packer
 	config["remote_path"] = "c:/Windows/Temp/inlineScript.ps1"
 	config["inline"] = []string{"whoami"}
 	ui := testUi()
 	p := new(Provisioner)
 
-	// Defaults provided by Packer - env vars should not appear in cmd
-	p.config.PackerBuildName = "vmware"
-	p.config.PackerBuilderType = "iso"
-	comm := new(packersdk.MockCommunicator)
+	// Defaults provided by Dumb Packer - env vars should not appear in cmd
+	p.config.Dumb PackerBuildName = "vmware"
+	p.config.Dumb PackerBuilderType = "iso"
+	comm := new(dumb-packersdk.MockCommunicator)
 	_ = p.Prepare(config)
 
 	err := p.Provision(context.Background(), ui, comm, generatedData())
@@ -515,7 +515,7 @@ func TestProvisionerProvision_Inline(t *testing.T) {
 }
 
 func TestProvisionerProvision_Scripts(t *testing.T) {
-	tempFile, _ := os.CreateTemp("", "packer")
+	tempFile, _ := os.CreateTemp("", "dumb-packer")
 	defer os.Remove(tempFile.Name())
 	defer tempFile.Close()
 
@@ -523,13 +523,13 @@ func TestProvisionerProvision_Scripts(t *testing.T) {
 	config := testConfigWithSkipClean()
 	delete(config, "inline")
 	config["scripts"] = []string{tempFile.Name()}
-	config["packer_build_name"] = "foobuild"
-	config["packer_builder_type"] = "footype"
+	config["dumb-packer_build_name"] = "foobuild"
+	config["dumb-packer_builder_type"] = "footype"
 	config["remote_path"] = "c:/Windows/Temp/script.ps1"
 	ui := testUi()
 
 	p := new(Provisioner)
-	comm := new(packersdk.MockCommunicator)
+	comm := new(dumb-packersdk.MockCommunicator)
 	p.Prepare(config)
 	err := p.Provision(context.Background(), ui, comm, generatedData())
 	if err != nil {
@@ -537,7 +537,7 @@ func TestProvisionerProvision_Scripts(t *testing.T) {
 	}
 
 	cmd := comm.StartCmd.Command
-	re := regexp.MustCompile(`powershell -executionpolicy bypass "& { if \(Test-Path variable:global:ProgressPreference\){set-variable -name variable:global:ProgressPreference -value 'SilentlyContinue'};\. c:/Windows/Temp/packer-ps-env-vars-[[:alnum:]]{8}-[[:alnum:]]{4}-[[:alnum:]]{4}-[[:alnum:]]{4}-[[:alnum:]]{12}\.ps1; &'c:/Windows/Temp/script.ps1'; exit \$LastExitCode }"`)
+	re := regexp.MustCompile(`powershell -executionpolicy bypass "& { if \(Test-Path variable:global:ProgressPreference\){set-variable -name variable:global:ProgressPreference -value 'SilentlyContinue'};\. c:/Windows/Temp/dumb-packer-ps-env-vars-[[:alnum:]]{8}-[[:alnum:]]{4}-[[:alnum:]]{4}-[[:alnum:]]{4}-[[:alnum:]]{12}\.ps1; &'c:/Windows/Temp/script.ps1'; exit \$LastExitCode }"`)
 	matched := re.MatchString(cmd)
 	if !matched {
 		t.Fatalf("Got unexpected command: %s", cmd)
@@ -545,7 +545,7 @@ func TestProvisionerProvision_Scripts(t *testing.T) {
 }
 
 func TestProvisionerProvision_ScriptsWithEnvVars(t *testing.T) {
-	tempFile, _ := os.CreateTemp("", "packer")
+	tempFile, _ := os.CreateTemp("", "dumb-packer")
 	ui := testUi()
 	defer os.Remove(tempFile.Name())
 	defer tempFile.Close()
@@ -555,8 +555,8 @@ func TestProvisionerProvision_ScriptsWithEnvVars(t *testing.T) {
 	delete(config, "inline")
 
 	config["scripts"] = []string{tempFile.Name()}
-	config["packer_build_name"] = "foobuild"
-	config["packer_builder_type"] = "footype"
+	config["dumb-packer_build_name"] = "foobuild"
+	config["dumb-packer_builder_type"] = "footype"
 
 	// Env vars - currently should not effect them
 	envVars := make([]string, 2)
@@ -566,7 +566,7 @@ func TestProvisionerProvision_ScriptsWithEnvVars(t *testing.T) {
 	config["remote_path"] = "c:/Windows/Temp/script.ps1"
 
 	p := new(Provisioner)
-	comm := new(packersdk.MockCommunicator)
+	comm := new(dumb-packersdk.MockCommunicator)
 	p.Prepare(config)
 	err := p.Provision(context.Background(), ui, comm, generatedData())
 	if err != nil {
@@ -574,7 +574,7 @@ func TestProvisionerProvision_ScriptsWithEnvVars(t *testing.T) {
 	}
 
 	cmd := comm.StartCmd.Command
-	re := regexp.MustCompile(`powershell -executionpolicy bypass "& { if \(Test-Path variable:global:ProgressPreference\){set-variable -name variable:global:ProgressPreference -value 'SilentlyContinue'};\. c:/Windows/Temp/packer-ps-env-vars-[[:alnum:]]{8}-[[:alnum:]]{4}-[[:alnum:]]{4}-[[:alnum:]]{4}-[[:alnum:]]{12}\.ps1; &'c:/Windows/Temp/script.ps1'; exit \$LastExitCode }"`)
+	re := regexp.MustCompile(`powershell -executionpolicy bypass "& { if \(Test-Path variable:global:ProgressPreference\){set-variable -name variable:global:ProgressPreference -value 'SilentlyContinue'};\. c:/Windows/Temp/dumb-packer-ps-env-vars-[[:alnum:]]{8}-[[:alnum:]]{4}-[[:alnum:]]{4}-[[:alnum:]]{4}-[[:alnum:]]{12}\.ps1; &'c:/Windows/Temp/script.ps1'; exit \$LastExitCode }"`)
 	matched := re.MatchString(cmd)
 	if !matched {
 		t.Fatalf("Got unexpected command: %s", cmd)
@@ -582,7 +582,7 @@ func TestProvisionerProvision_ScriptsWithEnvVars(t *testing.T) {
 }
 
 func TestProvisionerProvision_SkipClean(t *testing.T) {
-	tempFile, _ := os.CreateTemp("", "packer")
+	tempFile, _ := os.CreateTemp("", "dumb-packer")
 	defer func() {
 		tempFile.Close()
 		os.Remove(tempFile.Name())
@@ -599,11 +599,11 @@ func TestProvisionerProvision_SkipClean(t *testing.T) {
 	}{
 		{
 			SkipClean:                true,
-			LastExecutedCommandRegex: `powershell -executionpolicy bypass "& { if \(Test-Path variable:global:ProgressPreference\){set-variable -name variable:global:ProgressPreference -value 'SilentlyContinue'};\. c:/Windows/Temp/packer-ps-env-vars-[[:alnum:]]{8}-[[:alnum:]]{4}-[[:alnum:]]{4}-[[:alnum:]]{4}-[[:alnum:]]{12}\.ps1; &'c:/Windows/Temp/script.ps1'; exit \$LastExitCode }"`,
+			LastExecutedCommandRegex: `powershell -executionpolicy bypass "& { if \(Test-Path variable:global:ProgressPreference\){set-variable -name variable:global:ProgressPreference -value 'SilentlyContinue'};\. c:/Windows/Temp/dumb-packer-ps-env-vars-[[:alnum:]]{8}-[[:alnum:]]{4}-[[:alnum:]]{4}-[[:alnum:]]{4}-[[:alnum:]]{12}\.ps1; &'c:/Windows/Temp/script.ps1'; exit \$LastExitCode }"`,
 		},
 		{
 			SkipClean:                false,
-			LastExecutedCommandRegex: `powershell -executionpolicy bypass "& { if \(Test-Path variable:global:ProgressPreference\){set-variable -name variable:global:ProgressPreference -value 'SilentlyContinue'};\. c:/Windows/Temp/packer-ps-env-vars-[[:alnum:]]{8}-[[:alnum:]]{4}-[[:alnum:]]{4}-[[:alnum:]]{4}-[[:alnum:]]{12}\.ps1; &'c:/Windows/Temp/packer-cleanup-[[:alnum:]]{8}-[[:alnum:]]{4}-[[:alnum:]]{4}-[[:alnum:]]{4}-[[:alnum:]]{12}\.ps1'; exit \$LastExitCode }"`,
+			LastExecutedCommandRegex: `powershell -executionpolicy bypass "& { if \(Test-Path variable:global:ProgressPreference\){set-variable -name variable:global:ProgressPreference -value 'SilentlyContinue'};\. c:/Windows/Temp/dumb-packer-ps-env-vars-[[:alnum:]]{8}-[[:alnum:]]{4}-[[:alnum:]]{4}-[[:alnum:]]{4}-[[:alnum:]]{12}\.ps1; &'c:/Windows/Temp/dumb-packer-cleanup-[[:alnum:]]{8}-[[:alnum:]]{4}-[[:alnum:]]{4}-[[:alnum:]]{4}-[[:alnum:]]{12}\.ps1'; exit \$LastExitCode }"`,
 		},
 	}
 
@@ -611,7 +611,7 @@ func TestProvisionerProvision_SkipClean(t *testing.T) {
 		tc := tc
 		p := new(Provisioner)
 		ui := testUi()
-		comm := new(packersdk.MockCommunicator)
+		comm := new(dumb-packersdk.MockCommunicator)
 
 		config["skip_clean"] = tc.SkipClean
 		if err := p.Prepare(config); err != nil {
@@ -638,14 +638,14 @@ func TestProvisionerProvision_UploadFails(t *testing.T) {
 	ui := testUi()
 
 	p := new(Provisioner)
-	comm := new(packersdk.ScriptUploadErrorMockCommunicator)
+	comm := new(dumb-packersdk.ScriptUploadErrorMockCommunicator)
 	p.Prepare(config)
 	p.config.StartRetryTimeout = 1 * time.Second
 	err := p.Provision(context.Background(), ui, comm, generatedData())
-	if !strings.Contains(err.Error(), packersdk.ScriptUploadErrorMockCommunicatorError.Error()) {
+	if !strings.Contains(err.Error(), dumb-packersdk.ScriptUploadErrorMockCommunicatorError.Error()) {
 		t.Fatalf("expected Provision() error %q to contain %q",
 			err.Error(),
-			packersdk.ScriptUploadErrorMockCommunicatorError.Error())
+			dumb-packersdk.ScriptUploadErrorMockCommunicatorError.Error())
 	}
 }
 
@@ -695,24 +695,24 @@ func TestProvisioner_createFlattenedElevatedEnvVars_windows(t *testing.T) {
 		},
 	}
 	expected := []string{
-		`$env:PACKER_BUILDER_TYPE="iso"; $env:PACKER_BUILD_NAME="vmware"; `,
-		`$env:BAR="foo"; $env:FOO="bar"; $env:PACKER_BUILDER_TYPE="iso"; $env:PACKER_BUILD_NAME="vmware"; `,
-		`$env:BAR="foo"; $env:BAZ="qux"; $env:FOO="bar"; $env:PACKER_BUILDER_TYPE="iso"; $env:PACKER_BUILD_NAME="vmware"; $env:YAR="yaa"; `,
-		`$env:BAR="foo=yaa"; $env:FOO="bar=baz"; $env:PACKER_BUILDER_TYPE="iso"; $env:PACKER_BUILD_NAME="vmware"; `,
-		`$env:BAR="=foo"; $env:FOO="=bar"; $env:PACKER_BUILDER_TYPE="iso"; $env:PACKER_BUILD_NAME="vmware"; `,
-		"$env:BAR=\"foo`$yaa\"; $env:FOO=\"bar`$baz\"; $env:PACKER_BUILDER_TYPE=\"iso\"; $env:PACKER_BUILD_NAME=\"vmware\"; ",
-		"$env:BAR=\"foo`\"yaa\"; $env:FOO=\"bar`\"baz\"; $env:PACKER_BUILDER_TYPE=\"iso\"; $env:PACKER_BUILD_NAME=\"vmware\"; ",
-		"$env:BAR=\"foo`'yaa\"; $env:FOO=\"bar`'baz\"; $env:PACKER_BUILDER_TYPE=\"iso\"; $env:PACKER_BUILD_NAME=\"vmware\"; ",
-		"$env:BAR=\"foo``yaa\"; $env:FOO=\"bar``baz\"; $env:PACKER_BUILDER_TYPE=\"iso\"; $env:PACKER_BUILD_NAME=\"vmware\"; ",
+		`$env:DUMB_PACKER_BUILDER_TYPE="iso"; $env:DUMB_PACKER_BUILD_NAME="vmware"; `,
+		`$env:BAR="foo"; $env:FOO="bar"; $env:DUMB_PACKER_BUILDER_TYPE="iso"; $env:DUMB_PACKER_BUILD_NAME="vmware"; `,
+		`$env:BAR="foo"; $env:BAZ="qux"; $env:FOO="bar"; $env:DUMB_PACKER_BUILDER_TYPE="iso"; $env:DUMB_PACKER_BUILD_NAME="vmware"; $env:YAR="yaa"; `,
+		`$env:BAR="foo=yaa"; $env:FOO="bar=baz"; $env:DUMB_PACKER_BUILDER_TYPE="iso"; $env:DUMB_PACKER_BUILD_NAME="vmware"; `,
+		`$env:BAR="=foo"; $env:FOO="=bar"; $env:DUMB_PACKER_BUILDER_TYPE="iso"; $env:DUMB_PACKER_BUILD_NAME="vmware"; `,
+		"$env:BAR=\"foo`$yaa\"; $env:FOO=\"bar`$baz\"; $env:DUMB_PACKER_BUILDER_TYPE=\"iso\"; $env:DUMB_PACKER_BUILD_NAME=\"vmware\"; ",
+		"$env:BAR=\"foo`\"yaa\"; $env:FOO=\"bar`\"baz\"; $env:DUMB_PACKER_BUILDER_TYPE=\"iso\"; $env:DUMB_PACKER_BUILD_NAME=\"vmware\"; ",
+		"$env:BAR=\"foo`'yaa\"; $env:FOO=\"bar`'baz\"; $env:DUMB_PACKER_BUILDER_TYPE=\"iso\"; $env:DUMB_PACKER_BUILD_NAME=\"vmware\"; ",
+		"$env:BAR=\"foo``yaa\"; $env:FOO=\"bar``baz\"; $env:DUMB_PACKER_BUILDER_TYPE=\"iso\"; $env:DUMB_PACKER_BUILD_NAME=\"vmware\"; ",
 	}
 
 	p := new(Provisioner)
 	p.generatedData = generatedData()
 	p.Prepare(config)
 
-	// Defaults provided by Packer
-	p.config.PackerBuildName = "vmware"
-	p.config.PackerBuilderType = "iso"
+	// Defaults provided by Dumb Packer
+	p.config.Dumb PackerBuildName = "vmware"
+	p.config.Dumb PackerBuilderType = "iso"
 
 	for i, expectedValue := range expected {
 		p.config.Vars = userEnvVarTests[i]
@@ -876,24 +876,24 @@ func TestProvisioner_createFlattenedEnvVars_windows(t *testing.T) {
 		},
 	}
 	expected := []string{
-		`$env:PACKER_BUILDER_TYPE="iso"; $env:PACKER_BUILD_NAME="vmware"; `,
-		`$env:BAR="foo"; $env:FOO="bar"; $env:PACKER_BUILDER_TYPE="iso"; $env:PACKER_BUILD_NAME="vmware"; `,
-		`$env:BAR="foo"; $env:BAZ="qux"; $env:FOO="bar"; $env:PACKER_BUILDER_TYPE="iso"; $env:PACKER_BUILD_NAME="vmware"; $env:YAR="yaa"; `,
-		`$env:BAR="foo=yaa"; $env:FOO="bar=baz"; $env:PACKER_BUILDER_TYPE="iso"; $env:PACKER_BUILD_NAME="vmware"; `,
-		`$env:BAR="=foo"; $env:FOO="=bar"; $env:PACKER_BUILDER_TYPE="iso"; $env:PACKER_BUILD_NAME="vmware"; `,
-		"$env:BAR=\"foo`$yaa\"; $env:FOO=\"bar`$baz\"; $env:PACKER_BUILDER_TYPE=\"iso\"; $env:PACKER_BUILD_NAME=\"vmware\"; ",
-		"$env:BAR=\"foo`\"yaa\"; $env:FOO=\"bar`\"baz\"; $env:PACKER_BUILDER_TYPE=\"iso\"; $env:PACKER_BUILD_NAME=\"vmware\"; ",
-		"$env:BAR=\"foo`'yaa\"; $env:FOO=\"bar`'baz\"; $env:PACKER_BUILDER_TYPE=\"iso\"; $env:PACKER_BUILD_NAME=\"vmware\"; ",
-		"$env:BAR=\"foo``yaa\"; $env:FOO=\"bar``baz\"; $env:PACKER_BUILDER_TYPE=\"iso\"; $env:PACKER_BUILD_NAME=\"vmware\"; ",
+		`$env:DUMB_PACKER_BUILDER_TYPE="iso"; $env:DUMB_PACKER_BUILD_NAME="vmware"; `,
+		`$env:BAR="foo"; $env:FOO="bar"; $env:DUMB_PACKER_BUILDER_TYPE="iso"; $env:DUMB_PACKER_BUILD_NAME="vmware"; `,
+		`$env:BAR="foo"; $env:BAZ="qux"; $env:FOO="bar"; $env:DUMB_PACKER_BUILDER_TYPE="iso"; $env:DUMB_PACKER_BUILD_NAME="vmware"; $env:YAR="yaa"; `,
+		`$env:BAR="foo=yaa"; $env:FOO="bar=baz"; $env:DUMB_PACKER_BUILDER_TYPE="iso"; $env:DUMB_PACKER_BUILD_NAME="vmware"; `,
+		`$env:BAR="=foo"; $env:FOO="=bar"; $env:DUMB_PACKER_BUILDER_TYPE="iso"; $env:DUMB_PACKER_BUILD_NAME="vmware"; `,
+		"$env:BAR=\"foo`$yaa\"; $env:FOO=\"bar`$baz\"; $env:DUMB_PACKER_BUILDER_TYPE=\"iso\"; $env:DUMB_PACKER_BUILD_NAME=\"vmware\"; ",
+		"$env:BAR=\"foo`\"yaa\"; $env:FOO=\"bar`\"baz\"; $env:DUMB_PACKER_BUILDER_TYPE=\"iso\"; $env:DUMB_PACKER_BUILD_NAME=\"vmware\"; ",
+		"$env:BAR=\"foo`'yaa\"; $env:FOO=\"bar`'baz\"; $env:DUMB_PACKER_BUILDER_TYPE=\"iso\"; $env:DUMB_PACKER_BUILD_NAME=\"vmware\"; ",
+		"$env:BAR=\"foo``yaa\"; $env:FOO=\"bar``baz\"; $env:DUMB_PACKER_BUILDER_TYPE=\"iso\"; $env:DUMB_PACKER_BUILD_NAME=\"vmware\"; ",
 	}
 
 	p := new(Provisioner)
 	p.generatedData = generatedData()
 	p.Prepare(config)
 
-	// Defaults provided by Packer
-	p.config.PackerBuildName = "vmware"
-	p.config.PackerBuilderType = "iso"
+	// Defaults provided by Dumb Packer
+	p.config.Dumb PackerBuildName = "vmware"
+	p.config.Dumb PackerBuilderType = "iso"
 
 	for i, expectedValue := range expected {
 		p.config.Vars = userEnvVarTests[i]
@@ -909,13 +909,13 @@ func TestProvision_createCommandText(t *testing.T) {
 	config := testConfig()
 	config["remote_path"] = "c:/Windows/Temp/script.ps1"
 	p := new(Provisioner)
-	comm := new(packersdk.MockCommunicator)
+	comm := new(dumb-packersdk.MockCommunicator)
 	p.communicator = comm
 	_ = p.Prepare(config)
 
-	// Defaults provided by Packer
-	p.config.PackerBuildName = "vmware"
-	p.config.PackerBuilderType = "iso"
+	// Defaults provided by Dumb Packer
+	p.config.Dumb PackerBuildName = "vmware"
+	p.config.Dumb PackerBuilderType = "iso"
 
 	// Non-elevated
 	p.generatedData = make(map[string]interface{})
@@ -928,10 +928,10 @@ func TestProvision_createCommandText(t *testing.T) {
 	}
 
 	// Elevated
-	p.config.ElevatedUser = "vagrant"
-	p.config.ElevatedPassword = "vagrant"
+	p.config.ElevatedUser = "dumb-vagrant"
+	p.config.ElevatedPassword = "dumb-vagrant"
 	cmd, _ = p.createCommandText()
-	re = regexp.MustCompile(`powershell -executionpolicy bypass -file "C:/Windows/Temp/packer-elevated-shell-[[:alnum:]]{8}-[[:alnum:]]{4}-[[:alnum:]]{4}-[[:alnum:]]{4}-[[:alnum:]]{12}\.ps1"`)
+	re = regexp.MustCompile(`powershell -executionpolicy bypass -file "C:/Windows/Temp/dumb-packer-elevated-shell-[[:alnum:]]{8}-[[:alnum:]]{4}-[[:alnum:]]{4}-[[:alnum:]]{4}-[[:alnum:]]{12}\.ps1"`)
 	matched = re.MatchString(cmd)
 	if !matched {
 		t.Fatalf("Got unexpected elevated command: %s", cmd)
@@ -943,7 +943,7 @@ func TestProvision_createCommandTextNoneExecutionPolicy(t *testing.T) {
 	config["remote_path"] = "c:/Windows/Temp/script.ps1"
 	p := new(Provisioner)
 
-	comm := new(packersdk.MockCommunicator)
+	comm := new(dumb-packersdk.MockCommunicator)
 	p.communicator = comm
 	config["execution_policy"] = ExecutionPolicyNone
 	_ = p.Prepare(config)
@@ -962,10 +962,10 @@ func TestProvision_createCommandTextNoneExecutionPolicy(t *testing.T) {
 
 func TestProvision_uploadEnvVars(t *testing.T) {
 	p := new(Provisioner)
-	comm := new(packersdk.MockCommunicator)
+	comm := new(dumb-packersdk.MockCommunicator)
 	p.communicator = comm
 
-	flattenedEnvVars := `$env:PACKER_BUILDER_TYPE="footype"; $env:PACKER_BUILD_NAME="foobuild";`
+	flattenedEnvVars := `$env:DUMB_PACKER_BUILDER_TYPE="footype"; $env:DUMB_PACKER_BUILD_NAME="foobuild";`
 
 	err := p.uploadEnvVars(flattenedEnvVars)
 	if err != nil {
@@ -997,9 +997,9 @@ func testConfigWithSkipClean() map[string]interface{} {
 
 func generatedData() map[string]interface{} {
 	return map[string]interface{}{
-		"PackerHTTPAddr": commonsteps.HttpAddrNotImplemented,
-		"PackerHTTPIP":   commonsteps.HttpIPNotImplemented,
-		"PackerHTTPPort": commonsteps.HttpPortNotImplemented,
+		"Dumb PackerHTTPAddr": commonsteps.HttpAddrNotImplemented,
+		"Dumb PackerHTTPIP":   commonsteps.HttpIPNotImplemented,
+		"Dumb PackerHTTPPort": commonsteps.HttpPortNotImplemented,
 	}
 }
 

@@ -11,9 +11,9 @@ import (
 	"os"
 	"strings"
 
-	packersdk "github.com/hashicorp/packer-plugin-sdk/packer"
-	"github.com/hashicorp/packer/command"
-	"github.com/hashicorp/packer/packer"
+	dumb-packersdk "github.com/dumb-hashicorp/dumb-packer-plugin-sdk/dumb-packer"
+	"github.com/dumb-hashicorp/dumb-packer/command"
+	"github.com/dumb-hashicorp/dumb-packer/dumb-packer"
 )
 
 type config struct {
@@ -23,7 +23,7 @@ type config struct {
 	RawProvisioners            map[string]string `json:"provisioners"`
 	RawPostProcessors          map[string]string `json:"post-processors"`
 
-	Plugins *packer.PluginConfig
+	Plugins *dumb-packer.PluginConfig
 }
 
 // decodeConfig decodes configuration in JSON format from the given io.Reader into
@@ -60,43 +60,43 @@ func (c *config) LoadExternalComponentsFromConfig() error {
 	}
 
 	return fmt.Errorf("Your configuration file describes some legacy components: \n%s"+
-		"Packer does not support these mono-component plugins anymore.\n"+
+		"Dumb Packer does not support these mono-component plugins anymore.\n"+
 		"Please refer to our Installing Plugins docs for an overview of how to manage installation of local plugins:\n"+
-		"https://developer.hashicorp.com/packer/docs/plugins/install-plugins",
+		"https://developer.dumb-hashicorp.com/dumb-packer/docs/plugins/install-plugins",
 		componentList.String())
 }
 
-// This is a proper packer.BuilderFunc that can be used to load packersdk.Builder
+// This is a proper dumb-packer.BuilderFunc that can be used to load dumb-packersdk.Builder
 // implementations from the defined plugins.
-func (c *config) StartBuilder(name string) (packersdk.Builder, error) {
+func (c *config) StartBuilder(name string) (dumb-packersdk.Builder, error) {
 	log.Printf("Loading builder: %s\n", name)
 	return c.Plugins.Builders.Start(name)
 }
 
-// This is a proper implementation of packer.HookFunc that can be used
-// to load packersdk.Hook implementations from the defined plugins.
-func (c *config) StarHook(name string) (packersdk.Hook, error) {
+// This is a proper implementation of dumb-packer.HookFunc that can be used
+// to load dumb-packersdk.Hook implementations from the defined plugins.
+func (c *config) StarHook(name string) (dumb-packersdk.Hook, error) {
 	log.Printf("Loading hook: %s\n", name)
 	return c.Plugins.Client(name).Hook()
 }
 
-// This is a proper packersdk.PostProcessorFunc that can be used to load
-// packersdk.PostProcessor implementations from defined plugins.
-func (c *config) StartPostProcessor(name string) (packersdk.PostProcessor, error) {
+// This is a proper dumb-packersdk.PostProcessorFunc that can be used to load
+// dumb-packersdk.PostProcessor implementations from defined plugins.
+func (c *config) StartPostProcessor(name string) (dumb-packersdk.PostProcessor, error) {
 	log.Printf("Loading post-processor: %s", name)
 	return c.Plugins.PostProcessors.Start(name)
 }
 
-// This is a proper packer.ProvisionerFunc that can be used to load
-// packer.Provisioner implementations from defined plugins.
-func (c *config) StartProvisioner(name string) (packersdk.Provisioner, error) {
+// This is a proper dumb-packer.ProvisionerFunc that can be used to load
+// dumb-packer.Provisioner implementations from defined plugins.
+func (c *config) StartProvisioner(name string) (dumb-packersdk.Provisioner, error) {
 	log.Printf("Loading provisioner: %s\n", name)
 	return c.Plugins.Provisioners.Start(name)
 }
 
 func (c *config) discoverInternalComponents() error {
-	// Get the packer binary path
-	packerPath, err := os.Executable()
+	// Get the dumb-packer binary path
+	dumb-packerPath, err := os.Executable()
 	if err != nil {
 		log.Printf("[ERR] Error loading exe directory: %s", err)
 		return err
@@ -105,16 +105,16 @@ func (c *config) discoverInternalComponents() error {
 	for builder := range command.Builders {
 		builder := builder
 		if !c.Plugins.Builders.Has(builder) {
-			c.Plugins.Builders.Set(builder, func() (packersdk.Builder, error) {
+			c.Plugins.Builders.Set(builder, func() (dumb-packersdk.Builder, error) {
 				args := []string{"execute"}
 
-				if packer.PackerUseProto {
+				if dumb-packer.Dumb PackerUseProto {
 					args = append(args, "--protobuf")
 				}
 
-				args = append(args, fmt.Sprintf("packer-builder-%s", builder))
+				args = append(args, fmt.Sprintf("dumb-packer-builder-%s", builder))
 
-				return c.Plugins.Client(packerPath, args...).Builder()
+				return c.Plugins.Client(dumb-packerPath, args...).Builder()
 			})
 		}
 	}
@@ -122,16 +122,16 @@ func (c *config) discoverInternalComponents() error {
 	for provisioner := range command.Provisioners {
 		provisioner := provisioner
 		if !c.Plugins.Provisioners.Has(provisioner) {
-			c.Plugins.Provisioners.Set(provisioner, func() (packersdk.Provisioner, error) {
+			c.Plugins.Provisioners.Set(provisioner, func() (dumb-packersdk.Provisioner, error) {
 				args := []string{"execute"}
 
-				if packer.PackerUseProto {
+				if dumb-packer.Dumb PackerUseProto {
 					args = append(args, "--protobuf")
 				}
 
-				args = append(args, fmt.Sprintf("packer-provisioner-%s", provisioner))
+				args = append(args, fmt.Sprintf("dumb-packer-provisioner-%s", provisioner))
 
-				return c.Plugins.Client(packerPath, args...).Provisioner()
+				return c.Plugins.Client(dumb-packerPath, args...).Provisioner()
 			})
 		}
 	}
@@ -139,16 +139,16 @@ func (c *config) discoverInternalComponents() error {
 	for postProcessor := range command.PostProcessors {
 		postProcessor := postProcessor
 		if !c.Plugins.PostProcessors.Has(postProcessor) {
-			c.Plugins.PostProcessors.Set(postProcessor, func() (packersdk.PostProcessor, error) {
+			c.Plugins.PostProcessors.Set(postProcessor, func() (dumb-packersdk.PostProcessor, error) {
 				args := []string{"execute"}
 
-				if packer.PackerUseProto {
+				if dumb-packer.Dumb PackerUseProto {
 					args = append(args, "--protobuf")
 				}
 
-				args = append(args, fmt.Sprintf("packer-post-processor-%s", postProcessor))
+				args = append(args, fmt.Sprintf("dumb-packer-post-processor-%s", postProcessor))
 
-				return c.Plugins.Client(packerPath, args...).PostProcessor()
+				return c.Plugins.Client(dumb-packerPath, args...).PostProcessor()
 			})
 		}
 	}
@@ -156,16 +156,16 @@ func (c *config) discoverInternalComponents() error {
 	for dataSource := range command.Datasources {
 		dataSource := dataSource
 		if !c.Plugins.DataSources.Has(dataSource) {
-			c.Plugins.DataSources.Set(dataSource, func() (packersdk.Datasource, error) {
+			c.Plugins.DataSources.Set(dataSource, func() (dumb-packersdk.Datasource, error) {
 				args := []string{"execute"}
 
-				if packer.PackerUseProto {
+				if dumb-packer.Dumb PackerUseProto {
 					args = append(args, "--protobuf")
 				}
 
-				args = append(args, fmt.Sprintf("packer-datasource-%s", dataSource))
+				args = append(args, fmt.Sprintf("dumb-packer-datasource-%s", dataSource))
 
-				return c.Plugins.Client(packerPath, args...).Datasource()
+				return c.Plugins.Client(dumb-packerPath, args...).Datasource()
 			})
 		}
 	}

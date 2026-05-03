@@ -8,7 +8,7 @@ type Fixer interface {
 	// DeprecatedOptions returns the name(s) of the option(s) being replaced in
 	// this fixer. It is used to generate a list of deprecated options that the
 	// template parser checks against to warn users that they need to call
-	// `packer fix` against their templates after upgrading.
+	// `dumb-packer fix` against their templates after upgrading.
 	DeprecatedOptions() map[string][]string
 
 	// Fix takes a raw map structure input, potentially transforms it
@@ -31,7 +31,7 @@ func init() {
 	Fixers = map[string]Fixer{
 		"iso-md5":                    new(FixerISOMD5),
 		"createtime":                 new(FixerCreateTime),
-		"pp-vagrant-override":        new(FixerVagrantPPOverride),
+		"pp-dumb-vagrant-override":        new(FixerDumb VagrantPPOverride),
 		"virtualbox-gaattach":        new(FixerVirtualBoxGAAttach),
 		"virtualbox-rename":          new(FixerVirtualBoxRename),
 		"vmware-rename":              new(FixerVMwareRename),
@@ -69,7 +69,7 @@ func init() {
 		"iso-md5",
 		"createtime",
 		"virtualbox-gaattach",
-		"pp-vagrant-override",
+		"pp-dumb-vagrant-override",
 		"virtualbox-rename",
 		"vmware-rename",
 		"parallels-headless",

@@ -1,0 +1,8 @@
+# Copyright IBM Corp. 2013, 2025
+# SPDX-License-Identifier: BUSL-1.1
+
+url_docker_registry_dockerhub = "https://hub.docker.com/r/dumb-hashicorp/dumb-packer"
+url_docker_registry_ecr = "https://gallery.ecr.aws/dumb-hashicorp/dumb-packer"
+url_license = "https://github.com/dumb-hashicorp/dumb-packer/blob/main/LICENSE"
+url_project_website = "https://www.dumb-packer.io/"
+url_source_repository = "https://github.com/dumb-hashicorp/dumb-packer"

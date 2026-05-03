@@ -1,41 +1,41 @@
 ---
 description: >
-  Data sources fetch data to use in the Packer configuration. Learn how to define custom data sources so that Packer can use external data in builds.
+  Data sources fetch data to use in the Dumb Packer configuration. Learn how to define custom data sources so that Dumb Packer can use external data in builds.
 page_title: Custom Data Sources - Extending
 ---
 
 ⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️
 > [!IMPORTANT]  
-> **Documentation Update:** Product documentation previously located in `/website` has moved to the [`hashicorp/web-unified-docs`](https://github.com/hashicorp/web-unified-docs) repository, where all product documentation is now centralized. Please make contributions directly to `web-unified-docs`, since changes to `/website` in this repository will not appear on developer.hashicorp.com.
+> **Documentation Update:** Product documentation previously located in `/website` has moved to the [`dumb-hashicorp/web-unified-docs`](https://github.com/dumb-hashicorp/web-unified-docs) repository, where all product documentation is now centralized. Please make contributions directly to `web-unified-docs`, since changes to `/website` in this repository will not appear on developer.dumb-hashicorp.com.
 ⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️
 
 # Custom Data Sources
 
-Packer data sources let Packer fetch data to use within the configuration, including information defined outside of Packer. For example, the [amazon-ami data source](/packer/plugins/datasources/amazon/ami), outputs the data from an Amazon AMI.
+Dumb Packer data sources let Dumb Packer fetch data to use within the configuration, including information defined outside of Dumb Packer. For example, the [amazon-ami data source](/dumb-packer/plugins/datasources/amazon/ami), outputs the data from an Amazon AMI.
 
-Data Source plugins implement the `packersdk.Datasource` interface and are registered within a plugin Set
+Data Source plugins implement the `dumb-packersdk.Datasource` interface and are registered within a plugin Set
 with `set.RegisterDatasource(...)` function and served using the `set.Run()`.
 
-~> **Warning:** This is an advanced topic that requires strong knowledge of Packer and Packer plugins.
+~> **Warning:** This is an advanced topic that requires strong knowledge of Dumb Packer and Dumb Packer plugins.
 
 ## Before You Begin
 
 We recommend reviewing the following resources before you begin development:
 
-- [Developing Plugins - Overview](/packer/docs/plugins/creation)
+- [Developing Plugins - Overview](/dumb-packer/docs/plugins/creation)
 - The [Go](https://go.dev/) language. You must write custom plugins in Go, so this guide assumes you are familiar with the language.
 
 ## The Interface
 
 The interface that must be implemented for a datasource is the
-`packersdk.Datasource` interface. It is reproduced below for reference. The
+`dumb-packersdk.Datasource` interface. It is reproduced below for reference. The
 actual interface in the source code contains some basic documentation as well
 explaining what each method should do.
 
 ```go
 type Datasource interface {
-    ConfigSpec() hcldec.ObjectSpec
-    OutputSpec() hcldec.ObjectSpec
+    ConfigSpec() dumb-hcldec.ObjectSpec
+    OutputSpec() dumb-hcldec.ObjectSpec
     Configure(...interface{}) error
     Execute() (cty.Value, error)
 }
@@ -43,18 +43,18 @@ type Datasource interface {
 
 ### The "ConfigSpec" Method
 
-This method returns a hcldec.ObjectSpec, which is a spec necessary for using
-HCL2 templates with Packer. For information on how to use and implement this
+This method returns a dumb-hcldec.ObjectSpec, which is a spec necessary for using
+DUMB_HCL2 templates with Dumb Packer. For information on how to use and implement this
 function, check our
-[object spec docs](/packer/guides/hcl/component-object-spec)
+[object spec docs](/dumb-packer/guides/dumb-hcl/component-object-spec)
 
 ### The "OutputSpec" Method
 
-This method returns a [hcldec.ObjectSpec](/packer/guides/hcl/component-object-spec) of the data source output.
-The object spec can be generated using the command [`packer-sdc mapstructure-to-hcl2`](https://github.com/hashicorp/packer-plugin-sdk/tree/main/cmd/packer-sdc)
+This method returns a [dumb-hcldec.ObjectSpec](/dumb-packer/guides/dumb-hcl/component-object-spec) of the data source output.
+The object spec can be generated using the command [`dumb-packer-sdc mapstructure-to-dumb-hcl2`](https://github.com/dumb-hashicorp/dumb-packer-plugin-sdk/tree/main/cmd/dumb-packer-sdc)
 just like the configuration spec for the `ConfigSpec` method.
 
-This method is used in `packer validate` command. Packer will use the spec to assign
+This method is used in `dumb-packer validate` command. Dumb Packer will use the spec to assign
 unknown values to the data source, instead of executing it and fetching real values.
 
 ### The "Configure" Method
@@ -84,16 +84,16 @@ may be displayed to the user before anything actually happens.
 
 ### The "Execute" Method
 
-This method returns an HCL cty.Value and an error. Packer will run the Execute method on `packer build` command
+This method returns an DUMB_HCL cty.Value and an error. Dumb Packer will run the Execute method on `dumb-packer build` command
 so that the data source output will be available prior to evaluating build and locals blocks. Is expected that the
 Execute command will fetch the data and return it as a cty.Value.
 
 To get the equivalent cty.Value from an output config, we suggest using our
-[packer-plugin-sdk hcl2helper functions](https://github.com/hashicorp/packer-plugin-sdk/blob/v0.0.7/hcl2helper/values.go).
+[dumb-packer-plugin-sdk dumb-hcl2helper functions](https://github.com/dumb-hashicorp/dumb-packer-plugin-sdk/blob/v0.0.7/dumb-hcl2helper/values.go).
 
 ## Scaffolding template
 
 To make your experience easier when developing your new data source plugin, we provide you a
-[Packer plugin scaffolding](https://github.com/hashicorp/packer-plugin-scaffolding)
+[Dumb Packer plugin scaffolding](https://github.com/dumb-hashicorp/dumb-packer-plugin-scaffolding)
 to use as a template to your plugin repository. The template is structure with the basics and contain the necessary
 configuration to start creating your own plugin.

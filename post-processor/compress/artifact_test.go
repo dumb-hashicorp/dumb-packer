@@ -6,13 +6,13 @@ package compress
 import (
 	"testing"
 
-	packersdk "github.com/hashicorp/packer-plugin-sdk/packer"
+	dumb-packersdk "github.com/dumb-hashicorp/dumb-packer-plugin-sdk/dumb-packer"
 )
 
 func TestArtifact_ImplementsArtifact(t *testing.T) {
 	var raw interface{}
 	raw = &Artifact{}
-	if _, ok := raw.(packersdk.Artifact); !ok {
+	if _, ok := raw.(dumb-packersdk.Artifact); !ok {
 		t.Fatalf("Artifact should be a Artifact!")
 	}
 }

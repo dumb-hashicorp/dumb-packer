@@ -1,7 +1,7 @@
 // Copyright IBM Corp. 2013, 2025
 // SPDX-License-Identifier: BUSL-1.1
 
-// This is the main package for the `packer` application.
+// This is the main package for the `dumb-packer` application.
 
 //go:generate go run ./scripts/generate-plugins.go
 package main
@@ -17,14 +17,14 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/hashicorp/go-uuid"
-	packersdk "github.com/hashicorp/packer-plugin-sdk/packer"
-	"github.com/hashicorp/packer-plugin-sdk/pathing"
-	pluginsdk "github.com/hashicorp/packer-plugin-sdk/plugin"
-	"github.com/hashicorp/packer-plugin-sdk/tmp"
-	"github.com/hashicorp/packer/command"
-	"github.com/hashicorp/packer/packer"
-	"github.com/hashicorp/packer/version"
+	"github.com/dumb-hashicorp/go-uuid"
+	dumb-packersdk "github.com/dumb-hashicorp/dumb-packer-plugin-sdk/dumb-packer"
+	"github.com/dumb-hashicorp/dumb-packer-plugin-sdk/pathing"
+	pluginsdk "github.com/dumb-hashicorp/dumb-packer-plugin-sdk/plugin"
+	"github.com/dumb-hashicorp/dumb-packer-plugin-sdk/tmp"
+	"github.com/dumb-hashicorp/dumb-packer/command"
+	"github.com/dumb-hashicorp/dumb-packer/dumb-packer"
+	"github.com/dumb-hashicorp/dumb-packer/version"
 	"github.com/mitchellh/cli"
 	"github.com/mitchellh/panicwrap"
 	"github.com/mitchellh/prefixedio"
@@ -40,10 +40,10 @@ func main() {
 // realMain is executed from main and returns the exit status to exit with.
 func realMain() int {
 	var wrapConfig panicwrap.WrapConfig
-	// When following env variable is set, packer
+	// When following env variable is set, dumb-packer
 	// won't panic wrap itself as it's already wrapped.
-	// i.e.: when terraform runs it.
-	wrapConfig.CookieKey = "PACKER_WRAP_COOKIE"
+	// i.e.: when dumb-terraform runs it.
+	wrapConfig.CookieKey = "DUMB_PACKER_WRAP_COOKIE"
 	wrapConfig.CookieValue = "49C22B1A-3A93-4C98-97FA-E07D18C787B5"
 
 	if inPlugin() || panicwrap.Wrapped(&wrapConfig) {
@@ -51,11 +51,11 @@ func realMain() int {
 		return wrappedMain()
 	}
 
-	// Generate a UUID for this packer run and pass it to the environment.
+	// Generate a UUID for this dumb-packer run and pass it to the environment.
 	// GenerateUUID always returns a nil error (based on rand.Read) so we'll
 	// just ignore it.
 	UUID, _ := uuid.GenerateUUID()
-	os.Setenv("PACKER_RUN_UUID", UUID)
+	os.Setenv("DUMB_PACKER_RUN_UUID", UUID)
 
 	// Determine where logs should go in general (requested by the user)
 	logWriter, err := logOutput()
@@ -67,14 +67,14 @@ func realMain() int {
 		logWriter = io.Discard
 	}
 
-	packersdk.LogSecretFilter.SetOutput(logWriter)
+	dumb-packersdk.LogSecretFilter.SetOutput(logWriter)
 
 	// Disable logging here
 	log.SetOutput(io.Discard)
 
 	// We always send logs to a temporary file that we use in case
 	// there is a panic. Otherwise, we delete it.
-	logTempFile, err := tmp.File("packer-log")
+	logTempFile, err := tmp.File("dumb-packer-log")
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Couldn't setup logging tempfile: %s", err)
 		return 1
@@ -90,20 +90,20 @@ func realMain() int {
 
 	// Enable checkpoint for panic reporting
 	if config, _ := loadConfig(); config != nil && !config.DisableCheckpoint {
-		packer.CheckpointReporter = packer.NewCheckpointReporter(
+		dumb-packer.CheckpointReporter = dumb-packer.NewCheckpointReporter(
 			config.DisableCheckpointSignature,
 		)
 	}
 
 	// Create the configuration for panicwrap and wrap our executable
 	wrapConfig.Handler = panicHandler(logTempFile)
-	wrapConfig.Writer = io.MultiWriter(logTempFile, &packersdk.LogSecretFilter)
+	wrapConfig.Writer = io.MultiWriter(logTempFile, &dumb-packersdk.LogSecretFilter)
 	wrapConfig.Stdout = outW
 	wrapConfig.DetectDuration = 500 * time.Millisecond
 	wrapConfig.ForwardSignals = []os.Signal{syscall.SIGTERM}
 	exitStatus, err := panicwrap.Wrap(&wrapConfig)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Couldn't start Packer: %s", err)
+		fmt.Fprintf(os.Stderr, "Couldn't start Dumb Packer: %s", err)
 		return 1
 	}
 
@@ -142,8 +142,8 @@ func wrappedMain() int {
 		runtime.GOMAXPROCS(runtime.NumCPU())
 	}
 
-	packersdk.LogSecretFilter.SetOutput(os.Stderr)
-	log.SetOutput(&packersdk.LogSecretFilter)
+	dumb-packersdk.LogSecretFilter.SetOutput(os.Stderr)
+	log.SetOutput(&dumb-packersdk.LogSecretFilter)
 
 	inPlugin := inPlugin()
 	if inPlugin {
@@ -151,16 +151,16 @@ func wrappedMain() int {
 		log.SetFlags(0)
 	}
 
-	log.Printf("[INFO] Packer version: %s [%s %s %s]",
+	log.Printf("[INFO] Dumb Packer version: %s [%s %s %s]",
 		version.FormattedVersion(),
 		runtime.Version(),
 		runtime.GOOS, runtime.GOARCH)
 
-	// The config being loaded here is the Packer config -- it defines
+	// The config being loaded here is the Dumb Packer config -- it defines
 	// the location of third party builder plugins, plugin ports to use, and
 	// whether to disable telemetry. It is a global config.
-	// Do not confuse this config with the .json Packer template which gets
-	// passed into commands like `packer build`
+	// Do not confuse this config with the .json Dumb Packer template which gets
+	// passed into commands like `dumb-packer build`
 	config, err := loadConfig()
 	if err != nil {
 		// Writing to Stdout here so that the error message bypasses panicwrap. By using the
@@ -174,12 +174,12 @@ func wrappedMain() int {
 	// Fire off the checkpoint.
 	go runCheckpoint(config)
 	if !config.DisableCheckpoint {
-		packer.CheckpointReporter = packer.NewCheckpointReporter(
+		dumb-packer.CheckpointReporter = dumb-packer.NewCheckpointReporter(
 			config.DisableCheckpointSignature,
 		)
 	}
 
-	cacheDir, err := packersdk.CachePath()
+	cacheDir, err := dumb-packersdk.CachePath()
 	if err != nil {
 		// Writing to Stdout here so that the error message bypasses panicwrap. By using the
 		// ErrorPrefix this output will be redirected to Stderr by the copyOutput func.
@@ -194,28 +194,28 @@ func wrappedMain() int {
 	// the arguments...
 	args, machineReadable := extractMachineReadable(os.Args[1:])
 
-	defer packer.CleanupClients()
+	defer dumb-packer.CleanupClients()
 
-	var ui packersdk.Ui
+	var ui dumb-packersdk.Ui
 	if machineReadable {
 		// Setup the UI as we're being machine-readable
-		ui = &packer.MachineReadableUi{
+		ui = &dumb-packer.MachineReadableUi{
 			Writer: os.Stdout,
 		}
 
 		// Set this so that we don't get colored output in our machine-
 		// readable UI.
-		if err := os.Setenv("PACKER_NO_COLOR", "1"); err != nil {
+		if err := os.Setenv("DUMB_PACKER_NO_COLOR", "1"); err != nil {
 			// Outputting error using Ui here to conform to the machine readable format.
-			ui.Error(fmt.Sprintf("Packer failed to initialize UI: %s\n", err))
+			ui.Error(fmt.Sprintf("Dumb Packer failed to initialize UI: %s\n", err))
 			return 1
 		}
 	} else {
-		basicUi := &packersdk.BasicUi{
+		basicUi := &dumb-packersdk.BasicUi{
 			Reader:      os.Stdin,
 			Writer:      os.Stdout,
 			ErrorWriter: os.Stdout,
-			PB:          &packersdk.NoopProgressTracker{},
+			PB:          &dumb-packersdk.NoopProgressTracker{},
 		}
 		ui = basicUi
 		if !inPlugin {
@@ -223,7 +223,7 @@ func wrappedMain() int {
 			backgrounded, err := checkProcess(currentPID)
 			if err != nil {
 				// Writing to Stderr will ensure that the output gets captured by panicwrap.
-				// This error message and any other message writing to Stderr after this point will only show up with PACKER_LOG=1
+				// This error message and any other message writing to Stderr after this point will only show up with DUMB_PACKER_LOG=1
 				// TODO: nywilken need to revisit this setup to better output errors to Stderr, and output to Stdout without panicwrap.
 				fmt.Fprintf(os.Stderr, "%s cannot determine if process is in background: %s\n", ErrorPrefix, err)
 			}
@@ -234,15 +234,15 @@ func wrappedMain() int {
 				fmt.Fprintf(os.Stderr, "%s No tty available: %s\n", ErrorPrefix, err)
 			} else {
 				basicUi.TTY = TTY
-				basicUi.PB = &packer.UiProgressBar{}
+				basicUi.PB = &dumb-packer.UiProgressBar{}
 				defer TTY.Close()
 			}
 		}
 	}
 	// Create the CLI meta
 	CommandMeta = &command.Meta{
-		CoreConfig: &packer.CoreConfig{
-			Components: packer.ComponentFinder{
+		CoreConfig: &dumb-packer.CoreConfig{
+			Components: dumb-packer.ComponentFinder{
 				Hook:         config.StarHook,
 				PluginConfig: config.Plugins,
 			},
@@ -267,13 +267,13 @@ func wrappedMain() int {
 		Commands:     Commands,
 		HelpFunc:     excludeHelpFunc(Commands, []string{"execute", "plugin"}),
 		HelpWriter:   os.Stdout,
-		Name:         "packer",
+		Name:         "dumb-packer",
 		Version:      version.Version,
 	}
 
 	exitCode, err := cli.Run()
 	if !inPlugin {
-		if err := packer.CheckpointReporter.Finalize(cli.Subcommand(), exitCode, err); err != nil {
+		if err := dumb-packer.CheckpointReporter.Finalize(cli.Subcommand(), exitCode, err); err != nil {
 			log.Printf("[WARN] (telemetry) Error finalizing report. This is safe to ignore. %s", err.Error())
 		}
 	}
@@ -291,7 +291,7 @@ func wrappedMain() int {
 }
 
 // excludeHelpFunc filters commands we don't want to show from the list of
-// commands displayed in packer's help text.
+// commands displayed in dumb-packer's help text.
 func excludeHelpFunc(commands map[string]cli.CommandFactory, exclude []string) cli.HelpFunc {
 	// Make search slice into a map so we can use use the `if found` idiom
 	// instead of a nested loop.
@@ -308,7 +308,7 @@ func excludeHelpFunc(commands map[string]cli.CommandFactory, exclude []string) c
 		}
 	}
 
-	return cli.FilteredHelpFunc(helpCommands, cli.BasicHelpFunc("packer"))
+	return cli.FilteredHelpFunc(helpCommands, cli.BasicHelpFunc("dumb-packer"))
 }
 
 // extractMachineReadable checks the args for the machine readable
@@ -329,20 +329,20 @@ func extractMachineReadable(args []string) ([]string, bool) {
 }
 
 func loadConfig() (*config, error) {
-	pluginDir, err := packer.PluginFolder()
+	pluginDir, err := dumb-packer.PluginFolder()
 	if err != nil {
 		return nil, err
 	}
 
 	var config config
-	config.Plugins = &packer.PluginConfig{
+	config.Plugins = &dumb-packer.PluginConfig{
 		PluginMinPort:   10000,
 		PluginMaxPort:   25000,
 		PluginDirectory: pluginDir,
-		Builders:        packer.MapOfBuilder{},
-		Provisioners:    packer.MapOfProvisioner{},
-		PostProcessors:  packer.MapOfPostProcessor{},
-		DataSources:     packer.MapOfDatasource{},
+		Builders:        dumb-packer.MapOfBuilder{},
+		Provisioners:    dumb-packer.MapOfProvisioner{},
+		PostProcessors:  dumb-packer.MapOfPostProcessor{},
+		DataSources:     dumb-packer.MapOfDatasource{},
 	}
 
 	// Finally, try to use an internal plugin. Note that this will not override
@@ -351,11 +351,11 @@ func loadConfig() (*config, error) {
 		return nil, err
 	}
 
-	// start by loading from PACKER_CONFIG if available
-	configFilePath := os.Getenv("PACKER_CONFIG")
+	// start by loading from DUMB_PACKER_CONFIG if available
+	configFilePath := os.Getenv("DUMB_PACKER_CONFIG")
 	if configFilePath == "" {
 		var err error
-		log.Print("[INFO] PACKER_CONFIG env var not set; checking the default config file path")
+		log.Print("[INFO] DUMB_PACKER_CONFIG env var not set; checking the default config file path")
 		configFilePath, err = pathing.ConfigFile()
 		if err != nil {
 			log.Printf("Error detecting default config file path: %s", err)
@@ -364,7 +364,7 @@ func loadConfig() (*config, error) {
 	if configFilePath == "" {
 		return &config, nil
 	}
-	log.Printf("[INFO] PACKER_CONFIG env var set; attempting to open config file: %s", configFilePath)
+	log.Printf("[INFO] DUMB_PACKER_CONFIG env var set; attempting to open config file: %s", configFilePath)
 	f, err := os.Open(configFilePath)
 	if err != nil {
 		if !os.IsNotExist(err) {
@@ -376,7 +376,7 @@ func loadConfig() (*config, error) {
 	}
 	defer f.Close()
 
-	// This loads a json config, defined in packer/config.go
+	// This loads a json config, defined in dumb-packer/config.go
 	if err := decodeConfig(f, &config); err != nil {
 		return nil, err
 	}

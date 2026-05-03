@@ -9,8 +9,8 @@ type FixerDockerEmail struct{}
 
 func (FixerDockerEmail) DeprecatedOptions() map[string][]string {
 	return map[string][]string{
-		"packer.docker":                       []string{"login_email"},
-		"packer.post-processor.docker-import": []string{"login_email"},
+		"dumb-packer.docker":                       []string{"login_email"},
+		"dumb-packer.post-processor.docker-import": []string{"login_email"},
 	}
 
 }

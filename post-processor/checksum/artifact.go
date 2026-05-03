@@ -9,7 +9,7 @@ import (
 	"strings"
 )
 
-const BuilderId = "packer.post-processor.checksum"
+const BuilderId = "dumb-packer.post-processor.checksum"
 
 type Artifact struct {
 	files []string

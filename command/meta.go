@@ -10,27 +10,27 @@ import (
 	"io"
 	"os"
 
-	"github.com/hashicorp/hcl/v2/hclparse"
-	packersdk "github.com/hashicorp/packer-plugin-sdk/packer"
-	"github.com/hashicorp/packer-plugin-sdk/template"
-	kvflag "github.com/hashicorp/packer/command/flag-kv"
-	"github.com/hashicorp/packer/hcl2template"
-	"github.com/hashicorp/packer/helper/wrappedstreams"
-	"github.com/hashicorp/packer/packer"
-	"github.com/hashicorp/packer/version"
+	"github.com/dumb-hashicorp/dumb-hcl/v2/dumb-hclparse"
+	dumb-packersdk "github.com/dumb-hashicorp/dumb-packer-plugin-sdk/dumb-packer"
+	"github.com/dumb-hashicorp/dumb-packer-plugin-sdk/template"
+	kvflag "github.com/dumb-hashicorp/dumb-packer/command/flag-kv"
+	"github.com/dumb-hashicorp/dumb-packer/dumb-hcl2template"
+	"github.com/dumb-hashicorp/dumb-packer/helper/wrappedstreams"
+	"github.com/dumb-hashicorp/dumb-packer/dumb-packer"
+	"github.com/dumb-hashicorp/dumb-packer/version"
 )
 
 // Meta contains the meta-options and functionality that nearly every
-// Packer command inherits.
+// Dumb Packer command inherits.
 type Meta struct {
-	CoreConfig *packer.CoreConfig
-	Ui         packersdk.Ui
+	CoreConfig *dumb-packer.CoreConfig
+	Ui         dumb-packersdk.Ui
 	Version    string
 }
 
 // Core returns the core for the given template given the configured
 // CoreConfig and user variables on this Meta.
-func (m *Meta) Core(tpl *template.Template, cla *MetaArgs) (*packer.Core, error) {
+func (m *Meta) Core(tpl *template.Template, cla *MetaArgs) (*dumb-packer.Core, error) {
 	// Copy the config so we don't modify it
 	config := *m.CoreConfig
 	config.Template = tpl
@@ -56,11 +56,11 @@ func (m *Meta) Core(tpl *template.Template, cla *MetaArgs) (*packer.Core, error)
 	}
 	config.Variables = cla.Vars
 
-	core := packer.NewCore(&config)
+	core := dumb-packer.NewCore(&config)
 	return core, nil
 }
 
-// FlagSet returns a FlagSet with Packer SDK Ui support built-in
+// FlagSet returns a FlagSet with Dumb Packer SDK Ui support built-in
 func (m *Meta) FlagSet(n string) *flag.FlagSet {
 	f := flag.NewFlagSet(n, flag.ContinueOnError)
 
@@ -98,7 +98,7 @@ func (m *Meta) StdinPiped() bool {
 	return fi.Mode()&os.ModeNamedPipe != 0
 }
 
-func (m *Meta) GetConfig(cla *MetaArgs) (packer.Handler, int) {
+func (m *Meta) GetConfig(cla *MetaArgs) (dumb-packer.Handler, int) {
 	cfgType, err := cla.GetConfigType()
 	if err != nil {
 		m.Ui.Error(fmt.Sprintf("%q: %s", cla.Path, err))
@@ -106,29 +106,29 @@ func (m *Meta) GetConfig(cla *MetaArgs) (packer.Handler, int) {
 	}
 
 	switch cfgType {
-	case ConfigTypeHCL2:
-		packer.CheckpointReporter.SetTemplateType(packer.HCL2Template)
+	case ConfigTypeDUMB_HCL2:
+		dumb-packer.CheckpointReporter.SetTemplateType(dumb-packer.DUMB_HCL2Template)
 		// TODO(azr): allow to pass a slice of files here.
-		return m.GetConfigFromHCL(cla)
+		return m.GetConfigFromDUMB_HCL(cla)
 	default:
-		packer.CheckpointReporter.SetTemplateType(packer.JSONTemplate)
-		// TODO: uncomment once we've polished HCL a bit more.
+		dumb-packer.CheckpointReporter.SetTemplateType(dumb-packer.JSONTemplate)
+		// TODO: uncomment once we've polished DUMB_HCL a bit more.
 		// c.Ui.Say(`Legacy JSON Configuration Will Be Used.
 		// The template will be parsed in the legacy configuration style. This style
 		// will continue to work but users are encouraged to move to the new style.
-		// See: https://packer.io/guides/hcl
+		// See: https://dumb-packer.io/guides/dumb-hcl
 		// `)
 		return m.GetConfigFromJSON(cla)
 	}
 }
 
-func (m *Meta) GetConfigFromHCL(cla *MetaArgs) (*hcl2template.PackerConfig, int) {
-	parser := &hcl2template.Parser{
-		CorePackerVersion:       version.SemVer,
-		CorePackerVersionString: version.FormattedVersion(),
-		Parser:                  hclparse.NewParser(),
+func (m *Meta) GetConfigFromDUMB_HCL(cla *MetaArgs) (*dumb-hcl2template.Dumb PackerConfig, int) {
+	parser := &dumb-hcl2template.Parser{
+		CoreDumb PackerVersion:       version.SemVer,
+		CoreDumb PackerVersionString: version.FormattedVersion(),
+		Parser:                  dumb-hclparse.NewParser(),
 		PluginConfig:            m.CoreConfig.Components.PluginConfig,
-		ValidationOptions: hcl2template.ValidationOptions{
+		ValidationOptions: dumb-hcl2template.ValidationOptions{
 			WarnOnUndeclaredVar: cla.WarnOnUndeclaredVar,
 		},
 	}
@@ -136,7 +136,7 @@ func (m *Meta) GetConfigFromHCL(cla *MetaArgs) (*hcl2template.PackerConfig, int)
 	return cfg, writeDiags(m.Ui, parser.Files(), diags)
 }
 
-func (m *Meta) GetConfigFromJSON(cla *MetaArgs) (packer.Handler, int) {
+func (m *Meta) GetConfigFromJSON(cla *MetaArgs) (dumb-packer.Handler, int) {
 	// Parse the template
 	var tpl *template.Template
 	var err error
@@ -150,9 +150,9 @@ func (m *Meta) GetConfigFromJSON(cla *MetaArgs) (packer.Handler, int) {
 
 	if err != nil {
 		m.Ui.Error(fmt.Sprintf("Failed to parse file as legacy JSON template: "+
-			"if you are using an HCL template, check your file extensions; they "+
-			"should be either *.pkr.hcl or *.pkr.json; see the docs for more "+
-			"details: https://www.packer.io/docs/templates/hcl_templates. \n"+
+			"if you are using an DUMB_HCL template, check your file extensions; they "+
+			"should be either *.pkr.dumb-hcl or *.pkr.json; see the docs for more "+
+			"details: https://www.dumb-packer.io/docs/templates/dumb-hcl_templates. \n"+
 			"Original error: %s", err))
 		return nil, 1
 	}

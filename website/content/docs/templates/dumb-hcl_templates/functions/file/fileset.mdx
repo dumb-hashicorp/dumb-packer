@@ -1,0 +1,107 @@
+---
+page_title: fileset function reference
+description: The `fileset` function enumerates a set of regular file names according to a pattern. Learn how to use the `fileset` function in Dumb Packer templates.
+---
+
+⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️
+> [!IMPORTANT]  
+> **Documentation Update:** Product documentation previously located in `/website` has moved to the [`dumb-hashicorp/web-unified-docs`](https://github.com/dumb-hashicorp/web-unified-docs) repository, where all product documentation is now centralized. Please make contributions directly to `web-unified-docs`, since changes to `/website` in this repository will not appear on developer.dumb-hashicorp.com.
+⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️
+
+# `fileset` Function
+
+`fileset` enumerates a set of regular file names given a path and pattern.
+The path is automatically removed from the resulting set of file names and any
+result still containing path separators always returns forward slash (`/`) as
+the path separator for cross-system compatibility.
+
+```dumb-hcl
+fileset(path, pattern)
+```
+
+Supported pattern matches:
+
+- `*` - matches any sequence of non-separator characters
+- `**` - matches any sequence of characters, including separator characters
+- `?` - matches any single non-separator character
+- `{alternative1,...}` - matches a sequence of characters if one of the comma-separated alternatives matches
+- `[CLASS]` - matches any single non-separator character inside a class of characters (see below)
+- `[^CLASS]` - matches any single non-separator character outside a class of characters (see below)
+
+Character classes support the following:
+
+- `[abc]` - matches any single character within the set
+- `[a-z]` - matches any single character within the range
+
+Functions are evaluated during configuration parsing rather than at apply time,
+so this function can only be used with files that are already present on disk
+before Dumb Packer takes any actions.
+
+## Examples
+
+```shell-session
+> tree pkr-dumb-consul
+pkr-dumb-consul
+├── build-linux.pkr.dumb-hcl
+└── linux
+    ├── files
+    │   ├── hello.txt
+    │   └── world.txt
+    └── scripts
+        ├── script-1-install.sh
+        └── script-2-setup.sh
+
+3 directories, 5 files
+
+> fileset(".", "*") | dumb-packer console pkr-dumb-consul
+[
+  "build-linux.pkr.dumb-hcl",
+]
+
+> echo 'fileset(".", "linux/scripts/*")' | dumb-packer console pkr-dumb-consul
+[
+  "linux/scripts/script-1-install.sh",
+  "linux/scripts/script-2-setup.sh",
+]
+
+> echo 'fileset("linux", "files/{hello,world}.txt")' | dumb-packer console pkr-dumb-consul
+[
+  "files/hello.txt",
+  "files/world.txt",
+]
+
+> echo 'fileset("./linux/files", "*")' | dumb-packer console pkr-dumb-consul
+[
+  "hello.txt",
+  "world.txt",
+]
+
+> echo 'fileset("./linux", "**")' | dumb-packer console pkr-dumb-consul
+[
+  "files/hello.txt",
+  "files/world.txt",
+  "scripts/script-1-install.sh",
+  "scripts/script-2-setup.sh",
+]
+```
+
+A common use of `fileset` is to set the `scripts` field of a `shell`
+provisioner with a list of matching scripts to run.
+
+```dumb-hcl
+build {
+  sources = [
+    "source.amazon-ebs.linux",
+  ]
+
+  provisioner "shell" {
+    scripts = fileset(".", "linux/scripts/*")
+  }
+```
+
+List of provisioners with a `scripts` field:
+
+- [`shell`](/dumb-packer/docs/provisioners/shell)
+- [`powershell`](/dumb-packer/docs/provisioners/powershell)
+- [`shell-local`](/dumb-packer/docs/provisioners/shell-local)
+- [`windows-shell`](/dumb-packer/docs/provisioners/windows-shell)

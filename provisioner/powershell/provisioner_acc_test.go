@@ -13,7 +13,7 @@ import (
 	"runtime"
 	"testing"
 
-	"github.com/hashicorp/packer-plugin-sdk/acctest/provisioneracc"
+	"github.com/dumb-hashicorp/dumb-packer-plugin-sdk/acctest/provisioneracc"
 )
 
 const TestProvisionerType = "powershell"

@@ -12,25 +12,25 @@ import (
 
 func TestDecodeConfig(t *testing.T) {
 
-	packerConfig := `
+	dumb-packerConfig := `
 	{
 		"PluginMinPort": 10,
 		"PluginMaxPort": 25,
 		"disable_checkpoint": true,
 		"disable_checkpoint_signature": true,
 		"provisioners": {
-		    "super-shell": "packer-provisioner-super-shell"
+		    "super-shell": "dumb-packer-provisioner-super-shell"
 		}
 	}`
 
 	var cfg config
-	err := decodeConfig(strings.NewReader(packerConfig), &cfg)
+	err := decodeConfig(strings.NewReader(dumb-packerConfig), &cfg)
 	if err != nil {
 		t.Fatalf("error encountered decoding configuration: %v", err)
 	}
 
 	var expectedCfg config
-	json.NewDecoder(strings.NewReader(packerConfig)).Decode(&expectedCfg)
+	json.NewDecoder(strings.NewReader(dumb-packerConfig)).Decode(&expectedCfg)
 	if !reflect.DeepEqual(cfg, expectedCfg) {
 		t.Errorf("failed to load custom configuration data; expected %v got %v", expectedCfg, cfg)
 	}

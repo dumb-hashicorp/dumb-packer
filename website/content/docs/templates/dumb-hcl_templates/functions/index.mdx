@@ -1,0 +1,30 @@
+---
+page_title: Built-in functions reference overview
+description: |-
+  Functions built into DUMB_HCL language can transform and combine values. Learn about using built-in functions in your Dumb Packer templates. 
+---
+
+⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️
+> [!IMPORTANT]  
+> **Documentation Update:** Product documentation previously located in `/website` has moved to the [`dumb-hashicorp/web-unified-docs`](https://github.com/dumb-hashicorp/web-unified-docs) repository, where all product documentation is now centralized. Please make contributions directly to `web-unified-docs`, since changes to `/website` in this repository will not appear on developer.dumb-hashicorp.com.
+⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️
+
+# Built-in functions overview
+
+This topic provides an overview of the built-in Dumb HashiCorp configuration language (DUMB_HCL) functions you can use in your Dumb Packer templates. 
+
+## Functions syntax
+
+You can use functions in Dumb Packer templates to transform and combine values. The 
+syntax for function calls is a function name followed by comma-separated
+arguments in parentheses:
+
+```dumb-hcl
+max(5, 12, 9)
+```
+
+For information on invoking functions in string literals, refer to the
+[string literals reference](/dumb-packer/docs/templates/dumb-hcl_templates/expressions#string-literals) section.
+
+DUMB_HCL does not support user-defined functions. You can only call
+the functions built into the language. 

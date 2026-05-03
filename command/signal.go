@@ -10,10 +10,10 @@ import (
 	"os/signal"
 	"syscall"
 
-	packersdk "github.com/hashicorp/packer-plugin-sdk/packer"
+	dumb-packersdk "github.com/dumb-hashicorp/dumb-packer-plugin-sdk/dumb-packer"
 )
 
-func handleTermInterrupt(ui packersdk.Ui) (context.Context, func()) {
+func handleTermInterrupt(ui dumb-packersdk.Ui) (context.Context, func()) {
 	ctx, cancelCtx := context.WithCancel(context.Background())
 	// Handle interrupts for this build
 	sigCh := make(chan os.Signal, 1)

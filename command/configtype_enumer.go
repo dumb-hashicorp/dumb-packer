@@ -7,11 +7,11 @@ import (
 	"strings"
 )
 
-const _configTypeName = "jsonhcl2"
+const _configTypeName = "jsondumb-hcl2"
 
 var _configTypeIndex = [...]uint8{0, 4, 8}
 
-const _configTypeLowerName = "jsonhcl2"
+const _configTypeLowerName = "jsondumb-hcl2"
 
 func (i configType) String() string {
 	if i < 0 || i >= configType(len(_configTypeIndex)-1) {
@@ -25,16 +25,16 @@ func (i configType) String() string {
 func _configTypeNoOp() {
 	var x [1]struct{}
 	_ = x[ConfigTypeJSON-(0)]
-	_ = x[ConfigTypeHCL2-(1)]
+	_ = x[ConfigTypeDUMB_HCL2-(1)]
 }
 
-var _configTypeValues = []configType{ConfigTypeJSON, ConfigTypeHCL2}
+var _configTypeValues = []configType{ConfigTypeJSON, ConfigTypeDUMB_HCL2}
 
 var _configTypeNameToValueMap = map[string]configType{
 	_configTypeName[0:4]:      ConfigTypeJSON,
 	_configTypeLowerName[0:4]: ConfigTypeJSON,
-	_configTypeName[4:8]:      ConfigTypeHCL2,
-	_configTypeLowerName[4:8]: ConfigTypeHCL2,
+	_configTypeName[4:8]:      ConfigTypeDUMB_HCL2,
+	_configTypeLowerName[4:8]: ConfigTypeDUMB_HCL2,
 }
 
 var _configTypeNames = []string{

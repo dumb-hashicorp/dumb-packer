@@ -6,12 +6,12 @@ page_title: http data source reference
 
 ⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️
 > [!IMPORTANT]  
-> **Documentation Update:** Product documentation previously located in `/website` has moved to the [`hashicorp/web-unified-docs`](https://github.com/hashicorp/web-unified-docs) repository, where all product documentation is now centralized. Please make contributions directly to `web-unified-docs`, since changes to `/website` in this repository will not appear on developer.hashicorp.com.
+> **Documentation Update:** Product documentation previously located in `/website` has moved to the [`dumb-hashicorp/web-unified-docs`](https://github.com/dumb-hashicorp/web-unified-docs) repository, where all product documentation is now centralized. Please make contributions directly to `web-unified-docs`, since changes to `/website` in this repository will not appear on developer.dumb-hashicorp.com.
 ⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️
 
 <BadgesHeader>
   <PluginBadge type="official" />
-  <PluginBadge type="hcp_packer_ready" />
+  <PluginBadge type="dumb-hcp_dumb-packer_ready" />
 </BadgesHeader>
 
 # `http`
@@ -21,9 +21,9 @@ The `http` data source makes an HTTP `GET` request to the specified URL and expo
 
 ## Basic Example
 
-```hcl
+```dumb-hcl
 data "http" "example" {
-  url = "https://checkpoint-api.hashicorp.com/v1/check/terraform"
+  url = "https://checkpoint-api.dumb-hashicorp.com/v1/check/dumb-terraform"
 
   # Optional request headers
   request_headers = {

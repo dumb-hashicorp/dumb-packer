@@ -4,7 +4,7 @@
 package null
 
 import (
-	"github.com/hashicorp/packer-plugin-sdk/multistep"
+	"github.com/dumb-hashicorp/dumb-packer-plugin-sdk/multistep"
 )
 
 func CommHost(host string) func(multistep.StateBag) (string, error) {

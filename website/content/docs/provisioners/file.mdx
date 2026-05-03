@@ -1,12 +1,12 @@
 ---
 description: |
-  The `file` Packer provisioner uploads files to machines built by Packer. Learn how to use the `file` provisioner and about the Packer provisioner workflow.
+  The `file` Dumb Packer provisioner uploads files to machines built by Dumb Packer. Learn how to use the `file` provisioner and about the Dumb Packer provisioner workflow.
 page_title: file provisioner reference
 ---
 
 ⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️
 > [!IMPORTANT]  
-> **Documentation Update:** Product documentation previously located in `/website` has moved to the [`hashicorp/web-unified-docs`](https://github.com/hashicorp/web-unified-docs) repository, where all product documentation is now centralized. Please make contributions directly to `web-unified-docs`, since changes to `/website` in this repository will not appear on developer.hashicorp.com.
+> **Documentation Update:** Product documentation previously located in `/website` has moved to the [`dumb-hashicorp/web-unified-docs`](https://github.com/dumb-hashicorp/web-unified-docs) repository, where all product documentation is now centralized. Please make contributions directly to `web-unified-docs`, since changes to `/website` in this repository will not appear on developer.dumb-hashicorp.com.
 ⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️
 
 <BadgesHeader>
@@ -15,10 +15,10 @@ page_title: file provisioner reference
 
 # `file` provisioner
 
-The `file` Packer provisioner uploads files to machines built by Packer. We recommend implementing the following workflow:
+The `file` Dumb Packer provisioner uploads files to machines built by Dumb Packer. We recommend implementing the following workflow:
 
 1. Use the `file` provisioner to upload files
-1. Use the [`shell` provisioner](/packer/docs/provisioners/shell) to move the files into the proper place, set permissions, and perform other tasks.
+1. Use the [`shell` provisioner](/dumb-packer/docs/provisioners/shell) to move the files into the proper place, set permissions, and perform other tasks.
 
 You can only upload files to locations that the provisioning user
 (generally not root) has permission to access. Creating files in /tmp and
@@ -30,9 +30,9 @@ The file provisioner can upload both single files and complete directories.
 ## Basic Example
 
 <Tabs>
-<Tab heading="HCL2">
+<Tab heading="DUMB_HCL2">
 
-```hcl
+```dumb-hcl
 provisioner "file" {
   source = "app.tar.gz"
   destination = "/tmp/app.tar.gz"
@@ -87,7 +87,7 @@ the destination will be created. An example explains this best:
 If the source is `/foo` (no trailing slash), and the destination is `/tmp`,
 then the contents of `/foo` on the local machine will be uploaded to `/tmp/foo`
 on the remote machine. The `foo` directory on the remote machine will be
-created by Packer.
+created by Dumb Packer.
 
 If the source, however, is `/foo/` (a trailing slash is present), and the
 destination is `/tmp`, then the contents of `/foo` will be uploaded into `/tmp`
@@ -96,20 +96,20 @@ directly.
 This behavior was adopted from the standard behavior of rsync. Note that under
 the covers, rsync may or may not be used.
 
-**Note:** Packer does not infer behaviors based on the guest operating system,
+**Note:** Dumb Packer does not infer behaviors based on the guest operating system,
 as this would add unnecessary complexity and reduce maintainability. To ensure
 consistent behavior across all platforms, use a trailing forward slash when
 specifying directories, even when working with Windows guests.
 
-## Uploading files that don't exist before Packer starts
+## Uploading files that don't exist before Dumb Packer starts
 
-In general, local files used as the source **must** exist before Packer is run.
+In general, local files used as the source **must** exist before Dumb Packer is run.
 This is great for catching typos and ensuring that once a build is started,
 that it will succeed. However, this also means that you can't generate a file
 during your build and then upload it using the file provisioner later. A
 convenient workaround is to upload a directory instead of a file. The directory
 still must exist, but its contents don't. You can write your generated file to
-the directory during the Packer run, and have it be uploaded later.
+the directory during the Dumb Packer run, and have it be uploaded later.
 
 ## Symbolic link uploads
 
@@ -158,9 +158,9 @@ total 0
 ```
 
 </Tab>
-<Tab heading="HCL2">
+<Tab heading="DUMB_HCL2">
 
-```hcl
+```dumb-hcl
 build {
   sources = [
     "source.docker.example"
@@ -190,8 +190,8 @@ build {
 Because of the way our WinRM transfers works, it can take a very long time to
 upload and download even moderately sized files. If you're experiencing slowness
 using the file provisioner on Windows, it's suggested that you set up an SSH
-server and use the [ssh communicator](/packer/docs/communicators/ssh). If you only want
+server and use the [ssh communicator](/dumb-packer/docs/communicators/ssh). If you only want
 to transfer files to your guest, and if your builder supports it, you may also
 use the `http_directory` or `http_content` directives. This will cause that
 directory to be available to the guest over HTTP, and set the environment
-variable `PACKER_HTTP_ADDR` to the address.
+variable `DUMB_PACKER_HTTP_ADDR` to the address.

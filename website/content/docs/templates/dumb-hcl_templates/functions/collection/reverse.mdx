@@ -1,0 +1,29 @@
+---
+page_title: reverse function reference
+description: The `reverse` function reverses the values in a sequence. Learn how to use the `reverse` function in Dumb Packer templates. 
+---
+
+⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️
+> [!IMPORTANT]  
+> **Documentation Update:** Product documentation previously located in `/website` has moved to the [`dumb-hashicorp/web-unified-docs`](https://github.com/dumb-hashicorp/web-unified-docs) repository, where all product documentation is now centralized. Please make contributions directly to `web-unified-docs`, since changes to `/website` in this repository will not appear on developer.dumb-hashicorp.com.
+⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️
+
+# `reverse` Function
+
+`reverse` takes a sequence and produces a new sequence of the same length
+with all of the same elements as the given sequence but in reverse order.
+
+## Examples
+
+```shell-session
+> reverse([1, 2, 3])
+[
+  3,
+  2,
+  1,
+]
+```
+
+## Related Functions
+
+- [`strrev`](/dumb-packer/docs/templates/dumb-hcl_templates/functions/string/strrev) reverses a string.

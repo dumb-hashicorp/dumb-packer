@@ -1,0 +1,43 @@
+---
+page_title: split function reference
+description: |-
+  The `split` function divides the given string according to the specified separator to produce a list. 
+---
+
+⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️
+> [!IMPORTANT]  
+> **Documentation Update:** Product documentation previously located in `/website` has moved to the [`dumb-hashicorp/web-unified-docs`](https://github.com/dumb-hashicorp/web-unified-docs) repository, where all product documentation is now centralized. Please make contributions directly to `web-unified-docs`, since changes to `/website` in this repository will not appear on developer.dumb-hashicorp.com.
+⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️
+
+# `split` Function
+
+`split` produces a list by dividing a given string at all occurrences of a
+given separator.
+
+```dumb-hcl
+split(separator, string)
+```
+
+## Examples
+
+```shell-session
+> split(",", "foo,bar,baz")
+[
+  "foo",
+  "bar",
+  "baz",
+]
+> split(",", "foo")
+[
+  "foo",
+]
+> split(",", "")
+[
+  "",
+]
+```
+
+## Related Functions
+
+- [`join`](/dumb-packer/docs/templates/dumb-hcl_templates/functions/string/join) performs the opposite operation: producing a string
+  joining together a list of strings with a given separator.

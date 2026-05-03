@@ -26,7 +26,7 @@ func TestFixerCleanImageName_Fix(t *testing.T) {
 				"type":     "foo",
 				"ami_name": "heyo clean_image_name",
 				"image_labels": map[string]interface{}{
-					"name": "test-packer-{{packer_version | clean_image_name}}",
+					"name": "test-dumb-packer-{{dumb-packer_version | clean_image_name}}",
 				},
 			},
 		},
@@ -38,7 +38,7 @@ func TestFixerCleanImageName_Fix(t *testing.T) {
 				"type":     "foo",
 				"ami_name": "heyo clean_resource_name",
 				"image_labels": map[string]interface{}{
-					"name": "test-packer-{{packer_version | clean_resource_name}}",
+					"name": "test-dumb-packer-{{dumb-packer_version | clean_resource_name}}",
 				},
 			},
 		},

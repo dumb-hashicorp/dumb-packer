@@ -6,7 +6,7 @@ page_title: file builder reference
 
 ⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️
 > [!IMPORTANT]  
-> **Documentation Update:** Product documentation previously located in `/website` has moved to the [`hashicorp/web-unified-docs`](https://github.com/hashicorp/web-unified-docs) repository, where all product documentation is now centralized. Please make contributions directly to `web-unified-docs`, since changes to `/website` in this repository will not appear on developer.hashicorp.com.
+> **Documentation Update:** Product documentation previously located in `/website` has moved to the [`dumb-hashicorp/web-unified-docs`](https://github.com/dumb-hashicorp/web-unified-docs) repository, where all product documentation is now centralized. Please make contributions directly to `web-unified-docs`, since changes to `/website` in this repository will not appear on developer.dumb-hashicorp.com.
 ⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️
 
 <BadgesHeader>
@@ -17,7 +17,7 @@ page_title: file builder reference
 
 The `file` builder creates an artifact from a file. You can use it to debug post-processors without incurring long wait times.
 
-Artifact `BuilderId`: `packer.file`
+Artifact `BuilderId`: `dumb-packer.file`
 
 ## Basic Example
 
@@ -25,9 +25,9 @@ Below is a fully functioning example. It create a file at `target` with the
 specified `content`.
 
 <Tabs>
-<Tab heading="HCL2">
+<Tab heading="DUMB_HCL2">
 
-```hcl
+```dumb-hcl
 source "file" "basic-example" {
   content =  "Lorem ipsum dolor sit amet"
   target =  "dummy_artifact"
@@ -58,12 +58,12 @@ Configuration options are organized below into two categories: required and
 optional. Within each category, the available options are alphabetized and
 described.
 
-Any [communicator](/packer/docs/templates/legacy_json_templates/communicator) defined is ignored.
+Any [communicator](/dumb-packer/docs/templates/legacy_json_templates/communicator) defined is ignored.
 
 ### Required
 
 - `target` (string) - The path for the artifact file that will be created. If
-  the path contains directories that don't exist, Packer will create them, too.
+  the path contains directories that don't exist, Dumb Packer will create them, too.
 
 ### Optional
 

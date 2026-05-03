@@ -6,7 +6,7 @@ In addition to Type Constraints, you can specify arbitrary custom validation
 rules for a particular variable using one or more `validation` block nested
 within the corresponding `variable` block:
 
-```hcl
+```dumb-hcl
 variable "image_id" {
   type        = string
   description = "The ID of the machine image (AMI) to use for the server."
@@ -24,9 +24,9 @@ The expression can refer only to the variable that the condition applies to,
 and _must not_ produce errors.
 
 If the failure of an expression is the basis of the validation decision, use
-[the `can` function](/packer/docs/templates/hcl_templates/functions/conversion/can) to detect such errors. For example:
+[the `can` function](/dumb-packer/docs/templates/dumb-hcl_templates/functions/conversion/can) to detect such errors. For example:
 
-```hcl
+```dumb-hcl
 variable "image_id" {
   type        = string
   description = "The ID of the machine image (AMI) to use for the server."
@@ -46,7 +46,7 @@ sentence structure similar to the above examples.
 
 Validation also works with more complex cases:
 
-```hcl
+```dumb-hcl
 variable "image_metadata" {
 
   default = {

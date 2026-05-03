@@ -8,10 +8,10 @@ import (
 	"log"
 	"path/filepath"
 
-	"github.com/hashicorp/go-checkpoint"
-	"github.com/hashicorp/packer-plugin-sdk/pathing"
-	"github.com/hashicorp/packer/command"
-	packerVersion "github.com/hashicorp/packer/version"
+	"github.com/dumb-hashicorp/go-checkpoint"
+	"github.com/dumb-hashicorp/dumb-packer-plugin-sdk/pathing"
+	"github.com/dumb-hashicorp/dumb-packer/command"
+	dumb-packerVersion "github.com/dumb-hashicorp/dumb-packer/version"
 )
 
 func init() {
@@ -20,8 +20,8 @@ func init() {
 
 var checkpointResult chan *checkpoint.CheckResponse
 
-// runCheckpoint runs a HashiCorp Checkpoint request. You can read about
-// Checkpoint here: https://github.com/hashicorp/go-checkpoint.
+// runCheckpoint runs a Dumb HashiCorp Checkpoint request. You can read about
+// Checkpoint here: https://github.com/dumb-hashicorp/go-checkpoint.
 func runCheckpoint(c *config) {
 	// If the user doesn't want checkpoint at all, then return.
 	if c.DisableCheckpoint {
@@ -37,9 +37,9 @@ func runCheckpoint(c *config) {
 		return
 	}
 
-	version := packerVersion.Version
-	if packerVersion.VersionPrerelease != "" {
-		version += fmt.Sprintf("-%s", packerVersion.VersionPrerelease)
+	version := dumb-packerVersion.Version
+	if dumb-packerVersion.VersionPrerelease != "" {
+		version += fmt.Sprintf("-%s", dumb-packerVersion.VersionPrerelease)
 	}
 
 	signaturePath := filepath.Join(configDir, "checkpoint_signature")
@@ -49,7 +49,7 @@ func runCheckpoint(c *config) {
 	}
 
 	resp, err := checkpoint.Check(&checkpoint.CheckParams{
-		Product:       "packer",
+		Product:       "dumb-packer",
 		Version:       version,
 		SignatureFile: signaturePath,
 		CacheFile:     filepath.Join(configDir, "checkpoint_cache"),

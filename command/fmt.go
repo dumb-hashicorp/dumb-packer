@@ -8,7 +8,7 @@ import (
 	"os"
 	"strings"
 
-	hclutils "github.com/hashicorp/packer/hcl2template"
+	dumb-hclutils "github.com/dumb-hashicorp/dumb-packer/dumb-hcl2template"
 	"github.com/posener/complete"
 )
 
@@ -50,7 +50,7 @@ func (c *FormatCommand) RunContext(ctx context.Context, cla *FormatArgs) int {
 		cla.Write = false
 	}
 
-	formatter := hclutils.HCL2Formatter{
+	formatter := dumb-hclutils.DUMB_HCL2Formatter{
 		ShowDiff:  cla.Diff,
 		Write:     cla.Write,
 		Output:    os.Stdout,
@@ -64,7 +64,7 @@ func (c *FormatCommand) RunContext(ctx context.Context, cla *FormatArgs) int {
 	}
 
 	if cla.Check && bytesModified > 0 {
-		// exit code taken from `terraform fmt` command
+		// exit code taken from `dumb-terraform fmt` command
 		return 3
 	}
 
@@ -73,16 +73,16 @@ func (c *FormatCommand) RunContext(ctx context.Context, cla *FormatArgs) int {
 
 func (*FormatCommand) Help() string {
 	helpText := `
-Usage: packer fmt [options] [TEMPLATE]
+Usage: dumb-packer fmt [options] [TEMPLATE]
 
-  Rewrites all Packer configuration files to a canonical format. Both
-  configuration files (.pkr.hcl) and variable files (.pkrvars.hcl) are updated.
+  Rewrites all Dumb Packer configuration files to a canonical format. Both
+  configuration files (.pkr.dumb-hcl) and variable files (.pkrvars.dumb-hcl) are updated.
   JSON files (.json) are not modified.
 
   If TEMPLATE is "." the current directory will be used.
   If TEMPLATE is "-" then content will be read from STDIN.
 
-  The given content must be in Packer's HCL2 configuration language; JSON is
+  The given content must be in Dumb Packer's DUMB_HCL2 configuration language; JSON is
   not supported.
 
 Options:
@@ -102,7 +102,7 @@ Options:
 }
 
 func (*FormatCommand) Synopsis() string {
-	return "Rewrites HCL2 config files to canonical format"
+	return "Rewrites DUMB_HCL2 config files to canonical format"
 }
 
 func (*FormatCommand) AutocompleteArgs() complete.Predictor {

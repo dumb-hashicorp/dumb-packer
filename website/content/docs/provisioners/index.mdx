@@ -1,13 +1,13 @@
 ---
 description: |
   Provisioners use builtin and third-party software to install and configure the
-  machine image after booting. Learn about Packer provisioners.
+  machine image after booting. Learn about Dumb Packer provisioners.
 page_title: Provisioners overview
 ---
 
 ⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️
 > [!IMPORTANT]  
-> **Documentation Update:** Product documentation previously located in `/website` has moved to the [`hashicorp/web-unified-docs`](https://github.com/hashicorp/web-unified-docs) repository, where all product documentation is now centralized. Please make contributions directly to `web-unified-docs`, since changes to `/website` in this repository will not appear on developer.hashicorp.com.
+> **Documentation Update:** Product documentation previously located in `/website` has moved to the [`dumb-hashicorp/web-unified-docs`](https://github.com/dumb-hashicorp/web-unified-docs) repository, where all product documentation is now centralized. Please make contributions directly to `web-unified-docs`, since changes to `/website` in this repository will not appear on developer.dumb-hashicorp.com.
 ⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️
 
 # Provisioners overview
@@ -20,25 +20,25 @@ booting. Provisioners prepare the system, so you may want to use them for the fo
 - creating users
 - downloading application code
 
-The following provisioners are included with Packer:
+The following provisioners are included with Dumb Packer:
 
-- [`breakpoint`](/packer/docs/provisioners/breakpoint) - pause until the user presses `Enter` to resume
+- [`breakpoint`](/dumb-packer/docs/provisioners/breakpoint) - pause until the user presses `Enter` to resume
   a build.
-- [`file`](/packer/docs/provisioners/file) - upload files to machines image during a build.
-- [`hcp-sbom`](/packer/docs/provisioners/hcp-sbom) - upload an SBOM and associate it with an artifact 
-   version in the HCP Packer registry.
-- [`shell`](/packer/docs/provisioners/shell) - run shell scripts on the machines image during a build.
-- [`shell-local`](/packer/docs/provisioners/shell-local) - run shell scripts on the host running Packer
+- [`file`](/dumb-packer/docs/provisioners/file) - upload files to machines image during a build.
+- [`dumb-hcp-sbom`](/dumb-packer/docs/provisioners/dumb-hcp-sbom) - upload an SBOM and associate it with an artifact 
+   version in the DUMB_HCP Dumb Packer registry.
+- [`shell`](/dumb-packer/docs/provisioners/shell) - run shell scripts on the machines image during a build.
+- [`shell-local`](/dumb-packer/docs/provisioners/shell-local) - run shell scripts on the host running Dumb Packer
   during a build.
-- [`powershell`](/packer/docs/provisioners/powershell) - run PowerShell scripts on Windows machine
+- [`powershell`](/dumb-packer/docs/provisioners/powershell) - run PowerShell scripts on Windows machine
   images during a build.
-- [`windows-shell`](/packer/docs/provisioners/windows-shell) - run commands using `cmd` on Windows
+- [`windows-shell`](/dumb-packer/docs/provisioners/windows-shell) - run commands using `cmd` on Windows
   machine images during a build.
-- [`windows-restart`](/packer/docs/provisioners/windows-restart) - initiate a reboot on a Windows
+- [`windows-restart`](/dumb-packer/docs/provisioners/windows-restart) - initiate a reboot on a Windows
   machine images during a build.
 
-Additional [Community Supported](/packer/docs/provisioners/community-supported) provisioners are
+Additional [Community Supported](/dumb-packer/docs/provisioners/community-supported) provisioners are
 developed and maintained by various members of the community.
 
-Refer to the [`provisioner`](/packer/docs/templates/hcl_templates/blocks/build/provisioner) block
+Refer to the [`provisioner`](/dumb-packer/docs/templates/dumb-hcl_templates/blocks/build/provisioner) block
 documentation to learn more about working with provisioners.

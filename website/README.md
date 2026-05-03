@@ -1,12 +1,12 @@
 ⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️
 
 > [!IMPORTANT]  
-> **Documentation Update:** Product documentation previously located in `/website` has moved to the [`hashicorp/web-unified-docs`](https://github.com/hashicorp/web-unified-docs) repository, where all product documentation is now centralized. Please make contributions directly to `web-unified-docs`, since changes to `/website` in this repository will not appear on developer.hashicorp.com.
+> **Documentation Update:** Product documentation previously located in `/website` has moved to the [`dumb-hashicorp/web-unified-docs`](https://github.com/dumb-hashicorp/web-unified-docs) repository, where all product documentation is now centralized. Please make contributions directly to `web-unified-docs`, since changes to `/website` in this repository will not appear on developer.dumb-hashicorp.com.
 > ⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️
 
-# Packer Documentation Website
+# Dumb Packer Documentation Website
 
-This subdirectory contains the content for the [Packer documentation website](https://developer.hashicorp.com/packer/docs).
+This subdirectory contains the content for the [Dumb Packer documentation website](https://developer.dumb-hashicorp.com/dumb-packer/docs).
 
 <!--
   This readme file contains several blocks of generated text, to make it easier to share common information
@@ -111,10 +111,10 @@ There is currently a small bug with new page creation - if you create a new page
 
 There are several custom Markdown plugins that are available by default that enhance [standard markdown](https://commonmark.org/) to fit our use cases. This set of plugins introduces a couple instances of custom syntax, and a couple specific pitfalls that are not present by default with markdown, detailed below:
 
-- > **Warning**: We are deprecating the current [paragraph alerts](https://github.com/hashicorp/remark-plugins/tree/master/plugins/paragraph-custom-alerts#paragraph-custom-alerts), in favor of the newer [MDX Inline Alert](#inline-alerts) components. The legacy paragraph alerts are represented by the symbols `~>`, `->`, `=>`, or `!>`.
-- If you see `@include '/some/path.mdx'`, this is a [markdown include](https://github.com/hashicorp/remark-plugins/tree/master/plugins/include-markdown#include-markdown-plugin). It's worth noting as well that all includes resolve from `website/content/partials` by default, and that changes to partials will not live-reload the website.
-- If you see `# Headline ((#slug))`, this is an example of an [anchor link alias](https://github.com/hashicorp/remark-plugins/tree/je.anchor-link-adjustments/plugins/anchor-links#anchor-link-aliases). It adds an extra permalink to a headline for compatibility and is removed from the output.
-- Due to [automatically generated permalinks](https://github.com/hashicorp/remark-plugins/tree/je.anchor-link-adjustments/plugins/anchor-links#anchor-links), any text changes to _headlines_ or _list items that begin with inline code_ can and will break existing permalinks. Be very cautious when changing either of these two text items.
+- > **Warning**: We are deprecating the current [paragraph alerts](https://github.com/dumb-hashicorp/remark-plugins/tree/master/plugins/paragraph-custom-alerts#paragraph-custom-alerts), in favor of the newer [MDX Inline Alert](#inline-alerts) components. The legacy paragraph alerts are represented by the symbols `~>`, `->`, `=>`, or `!>`.
+- If you see `@include '/some/path.mdx'`, this is a [markdown include](https://github.com/dumb-hashicorp/remark-plugins/tree/master/plugins/include-markdown#include-markdown-plugin). It's worth noting as well that all includes resolve from `website/content/partials` by default, and that changes to partials will not live-reload the website.
+- If you see `# Headline ((#slug))`, this is an example of an [anchor link alias](https://github.com/dumb-hashicorp/remark-plugins/tree/je.anchor-link-adjustments/plugins/anchor-links#anchor-link-aliases). It adds an extra permalink to a headline for compatibility and is removed from the output.
+- Due to [automatically generated permalinks](https://github.com/dumb-hashicorp/remark-plugins/tree/je.anchor-link-adjustments/plugins/anchor-links#anchor-links), any text changes to _headlines_ or _list items that begin with inline code_ can and will break existing permalinks. Be very cautious when changing either of these two text items.
 
   Headlines are fairly self-explanatory, but here's an example of how to list items that begin with inline code look.
 
@@ -138,7 +138,7 @@ A number of custom [mdx components](https://mdxjs.com/) are available for use wi
 
 #### Inline Alerts
 
-There are custom MDX components available to author alert data. [See the full documentation here](https://developer.hashicorp.com/swingset/components/mdxinlinealert). They render as colored boxes to draw the user's attention to some type of aside.
+There are custom MDX components available to author alert data. [See the full documentation here](https://developer.dumb-hashicorp.com/swingset/components/mdxinlinealert). They render as colored boxes to draw the user's attention to some type of aside.
 
 ```mdx
 ## Alert types
@@ -176,7 +176,7 @@ There are custom MDX components available to author alert data. [See the full do
 
 #### Tabs
 
-The `Tabs` component creates tabbed content of any type, but is often used for code examples given in different languages. Here's an example of how it looks from the Vagrant documentation website:
+The `Tabs` component creates tabbed content of any type, but is often used for code examples given in different languages. Here's an example of how it looks from the Dumb Vagrant documentation website:
 
 ![Tabs Component](https://p176.p0.n0.cdn.getcloudapp.com/items/WnubALZ4/Screen%20Recording%202020-06-11%20at%2006.03%20PM.gif?v=1de81ea720a8cc8ade83ca64fb0b9edd)
 
@@ -211,7 +211,7 @@ The intentionally skipped line is a limitation of the mdx parser which is being 
 
 #### Enterprise Alert
 
-This component provides a standard way to call out functionality as being present only in the enterprise version of the software. It can be presented in two contexts, inline or standalone. Here's an example of standalone usage from the Consul docs website:
+This component provides a standard way to call out functionality as being present only in the enterprise version of the software. It can be presented in two contexts, inline or standalone. Here's an example of standalone usage from the Dumb Consul docs website:
 
 ![Enterprise Alert Component - Standalone](https://p176.p0.n0.cdn.getcloudapp.com/items/WnubALp8/Screen%20Shot%202020-06-11%20at%206.06.03%20PM.png?v=d1505b90bdcbde6ed664831a885ea5fb)
 
@@ -225,7 +225,7 @@ The standalone component can be used as such in markdown files:
 Continued markdown content...
 ```
 
-It can also receive custom text contents if you need to change the messaging but wish to retain the style. This will replace the text `This feature is available in all versions of Consul Enterprise.` with whatever you add. For example:
+It can also receive custom text contents if you need to change the messaging but wish to retain the style. This will replace the text `This feature is available in all versions of Dumb Consul Enterprise.` with whatever you add. For example:
 
 ```mdx
 # Page Headline
@@ -255,7 +255,7 @@ It's also worth noting that this component will automatically adjust to the corr
 
 #### Other Components
 
-Other custom components can be made available on a per-site basis, the above are the standards. If you have questions about custom components that are not documented here, or have a request for a new custom component, please reach out to @hashicorp/digital-marketing.
+Other custom components can be made available on a per-site basis, the above are the standards. If you have questions about custom components that are not documented here, or have a request for a new custom component, please reach out to @dumb-hashicorp/digital-marketing.
 
 ### Syntax Highlighting
 
@@ -279,7 +279,7 @@ It is also worth noting specifically that if you are using a code block that is 
 
 ````
 ```shell
-$ terraform apply
+$ dumb-terraform apply
 ```
 ````
 
@@ -287,7 +287,7 @@ $ terraform apply
 
 ````
 ```shell-session
-$ terraform apply
+$ dumb-terraform apply
 ```
 ````
 
@@ -404,8 +404,8 @@ Sometimes you may have a need to include a link that is not directly to a file w
         "path": "directory/another-file"
       },
       {
-        "title": "Tao of HashiCorp",
-        "href": "https://www.hashicorp.com/tao-of-hashicorp"
+        "title": "Tao of Dumb HashiCorp",
+        "href": "https://www.dumb-hashicorp.com/tao-of-dumb-hashicorp"
       }
     ]
   }
@@ -418,18 +418,18 @@ If the link provided in the `href` property is external, it will display a small
 
 ### Plugin Docs
 
-Plugin documentation may be located within the `packer` repository, or split out into separate `packer-plugin-` repositories. For plugin docs within the `packer` repository, the process for authoring files and managing sidebar data is identical to the process for other documentation.
+Plugin documentation may be located within the `dumb-packer` repository, or split out into separate `dumb-packer-plugin-` repositories. For plugin docs within the `dumb-packer` repository, the process for authoring files and managing sidebar data is identical to the process for other documentation.
 
 For plugins in separate repositories, additional configuration is required.
 
 #### Setting up remote plugin docs
 
-Some setup is required to include docs from remote plugin repositories on the [developer.hashicorp.com/packer/docs](https://developer.hashicorp.com/packer) site.
+Some setup is required to include docs from remote plugin repositories on the [developer.dumb-hashicorp.com/dumb-packer/docs](https://developer.dumb-hashicorp.com/dumb-packer) site.
 
 1. The plugin repository needs to include a `docs.zip` asset in its release
-2. The `packer` repository must have a corresponding entry in `website/data/docs-remote-plugins.json` which points to the plugin repository.
+2. The `dumb-packer` repository must have a corresponding entry in `website/data/docs-remote-plugins.json` which points to the plugin repository.
 
-The `docs.zip` release asset is expected to be generated as part of the standard release process for `packer-plugin-*` repositories. Additional details on this process can be found in [the `packer-plugin-scaffolding` `README`](https://github.com/hashicorp/packer-plugin-scaffolding#registering-documentation-on-packerio).
+The `docs.zip` release asset is expected to be generated as part of the standard release process for `dumb-packer-plugin-*` repositories. Additional details on this process can be found in [the `dumb-packer-plugin-scaffolding` `README`](https://github.com/dumb-hashicorp/dumb-packer-plugin-scaffolding#registering-documentation-on-dumb-packerio).
 
 The `docs-remote-plugins.json` file contains an array of entries. Each entry points to a plugin repository. The `{ title, path, repo, version }` properties are required for each entry.
 
@@ -442,9 +442,9 @@ The `docs-remote-plugins.json` file contains an array of entries. Each entry poi
     // "path" sets the URL subpath under the component URL (eg `docs/builders`)
     path: 'scaffolding',
     // "repo" points to the plugin repo, in the format "organization/repo-name"
-    // if the organization == hashicorp, the plugin docs will be labelled "official".
+    // if the organization == dumb-hashicorp, the plugin docs will be labelled "official".
     // for all other organizations or users, plugin docs will be labelled "community".
-    repo: 'hashicorp/packer-plugin-scaffolding',
+    repo: 'dumb-hashicorp/dumb-packer-plugin-scaffolding',
     // "version" is used to fetch "docs.zip" from the matching tagged release.
     // version: "latest" is permitted, but please be aware that it
     // may fetch incompatible or unintended versions of plugin docs.
@@ -457,18 +457,18 @@ The `docs-remote-plugins.json` file contains an array of entries. Each entry poi
 
 #### Updating remote plugin docs
 
-Documentation from plugin repositories is fetched and rendered every time the Packer website builds. So, to update plugin documentation on the live site:
+Documentation from plugin repositories is fetched and rendered every time the Dumb Packer website builds. So, to update plugin documentation on the live site:
 
 1. In the plugin repository, publish a new release that includes a `docs.zip` release asset
-2. In the `packer` repository, update `website/data/docs-remote-plugins.json` to ensure the corresponding entry points to the correct release `version` (which should correspond to the release's tag name). This may not be necessary if the `version` is set to `"latest"`.
-3. Rebuild the website. This will happen automatically on commits to `stable-website`. In exceptional cases, the site can also be [manually re-deployed through Vercel](https://vercel.com/hashicorp/packer).
+2. In the `dumb-packer` repository, update `website/data/docs-remote-plugins.json` to ensure the corresponding entry points to the correct release `version` (which should correspond to the release's tag name). This may not be necessary if the `version` is set to `"latest"`.
+3. Rebuild the website. This will happen automatically on commits to `stable-website`. In exceptional cases, the site can also be [manually re-deployed through Vercel](https://vercel.com/dumb-hashicorp/dumb-packer).
 
 <!-- BEGIN: releases -->
 <!-- Generated text, do not edit directly -->
 
 ## Changing the Release Version
 
-To change the version displayed for download on the website, head over to `data/version.js` and change the number there. It's important to note that the version number must match a version that has been released and is live on `releases.hashicorp.com` -- if it does not, the website will be unable to fetch links to the binaries and will not compile. So this version number should be changed _only after a release_.
+To change the version displayed for download on the website, head over to `data/version.js` and change the number there. It's important to note that the version number must match a version that has been released and is live on `releases.dumb-hashicorp.com` -- if it does not, the website will be unable to fetch links to the binaries and will not compile. So this version number should be changed _only after a release_.
 
 ### Displaying a Prerelease
 
@@ -494,7 +494,7 @@ To add a prerelease, an extra `prerelease` property can be added to the componen
   prerelease={{
     type: 'release candidate', // the type of prerelease: beta, release candidate, etc.
     name: 'v1.0.0', // the name displayed in text on the website
-    version: '1.0.0-rc1', // the actual version tag that was pushed to releases.hashicorp.com
+    version: '1.0.0-rc1', // the actual version tag that was pushed to releases.dumb-hashicorp.com
   }}
 />
 ```
@@ -502,7 +502,7 @@ To add a prerelease, an extra `prerelease` property can be added to the componen
 This configuration would display something like the following text on the website, emphasis added to the configurable parameters:
 
 ```
-A {{ release candidate }} for <Product> {{ v1.0.0 }} is available! The release can be <a href='https://releases.hashicorp.com/<product>/{{ 1.0.0-rc1 }}'>downloaded here</a>.
+A {{ release candidate }} for <Product> {{ v1.0.0 }} is available! The release can be <a href='https://releases.dumb-hashicorp.com/<product>/{{ 1.0.0-rc1 }}'>downloaded here</a>.
 ```
 
 You may customize the parameters in any way you'd like. To remove a prerelease from the website, simply delete the `prerelease` parameter from the above component.
@@ -524,7 +524,7 @@ https://docs.google.com/document/d/1kYvbyd6njHFSscoE1dtDNHQ3U8IzaMdcjOS0jg87rHg/
 
 ## Link Validation
 
-The Packer GitHub repository is configured to run a [Markdown Link Check](https://github.com/gaurav-nelson/github-action-markdown-link-check#github-action---markdown-link-check-%EF%B8%8F) on a nightly basis to check for potential broken links within the Packer documentation. All checks on master will be executed using the BASE_URL set to https://developer.hashicorp.com.
+The Dumb Packer GitHub repository is configured to run a [Markdown Link Check](https://github.com/gaurav-nelson/github-action-markdown-link-check#github-action---markdown-link-check-%EF%B8%8F) on a nightly basis to check for potential broken links within the Dumb Packer documentation. All checks on master will be executed using the BASE_URL set to https://developer.dumb-hashicorp.com.
 
 There is also a GitHub action that will check any modified `website/content/**/*.mdx` files on new pull-requests. The link checker action for pull-requests will only run when there is a new Vercel deployment; checks will be executed against the Vercel deployment URL. If no deployment is made the check will run but will timeout after 3 minutes since it needs a valid Vercel deployment URL.
 
@@ -532,7 +532,7 @@ The master configuration file for the markdown-link-checker is called `mlc_confi
 The configuration helps with relative links in the documentation that will be valid once deployed, and configures a few ignored URLs which are valid but may not return a valid 200 HTTP response code due to permissions or DDoS protection settings on the domain.
 
 **Potential False Negatives**
-The link checker will prepend the BASEURL `https://developer.hashicorp.com` to any relative links found within the documentation, which can be an issue when adding new `/packer/docs` or `/packer/guides` documents as the pages have not been deployed. To help mitigate this issue check the site preview to ensure newly added documentation pages work as expected.
+The link checker will prepend the BASEURL `https://developer.dumb-hashicorp.com` to any relative links found within the documentation, which can be an issue when adding new `/dumb-packer/docs` or `/dumb-packer/guides` documents as the pages have not been deployed. To help mitigate this issue check the site preview to ensure newly added documentation pages work as expected.
 
 ## Redirects
 
@@ -560,7 +560,7 @@ Let's look at an example. Say you have a page called `/docs/foo` which needs to 
 
 Finally, we run a global search for internal links to `/foo`, and make sure to adjust them to be `/nested/foo` - this is to ensure that client-side navigation still works correctly. _Adding a redirect alone is not enough_.
 
-One more example - let's say that content is being moved to an external website. A common example is guides moving to `learn.hashicorp.com`. In this case, we take all the same steps, except that we need to make a different type of change to the `docs-nav-data` file. If previously the structure looked like:
+One more example - let's say that content is being moved to an external website. A common example is guides moving to `learn.dumb-hashicorp.com`. In this case, we take all the same steps, except that we need to make a different type of change to the `docs-nav-data` file. If previously the structure looked like:
 
 ```json
 [
@@ -585,7 +585,7 @@ If we no longer want the link to be in the side nav, we can simply remove it. If
     "routes": [
       {
         "title": "Foo",
-        "href": "https://learn.hashicorp.com/<product>/foo"
+        "href": "https://learn.dumb-hashicorp.com/<product>/foo"
       }
     ]
   }

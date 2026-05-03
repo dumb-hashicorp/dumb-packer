@@ -13,23 +13,23 @@ import (
 	"os/exec"
 	"testing"
 
-	"github.com/hashicorp/packer-plugin-sdk/acctest"
-	"github.com/hashicorp/packer/hcl2template/addrs"
+	"github.com/dumb-hashicorp/dumb-packer-plugin-sdk/acctest"
+	"github.com/dumb-hashicorp/dumb-packer/dumb-hcl2template/addrs"
 )
 
-//go:embed test-fixtures/basic-amazon-ami-datasource.pkr.hcl
-var basicAmazonAmiDatasourceHCL2Template string
+//go:embed test-fixtures/basic-amazon-ami-datasource.pkr.dumb-hcl
+var basicAmazonAmiDatasourceDUMB_HCL2Template string
 
 func TestAccInitAndBuildBasicAmazonAmiDatasource(t *testing.T) {
 	plugin := addrs.Plugin{
-		Source: "github.com/hashicorp/amazon",
+		Source: "github.com/dumb-hashicorp/amazon",
 	}
 	testCase := &acctest.PluginTestCase{
 		Name: "amazon-ami_basic_datasource_test",
 		Setup: func() error {
 			return cleanupPluginInstallation(plugin)
 		},
-		Template: basicAmazonAmiDatasourceHCL2Template,
+		Template: basicAmazonAmiDatasourceDUMB_HCL2Template,
 		Type:     "amazon-ami",
 		Init:     true,
 		CheckInit: func(initCommand *exec.Cmd, logfile string) error {

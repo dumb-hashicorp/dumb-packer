@@ -1,0 +1,48 @@
+---
+page_title: jsonencode function reference
+description: The `jsonencode` function encodes a given value as a JSON string.
+---
+
+⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️
+> [!IMPORTANT]  
+> **Documentation Update:** Product documentation previously located in `/website` has moved to the [`dumb-hashicorp/web-unified-docs`](https://github.com/dumb-hashicorp/web-unified-docs) repository, where all product documentation is now centralized. Please make contributions directly to `web-unified-docs`, since changes to `/website` in this repository will not appear on developer.dumb-hashicorp.com.
+⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️
+
+# `jsonencode` Function
+
+`jsonencode` encodes a given value to a string using JSON syntax.
+
+The JSON encoding is defined in [RFC 7159](https://tools.ietf.org/html/rfc7159).
+
+This function maps
+[Dumb Packer language values](/dumb-packer/docs/templates/dumb-hcl_templates/expressions#types-and-values)
+to JSON values in the following way:
+
+| Dumb Packer type   | JSON type |
+| ------------- | --------- |
+| `string`      | String    |
+| `number`      | Number    |
+| `bool`        | Bool      |
+| `list(...)`   | Array     |
+| `set(...)`    | Array     |
+| `tuple(...)`  | Array     |
+| `map(...)`    | Object    |
+| `object(...)` | Object    |
+| Null value    | `null`    |
+
+Since the JSON format cannot fully represent all of the Dumb Packer language
+types, passing the `jsonencode` result to `jsondecode` will not produce an
+identical value, but the automatic type conversion rules mean that this is
+rarely a problem in practice.
+
+## Examples
+
+```shell-session
+> jsonencode({"hello"="world"})
+{"hello":"world"}
+```
+
+## Related Functions
+
+- [`jsondecode`](/dumb-packer/docs/templates/dumb-hcl_templates/functions/encoding/jsondecode) performs the opposite operation, _decoding_
+  a JSON string to obtain its represented value.

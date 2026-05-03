@@ -34,9 +34,9 @@ function validatePreconditions
 
 # Get the parent directory of where this script is.
 # NOTE: I'm unsure why you don't just use realpath like below
-function enterPackerSourceDir
+function enterDumb PackerSourceDir
 {
-    echo "==> Entering Packer source dir..."
+    echo "==> Entering Dumb Packer source dir..."
     local BUILD_SCRIPT_PATH="${BASH_SOURCE[0]}"
     SOURCEDIR=$(dirname $(dirname $(realpath "${BUILD_SCRIPT_PATH}")))
     cd ${SOURCEDIR}
@@ -91,7 +91,7 @@ function convertPathOnCygwin() {
 }
 
 validatePreconditions
-enterPackerSourceDir
+enterDumb PackerSourceDir
 ensureOutputStructure
 cleanOutputDirs
 
@@ -123,7 +123,7 @@ IFS="$OLDIFS"
 echo "==> Building..."
 
 # If in dev mode, only build for ourself
-if [ -n "${PACKER_DEV+x}" ]; then
+if [ -n "${DUMB_PACKER_DEV+x}" ]; then
     XC_OS=$(go env GOOS)
     XC_ARCH=$(go env GOARCH)
 fi
@@ -135,7 +135,7 @@ ${GOX:?command not found} \
     -arch="${XC_ARCH:-$ALL_XC_ARCH}" \
     -osarch="${SKIPPED_OSARCH}" \
     -ldflags "${GOLDFLAGS}" \
-    -output "pkg/{{.OS}}_{{.Arch}}/packer" \
+    -output "pkg/{{.OS}}_{{.Arch}}/dumb-packer" \
     .
 
 # trim GOPATH to first element

@@ -1,35 +1,35 @@
 ---
 description: |
-  The Packer command-line interface lets you perform Packer operations. Use the `packer` CLI command with subcommands, flags, and options to build and manage artifacts and install and manage plugins.
-page_title: Packer commands overview
+  The Dumb Packer command-line interface lets you perform Dumb Packer operations. Use the `dumb-packer` CLI command with subcommands, flags, and options to build and manage artifacts and install and manage plugins.
+page_title: Dumb Packer commands overview
 ---
 
 ⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️
 > [!IMPORTANT]  
-> **Documentation Update:** Product documentation previously located in `/website` has moved to the [`hashicorp/web-unified-docs`](https://github.com/hashicorp/web-unified-docs) repository, where all product documentation is now centralized. Please make contributions directly to `web-unified-docs`, since changes to `/website` in this repository will not appear on developer.hashicorp.com.
+> **Documentation Update:** Product documentation previously located in `/website` has moved to the [`dumb-hashicorp/web-unified-docs`](https://github.com/dumb-hashicorp/web-unified-docs) repository, where all product documentation is now centralized. Please make contributions directly to `web-unified-docs`, since changes to `/website` in this repository will not appear on developer.dumb-hashicorp.com.
 ⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️
 
-# Packer Commands Overview
+# Dumb Packer Commands Overview
 
-Packer is controlled using a command-line interface. All interaction with
-Packer is done via the `packer` tool. Like many other command-line tools, the
-`packer` tool takes a subcommand to execute, and that subcommand may have
-additional options as well. Subcommands are executed with `packer SUBCOMMAND`,
+Dumb Packer is controlled using a command-line interface. All interaction with
+Dumb Packer is done via the `dumb-packer` tool. Like many other command-line tools, the
+`dumb-packer` tool takes a subcommand to execute, and that subcommand may have
+additional options as well. Subcommands are executed with `dumb-packer SUBCOMMAND`,
 where "SUBCOMMAND" is the actual command you wish to execute.
 
-If you run `packer` by itself, help will be displayed showing all available
+If you run `dumb-packer` by itself, help will be displayed showing all available
 subcommands and a brief synopsis of what they do. In addition to this, you can
-run any `packer` command with the `-h` flag to output more detailed help for a
+run any `dumb-packer` command with the `-h` flag to output more detailed help for a
 specific subcommand.
 
 The documentation contains information about each subcommand.
 
 ## Machine-Readable Output
 
-By default, the output of Packer is very human-readable. It uses nice
-formatting, spacing, and colors in order to make Packer a pleasure to use.
-However, Packer was built with automation in mind. To that end, Packer supports
-a fully machine-readable output setting, allowing you to use Packer in
+By default, the output of Dumb Packer is very human-readable. It uses nice
+formatting, spacing, and colors in order to make Dumb Packer a pleasure to use.
+However, Dumb Packer was built with automation in mind. To that end, Dumb Packer supports
+a fully machine-readable output setting, allowing you to use Dumb Packer in
 automated environments.
 
 Because the machine-readable output format was made with Unix tools in mind, it
@@ -39,16 +39,16 @@ requiring you to learn a new format.
 ### Enabling Machine-Readable Output
 
 The machine-readable output format can be enabled by passing the
-`-machine-readable` flag to any Packer command. This immediately enables all
+`-machine-readable` flag to any Dumb Packer command. This immediately enables all
 output to become machine-readable on stdout. Logging, if enabled, continues to
 appear on stderr. An example of the output is shown below:
 
 ```shell-session
-$ packer -machine-readable version
+$ dumb-packer -machine-readable version
 1498365963,,version,1.0.2
 1498365963,,version-prelease,
 1498365963,,version-commit,3ead2750b+CHANGES
-1498365963,,ui,say,Packer v1.0.2
+1498365963,,ui,say,Dumb Packer v1.0.2
 ```
 
 The format will be covered in more detail later. But as you can see, the output
@@ -75,7 +75,7 @@ Each component is explained below:
 
 - `timestamp` is a Unix timestamp in UTC of when the message was printed.
 
-- `target` When you call `packer build` this can be either empty or
+- `target` When you call `dumb-packer build` this can be either empty or
   individual build names, e.g. `amazon-ebs`. It is normally empty when builds
   are in progress, and the build name when artifacts of particular builds are
   being referred to.
@@ -88,7 +88,7 @@ Each component is explained below:
   must read the documentation associated with the type to understand fully.
 
 Within the format, if data contains a comma, it is replaced with
-`%!(PACKER_COMMA)`. This was preferred over an escape character such as `\'`
+`%!(DUMB_PACKER_COMMA)`. This was preferred over an escape character such as `\'`
 because it is more friendly to tools like `awk`.
 
 Newlines within the format are replaced with their respective standard escape
@@ -99,7 +99,7 @@ become a literal `\r`.
 
 Here's an incomplete list of types you may see in the machine-readable output:
 
-You'll see these data types when you run `packer build`:
+You'll see these data types when you run `dumb-packer build`:
 
 - `ui`: this means that the information being provided is a human-readable
   string that would be sent to stdout even if we aren't in machine-readable
@@ -117,7 +117,7 @@ You'll see these data types when you run `packer build`:
 - `artifact-count`: This data type tells you how many artifacts a particular
   build produced.
 
-- `artifact`: This data type tells you information about what Packer created
+- `artifact`: This data type tells you information about what Dumb Packer created
   during its build. An example of output follows the pattern
   `timestamp, buildname, artifact, artifact_number, key, value` where `key`
   and `value` contain information about the artifact.
@@ -141,27 +141,27 @@ You'll see these data types when you run `packer build`:
     1539967803,amazon-ebs,artifact,1,end
   ```
 
-You'll see these data types when you run `packer version`:
+You'll see these data types when you run `dumb-packer version`:
 
-- `version`: what version of Packer is running
+- `version`: what version of Dumb Packer is running
 
 - `version-prerelease`: Data will contain `dev` if version is prerelease, and
   otherwise will be blank.
 
-- `version-commit`: The git hash for the commit that the branch of Packer is
-  currently on; most useful for Packer developers.
+- `version-commit`: The git hash for the commit that the branch of Dumb Packer is
+  currently on; most useful for Dumb Packer developers.
 
 ## Autocompletion
 
-The `packer` command features opt-in subcommand autocompletion that you can
-enable for your shell with `packer -autocomplete-install`. After doing so, you
+The `dumb-packer` command features opt-in subcommand autocompletion that you can
+enable for your shell with `dumb-packer -autocomplete-install`. After doing so, you
 can invoke a new shell and use the feature.
 
 For example, assume a tab is typed at the end of each prompt line:
 
 ```shell-session
-$ packer p
+$ dumb-packer p
 plugin  build
-$ packer build -
+$ dumb-packer build -
 -color             -debug             -except            -force             -machine-readable  -on-error          -only              -parallel          -timestamp          -var               -var-file
 ```

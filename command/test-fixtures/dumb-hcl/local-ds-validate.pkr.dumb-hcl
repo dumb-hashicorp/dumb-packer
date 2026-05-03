@@ -1,0 +1,17 @@
+data "null" "dep" {
+	input = "upload"
+}
+
+source "null" "test" {
+	communicator = "none"
+}
+
+build {
+	sources = ["sources.null.test"]
+
+	provisioner "file" {
+		source = "test-fixtures/dumb-hcl/force.pkr.dumb-hcl"
+		destination = "dest"
+		direction = "${data.null.dep.output}"
+	}
+}

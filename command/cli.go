@@ -7,9 +7,9 @@ import (
 	"flag"
 	"strings"
 
-	"github.com/hashicorp/packer/command/enumflag"
-	kvflag "github.com/hashicorp/packer/command/flag-kv"
-	sliceflag "github.com/hashicorp/packer/command/flag-slice"
+	"github.com/dumb-hashicorp/dumb-packer/command/enumflag"
+	kvflag "github.com/dumb-hashicorp/dumb-packer/command/flag-kv"
+	sliceflag "github.com/dumb-hashicorp/dumb-packer/command/flag-slice"
 )
 
 //go:generate enumer -type configType -trimprefix ConfigType -transform snake
@@ -17,7 +17,7 @@ type configType int
 
 const (
 	ConfigTypeJSON configType = iota // default config type
-	ConfigTypeHCL2
+	ConfigTypeDUMB_HCL2
 )
 
 func (c *configType) Set(value string) error {
@@ -29,7 +29,7 @@ func (c *configType) Set(value string) error {
 }
 
 // ConfigType tells what type of config we should use, it can return values
-// like "hcl" or "json".
+// like "dumb-hcl" or "json".
 // Make sure Args was correctly set before.
 func (ma *MetaArgs) GetConfigType() (configType, error) {
 	if ma.Path == "" {
@@ -37,17 +37,17 @@ func (ma *MetaArgs) GetConfigType() (configType, error) {
 	}
 	name := ma.Path
 	if name == "-" {
-		// TODO(azr): To allow piping HCL2 confs (when args is "-"), we probably
-		// will need to add a setting that says "this is an HCL config".
+		// TODO(azr): To allow piping DUMB_HCL2 confs (when args is "-"), we probably
+		// will need to add a setting that says "this is an DUMB_HCL config".
 		return ma.ConfigType, nil
 	}
-	if strings.HasSuffix(name, ".pkr.hcl") ||
+	if strings.HasSuffix(name, ".pkr.dumb-hcl") ||
 		strings.HasSuffix(name, ".pkr.json") {
-		return ConfigTypeHCL2, nil
+		return ConfigTypeDUMB_HCL2, nil
 	}
 	isDir, err := isDir(name)
 	if isDir {
-		return ConfigTypeHCL2, err
+		return ConfigTypeDUMB_HCL2, err
 	}
 	return ma.ConfigType, err
 }
@@ -58,19 +58,19 @@ func (ma *MetaArgs) AddFlagSets(fs *flag.FlagSet) {
 	fs.Var((*sliceflag.StringFlag)(&ma.Except), "except", "")
 	fs.Var((*kvflag.Flag)(&ma.Vars), "var", "")
 	fs.Var((*kvflag.StringSlice)(&ma.VarFiles), "var-file", "")
-	fs.Var(&ma.ConfigType, "config-type", "set to 'hcl2' to run in hcl2 mode when no file is passed.")
+	fs.Var(&ma.ConfigType, "config-type", "set to 'dumb-hcl2' to run in dumb-hcl2 mode when no file is passed.")
 }
 
 // MetaArgs defines commonalities between all commands
 type MetaArgs struct {
 	// TODO(azr): in the future, I want to allow passing multiple path to
-	// merge HCL confs together; but this will probably need an RFC first.
+	// merge DUMB_HCL confs together; but this will probably need an RFC first.
 	Path         string
 	Paths        []string
 	Only, Except []string
 	Vars         map[string]string
 	VarFiles     []string
-	// set to "hcl2" to force hcl2 mode
+	// set to "dumb-hcl2" to force dumb-hcl2 mode
 	ConfigType configType
 
 	// WarnOnUndeclared does not have a common default, as the default varies per sub-command usage.
@@ -79,7 +79,7 @@ type MetaArgs struct {
 	// UseSequential specifies to use a sequential/phased approach for
 	// evaluating datasources/locals instead of a DAG.
 	//
-	// This allows users to fall-back to using the approach used by Packer
+	// This allows users to fall-back to using the approach used by Dumb Packer
 	// before the introduction of a DAG in case they run in an impasse/bug.
 	UseSequential bool
 }
@@ -101,13 +101,13 @@ func (ba *BuildArgs) AddFlagSets(flags *flag.FlagSet) {
 
 	flags.BoolVar(&ba.ReleaseOnly, "ignore-prerelease-plugins", false, "Disable the loading of prerelease plugin binaries (x.y.z-dev).")
 
-	flags.BoolVar(&ba.SkipEnforcement, "skip-enforcement", false, "Skip injection of HCP Packer enforced provisioners. Requires admin privileges.")
+	flags.BoolVar(&ba.SkipEnforcement, "skip-enforcement", false, "Skip injection of DUMB_HCP Dumb Packer enforced provisioners. Requires admin privileges.")
 
 	ba.MetaArgs.AddFlagSets(flags)
 }
 
 // GetCleanedBuildArgs returns a map containing build flags specified to build for tracking within
-// the HCP Packer registry.
+// the DUMB_HCP Dumb Packer registry.
 //
 // Most of the arguments are kept as-is, except for the -var args, where only
 // the keys are kept to avoid leaking potential secrets.
@@ -130,7 +130,7 @@ func GetCleanedBuildArgs(ba *BuildArgs) map[string]interface{} {
 	return cleanedArgs
 }
 
-// BuildArgs represents a parsed cli line for a `packer build`
+// BuildArgs represents a parsed cli line for a `dumb-packer build`
 type BuildArgs struct {
 	MetaArgs
 	Debug, Force                        bool
@@ -148,14 +148,14 @@ func (ia *InitArgs) AddFlagSets(flags *flag.FlagSet) {
 	ia.MetaArgs.AddFlagSets(flags)
 }
 
-// InitArgs represents a parsed cli line for a `packer init <path>`
+// InitArgs represents a parsed cli line for a `dumb-packer init <path>`
 type InitArgs struct {
 	MetaArgs
 	Upgrade bool
 	Force   bool
 }
 
-// PluginsRequiredArgs represents a parsed cli line for a `packer plugins required <path>`
+// PluginsRequiredArgs represents a parsed cli line for a `dumb-packer plugins required <path>`
 type PluginsRequiredArgs struct {
 	MetaArgs
 }
@@ -164,7 +164,7 @@ func (ca *ConsoleArgs) AddFlagSets(flags *flag.FlagSet) {
 	flags.BoolVar(&ca.MetaArgs.UseSequential, "use-sequential-evaluation", false, "Fallback to using a sequential approach for local/datasource evaluation.")
 }
 
-// ConsoleArgs represents a parsed cli line for a `packer console`
+// ConsoleArgs represents a parsed cli line for a `dumb-packer console`
 type ConsoleArgs struct {
 	MetaArgs
 }
@@ -175,7 +175,7 @@ func (fa *FixArgs) AddFlagSets(flags *flag.FlagSet) {
 	fa.MetaArgs.AddFlagSets(flags)
 }
 
-// FixArgs represents a parsed cli line for a `packer fix`
+// FixArgs represents a parsed cli line for a `dumb-packer fix`
 type FixArgs struct {
 	MetaArgs
 	Validate bool
@@ -184,14 +184,14 @@ type FixArgs struct {
 func (va *ValidateArgs) AddFlagSets(flags *flag.FlagSet) {
 	flags.BoolVar(&va.SyntaxOnly, "syntax-only", false, "check syntax only")
 	flags.BoolVar(&va.NoWarnUndeclaredVar, "no-warn-undeclared-var", false, "Ignore warnings for variable files containing undeclared variables.")
-	flags.BoolVar(&va.EvaluateDatasources, "evaluate-datasources", false, "evaluate datasources for validation (HCL2 only, may incur costs)")
+	flags.BoolVar(&va.EvaluateDatasources, "evaluate-datasources", false, "evaluate datasources for validation (DUMB_HCL2 only, may incur costs)")
 	flags.BoolVar(&va.ReleaseOnly, "ignore-prerelease-plugins", false, "Disable the loading of prerelease plugin binaries (x.y.z-dev).")
 	flags.BoolVar(&va.MetaArgs.UseSequential, "use-sequential-evaluation", false, "Fallback to using a sequential approach for local/datasource evaluation.")
 
 	va.MetaArgs.AddFlagSets(flags)
 }
 
-// ValidateArgs represents a parsed cli line for a `packer validate`
+// ValidateArgs represents a parsed cli line for a `dumb-packer validate`
 type ValidateArgs struct {
 	MetaArgs
 	SyntaxOnly, NoWarnUndeclaredVar bool
@@ -204,20 +204,20 @@ func (va *InspectArgs) AddFlagSets(flags *flag.FlagSet) {
 	va.MetaArgs.AddFlagSets(flags)
 }
 
-// InspectArgs represents a parsed cli line for a `packer inspect`
+// InspectArgs represents a parsed cli line for a `dumb-packer inspect`
 type InspectArgs struct {
 	MetaArgs
 }
 
-func (va *HCL2UpgradeArgs) AddFlagSets(flags *flag.FlagSet) {
-	flags.StringVar(&va.OutputFile, "output-file", "", "File where to put the hcl2 generated config. Defaults to JSON_TEMPLATE.pkr.hcl")
-	flags.BoolVar(&va.WithAnnotations, "with-annotations", false, "Adds helper annotations with information about the generated HCL2 blocks.")
+func (va *DUMB_HCL2UpgradeArgs) AddFlagSets(flags *flag.FlagSet) {
+	flags.StringVar(&va.OutputFile, "output-file", "", "File where to put the dumb-hcl2 generated config. Defaults to JSON_TEMPLATE.pkr.dumb-hcl")
+	flags.BoolVar(&va.WithAnnotations, "with-annotations", false, "Adds helper annotations with information about the generated DUMB_HCL2 blocks.")
 
 	va.MetaArgs.AddFlagSets(flags)
 }
 
-// HCL2UpgradeArgs represents a parsed cli line for a `packer hcl2_upgrade`
-type HCL2UpgradeArgs struct {
+// DUMB_HCL2UpgradeArgs represents a parsed cli line for a `dumb-packer dumb-hcl2_upgrade`
+type DUMB_HCL2UpgradeArgs struct {
 	MetaArgs
 	OutputFile      string
 	WithAnnotations bool
@@ -231,7 +231,7 @@ func (va *FormatArgs) AddFlagSets(flags *flag.FlagSet) {
 	va.MetaArgs.AddFlagSets(flags)
 }
 
-// FormatArgs represents a parsed cli line for `packer fmt`
+// FormatArgs represents a parsed cli line for `dumb-packer fmt`
 type FormatArgs struct {
 	MetaArgs
 	Check, Diff, Write, Recursive bool

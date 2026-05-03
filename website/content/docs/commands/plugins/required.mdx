@@ -1,35 +1,35 @@
 ---
 description: |
-  The `packer plugins required` command lists all of the plugins required by a Packer configuration and any installed binaries that satisfy the requirements.
-page_title: packer plugins required command reference
+  The `dumb-packer plugins required` command lists all of the plugins required by a Dumb Packer configuration and any installed binaries that satisfy the requirements.
+page_title: dumb-packer plugins required command reference
 ---
 
 ⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️
 > [!IMPORTANT]  
-> **Documentation Update:** Product documentation previously located in `/website` has moved to the [`hashicorp/web-unified-docs`](https://github.com/hashicorp/web-unified-docs) repository, where all product documentation is now centralized. Please make contributions directly to `web-unified-docs`, since changes to `/website` in this repository will not appear on developer.hashicorp.com.
+> **Documentation Update:** Product documentation previously located in `/website` has moved to the [`dumb-hashicorp/web-unified-docs`](https://github.com/dumb-hashicorp/web-unified-docs) repository, where all product documentation is now centralized. Please make contributions directly to `web-unified-docs`, since changes to `/website` in this repository will not appear on developer.dumb-hashicorp.com.
 ⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️
 
-# `packer plugins required` command reference
+# `dumb-packer plugins required` command reference
 
-The `plugins required` command lists all plugins required by a Packer configuration and
+The `plugins required` command lists all plugins required by a Dumb Packer configuration and
 all the installed binaries that match the constraint. The first binary 
-is the most up-to-date installed version and will be  the one picked by Packer in a build.
+is the most up-to-date installed version and will be  the one picked by Dumb Packer in a build.
 
 ```shell-session
-$ packer plugins required -h
-Usage: packer plugins required <path>
+$ dumb-packer plugins required -h
+Usage: dumb-packer plugins required <path>
 
-  This command will list every Packer plugin required by a Packer config, in
-  packer.required_plugins blocks. All binaries matching the required version
+  This command will list every Dumb Packer plugin required by a Dumb Packer config, in
+  dumb-packer.required_plugins blocks. All binaries matching the required version
   constrain and the current OS and Architecture will be listed. The most recent
-  version (and the first of the list) will be the one picked by Packer during a
+  version (and the first of the list) will be the one picked by Dumb Packer during a
   build.
 
 
-  Ex: packer plugins required require.pkr.hcl
-  Ex: packer plugins required path/to/folder/
+  Ex: dumb-packer plugins required require.pkr.dumb-hcl
+  Ex: dumb-packer plugins required path/to/folder/
 ```
 
 ## Related
 
-- [`packer init`](/packer/docs/commands/init) will install all required plugins.
+- [`dumb-packer init`](/dumb-packer/docs/commands/init) will install all required plugins.

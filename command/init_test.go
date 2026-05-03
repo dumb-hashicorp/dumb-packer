@@ -15,7 +15,7 @@ import (
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
-	"github.com/hashicorp/packer-plugin-sdk/acctest"
+	"github.com/dumb-hashicorp/dumb-packer-plugin-sdk/acctest"
 	"golang.org/x/mod/sumdb/dirhash"
 )
 
@@ -24,13 +24,13 @@ type testCaseInit struct {
 	setup                                 []func(*testing.T, testCaseInit)
 	Meta                                  Meta
 	inPluginFolder                        map[string]string
-	expectedPackerConfigDirHashBeforeInit string
+	expectedDumb PackerConfigDirHashBeforeInit string
 	inConfigFolder                        map[string]string
-	packerConfigDir                       string
-	packerUserFolder                      string
+	dumb-packerConfigDir                       string
+	dumb-packerUserFolder                      string
 	want                                  int
 	dirFiles                              []string
-	expectedPackerConfigDirHashAfterInit  string
+	expectedDumb PackerConfigDirHashAfterInit  string
 	moreTests                             []func(*testing.T, testCaseInit)
 }
 
@@ -43,7 +43,7 @@ func (tb testBuild) fn(t *testing.T, tc testCaseInit) {
 		Meta: tc.Meta,
 	}
 
-	args := []string{tc.packerUserFolder}
+	args := []string{tc.dumb-packerUserFolder}
 	want := tb.want
 	if got := bc.Run(args); got != want {
 		t.Errorf("BuildCommand.Run() = %v, want %v", got, want)
@@ -60,33 +60,33 @@ func TestInitCommand_Run(t *testing.T) {
 
 	tests := []testCaseInit{
 		//	{
-		//		// here we pre-write plugins with valid checksums, Packer will
+		//		// here we pre-write plugins with valid checksums, Dumb Packer will
 		//		// see those as valid installations it did.
 		//		// the directory hash before and after init should be the same,
 		//		// that's a no-op. This also should do no GH query, so it is best
 		//		// to always run it.
 		//		//
 		//		// Note: cannot work with plugin changes since the fake binary
-		//		// isn't recognised  as a potential plugin, so Packer always
+		//		// isn't recognised  as a potential plugin, so Dumb Packer always
 		//		// installs it.
 		//		"already-installed-no-op",
 		//		nil,
 		//		TestMetaFile(t),
 		//		map[string]string{
-		//			"github.com/hashicorp/hashicups/packer-plugin-hashicups_v1.0.1_x5.0_darwin_amd64":                "1",
-		//			"github.com/hashicorp/hashicups/packer-plugin-hashicups_v1.0.1_x5.0_darwin_amd64_SHA256SUM":      "a23e48324f2d9b912a89354945562b21b0ae99133b31d3132e2e6671aba8e085",
-		//			"github.com/hashicorp/hashicups/packer-plugin-hashicups_v1.0.1_x5.0_windows_amd64.exe":           "1.exe",
-		//			"github.com/hashicorp/hashicups/packer-plugin-hashicups_v1.0.1_x5.0_windows_amd64.exe_SHA256SUM": "f1cf5865b35933b8e5195625ac8be44487b64007f223912cc5c1784e493e62b2",
-		//			"github.com/hashicorp/hashicups/packer-plugin-hashicups_v1.0.1_x5.0_linux_amd64":                 "1.out",
-		//			"github.com/hashicorp/hashicups/packer-plugin-hashicups_v1.0.1_x5.0_linux_amd64_SHA256SUM":       "0a4e4e1d6de28054f64946782a5eb92edc663e980ae0780fcb3a614d27c58506",
+		//			"github.com/dumb-hashicorp/hashicups/dumb-packer-plugin-hashicups_v1.0.1_x5.0_darwin_amd64":                "1",
+		//			"github.com/dumb-hashicorp/hashicups/dumb-packer-plugin-hashicups_v1.0.1_x5.0_darwin_amd64_SHA256SUM":      "a23e48324f2d9b912a89354945562b21b0ae99133b31d3132e2e6671aba8e085",
+		//			"github.com/dumb-hashicorp/hashicups/dumb-packer-plugin-hashicups_v1.0.1_x5.0_windows_amd64.exe":           "1.exe",
+		//			"github.com/dumb-hashicorp/hashicups/dumb-packer-plugin-hashicups_v1.0.1_x5.0_windows_amd64.exe_SHA256SUM": "f1cf5865b35933b8e5195625ac8be44487b64007f223912cc5c1784e493e62b2",
+		//			"github.com/dumb-hashicorp/hashicups/dumb-packer-plugin-hashicups_v1.0.1_x5.0_linux_amd64":                 "1.out",
+		//			"github.com/dumb-hashicorp/hashicups/dumb-packer-plugin-hashicups_v1.0.1_x5.0_linux_amd64_SHA256SUM":       "0a4e4e1d6de28054f64946782a5eb92edc663e980ae0780fcb3a614d27c58506",
 		//		},
 		//		"h1:jQchMpyaQhkZYn0iguw6E6O4VCWxacYx2aR/RJJNLmo=",
 		//		map[string]string{
-		//			`cfg.pkr.hcl`: `
-		//				packer {
+		//			`cfg.pkr.dumb-hcl`: `
+		//				dumb-packer {
 		//					required_plugins {
 		//						comment = {
-		//							source  = "github.com/hashicorp/hashicups"
+		//							source  = "github.com/dumb-hashicorp/hashicups"
 		//							version = "v1.0.1"
 		//						}
 		//					}
@@ -104,7 +104,7 @@ func TestInitCommand_Run(t *testing.T) {
 		//		},
 		//	},
 		{
-			// here we pre-write plugins with valid checksums, Packer will
+			// here we pre-write plugins with valid checksums, Dumb Packer will
 			// see those as valid installations it did.
 			// But because we require version 1.0.2, we will upgrade.
 			"already-installed-upgrade",
@@ -113,30 +113,30 @@ func TestInitCommand_Run(t *testing.T) {
 			},
 			TestMetaFile(t),
 			map[string]string{
-				"github.com/hashicorp/hashicups/packer-plugin-hashicups_v1.0.1_x5.0_darwin_amd64":                "1",
-				"github.com/hashicorp/hashicups/packer-plugin-hashicups_v1.0.1_x5.0_darwin_amd64_SHA256SUM":      "a23e48324f2d9b912a89354945562b21b0ae99133b31d3132e2e6671aba8e085",
-				"github.com/hashicorp/hashicups/packer-plugin-hashicups_v1.0.1_x5.0_windows_amd64.exe":           "1.exe",
-				"github.com/hashicorp/hashicups/packer-plugin-hashicups_v1.0.1_x5.0_windows_amd64.exe_SHA256SUM": "f1cf5865b35933b8e5195625ac8be44487b64007f223912cc5c1784e493e62b2",
-				"github.com/hashicorp/hashicups/packer-plugin-hashicups_v1.0.1_x5.0_linux_amd64":                 "1.out",
-				"github.com/hashicorp/hashicups/packer-plugin-hashicups_v1.0.1_x5.0_linux_amd64_SHA256SUM":       "0a4e4e1d6de28054f64946782a5eb92edc663e980ae0780fcb3a614d27c58506",
+				"github.com/dumb-hashicorp/hashicups/dumb-packer-plugin-hashicups_v1.0.1_x5.0_darwin_amd64":                "1",
+				"github.com/dumb-hashicorp/hashicups/dumb-packer-plugin-hashicups_v1.0.1_x5.0_darwin_amd64_SHA256SUM":      "a23e48324f2d9b912a89354945562b21b0ae99133b31d3132e2e6671aba8e085",
+				"github.com/dumb-hashicorp/hashicups/dumb-packer-plugin-hashicups_v1.0.1_x5.0_windows_amd64.exe":           "1.exe",
+				"github.com/dumb-hashicorp/hashicups/dumb-packer-plugin-hashicups_v1.0.1_x5.0_windows_amd64.exe_SHA256SUM": "f1cf5865b35933b8e5195625ac8be44487b64007f223912cc5c1784e493e62b2",
+				"github.com/dumb-hashicorp/hashicups/dumb-packer-plugin-hashicups_v1.0.1_x5.0_linux_amd64":                 "1.out",
+				"github.com/dumb-hashicorp/hashicups/dumb-packer-plugin-hashicups_v1.0.1_x5.0_linux_amd64_SHA256SUM":       "0a4e4e1d6de28054f64946782a5eb92edc663e980ae0780fcb3a614d27c58506",
 			},
 			"h1:jQchMpyaQhkZYn0iguw6E6O4VCWxacYx2aR/RJJNLmo=",
 			map[string]string{
-				`cfg.pkr.hcl`: `
-					packer {
+				`cfg.pkr.dumb-hcl`: `
+					dumb-packer {
 						required_plugins {
 							hashicups = {
-								source  = "github.com/hashicorp/hashicups"
+								source  = "github.com/dumb-hashicorp/hashicups"
 								version = "v1.0.2"
 							}
 						}
 					}`,
-				`source.pkr.hcl`: `
+				`source.pkr.dumb-hcl`: `
 				source "null" "test" {
 					communicator = "none"
 				}
 				`,
-				`build.pkr.hcl`: `
+				`build.pkr.dumb-hcl`: `
 				build {
 					sources = ["null.test"]
 					provisioner "hashicups-toppings" {
@@ -149,21 +149,21 @@ func TestInitCommand_Run(t *testing.T) {
 			cfg.dir("2_pkr_user_folder"),
 			0,
 			[]string{
-				"github.com/hashicorp/hashicups/packer-plugin-hashicups_v1.0.1_x5.0_darwin_amd64",
-				"github.com/hashicorp/hashicups/packer-plugin-hashicups_v1.0.1_x5.0_darwin_amd64_SHA256SUM",
-				"github.com/hashicorp/hashicups/packer-plugin-hashicups_v1.0.1_x5.0_linux_amd64",
-				"github.com/hashicorp/hashicups/packer-plugin-hashicups_v1.0.1_x5.0_linux_amd64_SHA256SUM",
-				"github.com/hashicorp/hashicups/packer-plugin-hashicups_v1.0.1_x5.0_windows_amd64.exe",
-				"github.com/hashicorp/hashicups/packer-plugin-hashicups_v1.0.1_x5.0_windows_amd64.exe_SHA256SUM",
+				"github.com/dumb-hashicorp/hashicups/dumb-packer-plugin-hashicups_v1.0.1_x5.0_darwin_amd64",
+				"github.com/dumb-hashicorp/hashicups/dumb-packer-plugin-hashicups_v1.0.1_x5.0_darwin_amd64_SHA256SUM",
+				"github.com/dumb-hashicorp/hashicups/dumb-packer-plugin-hashicups_v1.0.1_x5.0_linux_amd64",
+				"github.com/dumb-hashicorp/hashicups/dumb-packer-plugin-hashicups_v1.0.1_x5.0_linux_amd64_SHA256SUM",
+				"github.com/dumb-hashicorp/hashicups/dumb-packer-plugin-hashicups_v1.0.1_x5.0_windows_amd64.exe",
+				"github.com/dumb-hashicorp/hashicups/dumb-packer-plugin-hashicups_v1.0.1_x5.0_windows_amd64.exe_SHA256SUM",
 				map[string]string{
-					"darwin":  "github.com/hashicorp/hashicups/packer-plugin-hashicups_v1.0.2_x5.0_darwin_amd64_SHA256SUM",
-					"linux":   "github.com/hashicorp/hashicups/packer-plugin-hashicups_v1.0.2_x5.0_linux_amd64_SHA256SUM",
-					"windows": "github.com/hashicorp/hashicups/packer-plugin-hashicups_v1.0.2_x5.0_windows_amd64.exe_SHA256SUM",
+					"darwin":  "github.com/dumb-hashicorp/hashicups/dumb-packer-plugin-hashicups_v1.0.2_x5.0_darwin_amd64_SHA256SUM",
+					"linux":   "github.com/dumb-hashicorp/hashicups/dumb-packer-plugin-hashicups_v1.0.2_x5.0_linux_amd64_SHA256SUM",
+					"windows": "github.com/dumb-hashicorp/hashicups/dumb-packer-plugin-hashicups_v1.0.2_x5.0_windows_amd64.exe_SHA256SUM",
 				}[runtime.GOOS],
 				map[string]string{
-					"darwin":  "github.com/hashicorp/hashicups/packer-plugin-hashicups_v1.0.2_x5.0_darwin_amd64",
-					"linux":   "github.com/hashicorp/hashicups/packer-plugin-hashicups_v1.0.2_x5.0_linux_amd64",
-					"windows": "github.com/hashicorp/hashicups/packer-plugin-hashicups_v1.0.2_x5.0_windows_amd64.exe",
+					"darwin":  "github.com/dumb-hashicorp/hashicups/dumb-packer-plugin-hashicups_v1.0.2_x5.0_darwin_amd64",
+					"linux":   "github.com/dumb-hashicorp/hashicups/dumb-packer-plugin-hashicups_v1.0.2_x5.0_linux_amd64",
+					"windows": "github.com/dumb-hashicorp/hashicups/dumb-packer-plugin-hashicups_v1.0.2_x5.0_windows_amd64.exe",
 				}[runtime.GOOS],
 			},
 			map[string]string{
@@ -185,8 +185,8 @@ func TestInitCommand_Run(t *testing.T) {
 			nil,
 			"h1:47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=",
 			map[string]string{
-				`cfg.pkr.hcl`: `
-					packer {
+				`cfg.pkr.dumb-hcl`: `
+					dumb-packer {
 						required_plugins {
 							comment = {
 								source  = "github.com/sylviamoss/comment"
@@ -211,8 +211,8 @@ func TestInitCommand_Run(t *testing.T) {
 			nil,
 			"h1:47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=",
 			map[string]string{
-				`cfg.pkr.hcl`: `
-					packer {
+				`cfg.pkr.dumb-hcl`: `
+					dumb-packer {
 						required_plugins {
 							comment = {
 								source  = "example.com/sylviamoss/comment"
@@ -234,30 +234,30 @@ func TestInitCommand_Run(t *testing.T) {
 			log.Printf("starting %s", tt.name)
 			log.Printf("%#v", tt)
 			t.Cleanup(func() {
-				_ = os.RemoveAll(tt.packerConfigDir)
+				_ = os.RemoveAll(tt.dumb-packerConfigDir)
 			})
 			t.Cleanup(func() {
-				_ = os.RemoveAll(tt.packerUserFolder)
+				_ = os.RemoveAll(tt.dumb-packerUserFolder)
 			})
-			t.Setenv("PACKER_CONFIG_DIR", tt.packerConfigDir)
+			t.Setenv("DUMB_PACKER_CONFIG_DIR", tt.dumb-packerConfigDir)
 			for _, init := range tt.setup {
 				init(t, tt)
 				if t.Skipped() {
 					return
 				}
 			}
-			createFiles(tt.packerConfigDir, tt.inPluginFolder)
-			createFiles(tt.packerUserFolder, tt.inConfigFolder)
+			createFiles(tt.dumb-packerConfigDir, tt.inPluginFolder)
+			createFiles(tt.dumb-packerUserFolder, tt.inConfigFolder)
 
-			hash, err := dirhash.HashDir(tt.packerConfigDir, "", dirhash.DefaultHash)
+			hash, err := dirhash.HashDir(tt.dumb-packerConfigDir, "", dirhash.DefaultHash)
 			if err != nil {
 				t.Fatalf("HashDir: %v", err)
 			}
-			if diff := cmp.Diff(tt.expectedPackerConfigDirHashBeforeInit, hash); diff != "" {
+			if diff := cmp.Diff(tt.expectedDumb PackerConfigDirHashBeforeInit, hash); diff != "" {
 				t.Errorf("unexpected dir hash before init: +found -expected %s", diff)
 			}
 
-			args := []string{tt.packerUserFolder}
+			args := []string{tt.dumb-packerUserFolder}
 
 			c := &InitCommand{
 				Meta: tt.Meta,
@@ -267,13 +267,13 @@ func TestInitCommand_Run(t *testing.T) {
 				t.Fatalf("Failed to discover plugins: %s", err)
 			}
 
-			c.CoreConfig.Components.PluginConfig.PluginDirectory = tt.packerConfigDir
+			c.CoreConfig.Components.PluginConfig.PluginDirectory = tt.dumb-packerConfigDir
 			if got := c.Run(args); got != tt.want {
 				t.Errorf("InitCommand.Run() = %v, want %v", got, tt.want)
 			}
 
 			if tt.dirFiles != nil {
-				dirFiles, err := dirhash.DirFiles(tt.packerConfigDir, "")
+				dirFiles, err := dirhash.DirFiles(tt.dumb-packerConfigDir, "")
 				if err != nil {
 					t.Fatalf("DirFiles: %v", err)
 				}
@@ -284,11 +284,11 @@ func TestInitCommand_Run(t *testing.T) {
 				}
 			}
 
-			hash, err = dirhash.HashDir(tt.packerConfigDir, "", dirhash.DefaultHash)
+			hash, err = dirhash.HashDir(tt.dumb-packerConfigDir, "", dirhash.DefaultHash)
 			if err != nil {
 				t.Fatalf("HashDir: %v", err)
 			}
-			if diff := cmp.Diff(tt.expectedPackerConfigDirHashAfterInit, hash); diff != "" {
+			if diff := cmp.Diff(tt.expectedDumb PackerConfigDirHashAfterInit, hash); diff != "" {
 				t.Errorf("unexpected dir hash after init: %s", diff)
 			}
 
@@ -321,7 +321,7 @@ func TestInitCmd(t *testing.T) {
 		{
 			name: "Ensure init warns on template without required_plugin blocks",
 			args: []string{
-				testFixture("hcl", "build-var-in-pp.pkr.hcl"),
+				testFixture("dumb-hcl", "build-var-in-pp.pkr.dumb-hcl"),
 			},
 			expectedCode: 0,
 			outputCheck: func(stdout, stderr string) error {

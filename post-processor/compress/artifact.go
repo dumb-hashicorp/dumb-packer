@@ -8,7 +8,7 @@ import (
 	"os"
 )
 
-const BuilderId = "packer.post-processor.compress"
+const BuilderId = "dumb-packer.post-processor.compress"
 
 type Artifact struct {
 	Path string

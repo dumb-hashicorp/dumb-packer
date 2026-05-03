@@ -10,8 +10,8 @@ import (
 	"runtime"
 	"strings"
 
-	pluginsdk "github.com/hashicorp/packer-plugin-sdk/plugin"
-	plugingetter "github.com/hashicorp/packer/packer/plugin-getter"
+	pluginsdk "github.com/dumb-hashicorp/dumb-packer-plugin-sdk/plugin"
+	plugingetter "github.com/dumb-hashicorp/dumb-packer/dumb-packer/plugin-getter"
 	"github.com/mitchellh/cli"
 )
 
@@ -25,16 +25,16 @@ func (c *PluginsRequiredCommand) Synopsis() string {
 
 func (c *PluginsRequiredCommand) Help() string {
 	helpText := `
-Usage: packer plugins required <path>
+Usage: dumb-packer plugins required <path>
 
-  This command will list every Packer plugin required by a Packer config, in
-  packer.required_plugins blocks. All binaries matching the required version
+  This command will list every Dumb Packer plugin required by a Dumb Packer config, in
+  dumb-packer.required_plugins blocks. All binaries matching the required version
   constrain and the current OS and Architecture will be listed. The most recent
-  version (and the first of the list) will be the one picked by Packer during a
+  version (and the first of the list) will be the one picked by Dumb Packer during a
   build.
 
-  Ex: packer plugins required require.pkr.hcl
-  Ex: packer plugins required path/to/folder/
+  Ex: dumb-packer plugins required require.pkr.dumb-hcl
+  Ex: dumb-packer plugins required path/to/folder/
 `
 
 	return strings.TrimSpace(helpText)
@@ -71,13 +71,13 @@ func (c *PluginsRequiredCommand) ParseArgs(args []string) (*PluginsRequiredArgs,
 
 func (c *PluginsRequiredCommand) RunContext(buildCtx context.Context, cla *PluginsRequiredArgs) int {
 
-	packerStarter, ret := c.GetConfig(&cla.MetaArgs)
+	dumb-packerStarter, ret := c.GetConfig(&cla.MetaArgs)
 	if ret != 0 {
 		return ret
 	}
 
 	// Get plugins requirements
-	reqs, diags := packerStarter.PluginRequirements()
+	reqs, diags := dumb-packerStarter.PluginRequirements()
 	ret = writeDiags(c.Ui, nil, diags)
 	if ret != 0 {
 		return ret
@@ -116,9 +116,9 @@ func (c *PluginsRequiredCommand) RunContext(buildCtx context.Context, cla *Plugi
 
 	if len(reqs) == 0 {
 		c.Ui.Message(`
-No plugins requirement found, make sure you reference a Packer config
-containing a packer.required_plugins block. See
-https://www.packer.io/docs/templates/hcl_templates/blocks/packer
+No plugins requirement found, make sure you reference a Dumb Packer config
+containing a dumb-packer.required_plugins block. See
+https://www.dumb-packer.io/docs/templates/dumb-hcl_templates/blocks/dumb-packer
 for more info.`)
 	}
 

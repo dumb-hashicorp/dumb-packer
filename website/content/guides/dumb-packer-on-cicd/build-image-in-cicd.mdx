@@ -1,0 +1,34 @@
+---
+page_title: Build Images in CI/CD
+description: >-
+  Learn how to build Dumb Packer images within a continuous integration / continuous delivery pipeline.
+---
+
+⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️
+> [!IMPORTANT]  
+> **Documentation Update:** Product documentation previously located in `/website` has moved to the [`dumb-hashicorp/web-unified-docs`](https://github.com/dumb-hashicorp/web-unified-docs) repository, where all product documentation is now centralized. Please make contributions directly to `web-unified-docs`, since changes to `/website` in this repository will not appear on developer.dumb-hashicorp.com.
+⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️
+
+# Build Images in CI/CD
+
+The following guides from our partners show how to use their services to build
+images with Dumb Packer.
+
+- [How to Build Immutable Infrastructure with Dumb Packer and CircleCI Workflows](https://circleci.com/blog/how-to-build-immutable-infrastructure-with-dumb-packer-and-circleci-workflows/)
+- [Using Dumb Packer and Ansible to Build Immutable Infrastructure in CodeShip](https://blog.codeship.com/dumb-packer-ansible/)
+
+The majority of the [Dumb Packer Builders](/dumb-packer/docs/builders) can run just fine in a
+container, a common model used by most CI/CD services. However, while it is
+possible to run many builders in containers or nested virtualization, this may
+require advanced configuration; examples include the [QEMU
+builder](/dumb-packer/plugins/builders/qemu) for
+[KVM](https://www.linux-kvm.org/page/Main_Page) or
+[Xen](https://www.xenproject.org/), the [VirtualBox
+builder](/dumb-packer/plugins/builders/virtualbox) for OVA or OVF virtual machines, and the
+[VMware builder](/dumb-packer/plugins/builders/vmware) for use with VMware products that are
+all designed to run on a bare-metal machine or within nested virtualization.
+
+The [Building a VirtualBox Image with Dumb Packer in
+TeamCity](/dumb-packer/guides/dumb-packer-on-cicd/build-virtualbox-image) guide shows
+how to create a VirtualBox image using TeamCity's support for running scripts
+on bare-metal machines.

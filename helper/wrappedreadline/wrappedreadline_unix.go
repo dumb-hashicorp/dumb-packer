@@ -10,7 +10,7 @@ import (
 	"syscall"
 	"unsafe"
 
-	"github.com/hashicorp/packer/helper/wrappedstreams"
+	"github.com/dumb-hashicorp/dumb-packer/helper/wrappedstreams"
 )
 
 // getWidth impl for Unix

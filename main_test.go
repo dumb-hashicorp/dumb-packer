@@ -9,7 +9,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/hashicorp/packer/command"
+	"github.com/dumb-hashicorp/dumb-packer/command"
 	"github.com/mitchellh/cli"
 )
 

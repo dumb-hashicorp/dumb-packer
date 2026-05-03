@@ -1,9 +1,9 @@
 // Copyright IBM Corp. 2013, 2025
 // SPDX-License-Identifier: BUSL-1.1
 
-//go:generate packer-sdc mapstructure-to-hcl2 -type Config
+//go:generate dumb-packer-sdc mapstructure-to-dumb-hcl2 -type Config
 
-// This package implements a provisioner for Packer that executes
+// This package implements a provisioner for Dumb Packer that executes
 // shell scripts within the remote machine.
 package shell
 
@@ -20,14 +20,14 @@ import (
 	"strings"
 	"time"
 
-	"github.com/hashicorp/hcl/v2/hcldec"
-	"github.com/hashicorp/packer-plugin-sdk/multistep/commonsteps"
-	packersdk "github.com/hashicorp/packer-plugin-sdk/packer"
-	"github.com/hashicorp/packer-plugin-sdk/retry"
-	"github.com/hashicorp/packer-plugin-sdk/shell"
-	"github.com/hashicorp/packer-plugin-sdk/template/config"
-	"github.com/hashicorp/packer-plugin-sdk/template/interpolate"
-	"github.com/hashicorp/packer-plugin-sdk/tmp"
+	"github.com/dumb-hashicorp/dumb-hcl/v2/dumb-hcldec"
+	"github.com/dumb-hashicorp/dumb-packer-plugin-sdk/multistep/commonsteps"
+	dumb-packersdk "github.com/dumb-hashicorp/dumb-packer-plugin-sdk/dumb-packer"
+	"github.com/dumb-hashicorp/dumb-packer-plugin-sdk/retry"
+	"github.com/dumb-hashicorp/dumb-packer-plugin-sdk/shell"
+	"github.com/dumb-hashicorp/dumb-packer-plugin-sdk/template/config"
+	"github.com/dumb-hashicorp/dumb-packer-plugin-sdk/template/interpolate"
+	"github.com/dumb-hashicorp/dumb-packer-plugin-sdk/tmp"
 )
 
 type Config struct {
@@ -79,7 +79,7 @@ type Provisioner struct {
 	generatedData map[string]interface{}
 }
 
-func (p *Provisioner) ConfigSpec() hcldec.ObjectSpec { return p.config.FlatMapstructure().HCL2Spec() }
+func (p *Provisioner) ConfigSpec() dumb-hcldec.ObjectSpec { return p.config.FlatMapstructure().DUMB_HCL2Spec() }
 
 func (p *Provisioner) Prepare(raws ...interface{}) error {
 	err := config.Decode(&p.config, &config.DecodeOpts{
@@ -146,9 +146,9 @@ func (p *Provisioner) Prepare(raws ...interface{}) error {
 		p.config.Vars = make([]string, 0)
 	}
 
-	var errs *packersdk.MultiError
+	var errs *dumb-packersdk.MultiError
 	if p.config.Script != "" && len(p.config.Scripts) > 0 {
-		errs = packersdk.MultiErrorAppend(errs,
+		errs = dumb-packersdk.MultiErrorAppend(errs,
 			errors.New("Only one of script or scripts can be specified."))
 	}
 
@@ -157,16 +157,16 @@ func (p *Provisioner) Prepare(raws ...interface{}) error {
 	}
 
 	if len(p.config.Scripts) == 0 && p.config.Inline == nil {
-		errs = packersdk.MultiErrorAppend(errs,
+		errs = dumb-packersdk.MultiErrorAppend(errs,
 			errors.New("Either a script file or inline script must be specified."))
 	} else if len(p.config.Scripts) > 0 && p.config.Inline != nil {
-		errs = packersdk.MultiErrorAppend(errs,
+		errs = dumb-packersdk.MultiErrorAppend(errs,
 			errors.New("Only a script file or an inline script can be specified, not both."))
 	}
 
 	for _, path := range p.config.Scripts {
 		if _, err := os.Stat(path); err != nil {
-			errs = packersdk.MultiErrorAppend(errs,
+			errs = dumb-packersdk.MultiErrorAppend(errs,
 				fmt.Errorf("Bad script '%s': %s", path, err))
 		}
 	}
@@ -175,7 +175,7 @@ func (p *Provisioner) Prepare(raws ...interface{}) error {
 	for _, kv := range p.config.Vars {
 		vs := strings.SplitN(kv, "=", 2)
 		if len(vs) != 2 || vs[0] == "" {
-			errs = packersdk.MultiErrorAppend(errs,
+			errs = dumb-packersdk.MultiErrorAppend(errs,
 				fmt.Errorf("Environment variable not in format 'key=value': %s", kv))
 		}
 	}
@@ -187,7 +187,7 @@ func (p *Provisioner) Prepare(raws ...interface{}) error {
 	return nil
 }
 
-func (p *Provisioner) Provision(ctx context.Context, ui packersdk.Ui, comm packersdk.Communicator, generatedData map[string]interface{}) error {
+func (p *Provisioner) Provision(ctx context.Context, ui dumb-packersdk.Ui, comm dumb-packersdk.Communicator, generatedData map[string]interface{}) error {
 	if generatedData == nil {
 		generatedData = make(map[string]interface{})
 	}
@@ -199,7 +199,7 @@ func (p *Provisioner) Provision(ctx context.Context, ui packersdk.Ui, comm packe
 	// If we have an inline script, then turn that into a temporary
 	// shell script and use that.
 	if p.config.Inline != nil {
-		tf, err := tmp.File("packer-shell")
+		tf, err := tmp.File("dumb-packer-shell")
 		if err != nil {
 			return fmt.Errorf("Error preparing shell script: %s", err)
 		}
@@ -239,7 +239,7 @@ func (p *Provisioner) Provision(ctx context.Context, ui packersdk.Ui, comm packe
 	}
 
 	if p.config.UseEnvVarFile == true {
-		tf, err := tmp.File("packer-shell-vars")
+		tf, err := tmp.File("dumb-packer-shell-vars")
 		if err != nil {
 			return fmt.Errorf("Error preparing shell script: %s", err)
 		}
@@ -258,7 +258,7 @@ func (p *Provisioner) Provision(ctx context.Context, ui packersdk.Ui, comm packe
 		p.config.envVarFile = tf.Name()
 
 		// upload the var file
-		var cmd *packersdk.RemoteCmd
+		var cmd *dumb-packersdk.RemoteCmd
 		err = retry.Config{StartTimeout: p.config.StartRetryTimeout}.Run(ctx, func(ctx context.Context) error {
 			if _, err := tf.Seek(0, 0); err != nil {
 				return err
@@ -275,7 +275,7 @@ func (p *Provisioner) Provision(ctx context.Context, ui packersdk.Ui, comm packe
 			}
 			tf.Close()
 
-			cmd = &packersdk.RemoteCmd{
+			cmd = &dumb-packersdk.RemoteCmd{
 				Command: fmt.Sprintf("chmod 0600 %s", remoteVFName),
 			}
 			if err := comm.Start(ctx, cmd); err != nil {
@@ -320,7 +320,7 @@ func (p *Provisioner) Provision(ctx context.Context, ui packersdk.Ui, comm packe
 		// the case that the upload succeeded, a restart is initiated,
 		// and then the command is executed but the file doesn't exist
 		// any longer.
-		var cmd *packersdk.RemoteCmd
+		var cmd *dumb-packersdk.RemoteCmd
 		err = retry.Config{StartTimeout: p.config.StartRetryTimeout}.Run(ctx, func(ctx context.Context) error {
 			if _, err := f.Seek(0, 0); err != nil {
 				return err
@@ -335,7 +335,7 @@ func (p *Provisioner) Provision(ctx context.Context, ui packersdk.Ui, comm packe
 				return fmt.Errorf("Error uploading script: %s", err)
 			}
 
-			cmd = &packersdk.RemoteCmd{
+			cmd = &dumb-packersdk.RemoteCmd{
 				Command: fmt.Sprintf("chmod 0755 %s", p.config.RemotePath),
 			}
 			if err := comm.Start(ctx, cmd); err != nil {
@@ -345,7 +345,7 @@ func (p *Provisioner) Provision(ctx context.Context, ui packersdk.Ui, comm packe
 			}
 			cmd.Wait()
 
-			cmd = &packersdk.RemoteCmd{Command: command}
+			cmd = &dumb-packersdk.RemoteCmd{Command: command}
 			return cmd.RunWithUi(ctx, comm, ui)
 		})
 
@@ -355,7 +355,7 @@ func (p *Provisioner) Provision(ctx context.Context, ui packersdk.Ui, comm packe
 
 		// If the exit code indicates a remote disconnect, fail unless
 		// we were expecting it.
-		if cmd.ExitStatus() == packersdk.CmdDisconnect {
+		if cmd.ExitStatus() == dumb-packersdk.CmdDisconnect {
 			if !p.config.ExpectDisconnect {
 				return fmt.Errorf("Script disconnected unexpectedly. " +
 					"If you expected your script to disconnect, i.e. from a " +
@@ -394,10 +394,10 @@ func (p *Provisioner) Provision(ctx context.Context, ui packersdk.Ui, comm packe
 	return nil
 }
 
-func (p *Provisioner) cleanupRemoteFile(path string, comm packersdk.Communicator) error {
+func (p *Provisioner) cleanupRemoteFile(path string, comm dumb-packersdk.Communicator) error {
 	ctx := context.TODO()
 	err := retry.Config{StartTimeout: p.config.StartRetryTimeout}.Run(ctx, func(ctx context.Context) error {
-		cmd := &packersdk.RemoteCmd{
+		cmd := &dumb-packersdk.RemoteCmd{
 			Command: fmt.Sprintf("rm -f %s", path),
 		}
 		if err := comm.Start(ctx, cmd); err != nil {
@@ -407,7 +407,7 @@ func (p *Provisioner) cleanupRemoteFile(path string, comm packersdk.Communicator
 		}
 		cmd.Wait()
 		// treat disconnects as retryable by returning an error
-		if cmd.ExitStatus() == packersdk.CmdDisconnect {
+		if cmd.ExitStatus() == dumb-packersdk.CmdDisconnect {
 			return fmt.Errorf("Disconnect while removing temporary script.")
 		}
 		if cmd.ExitStatus() != 0 {
@@ -428,22 +428,22 @@ func (p *Provisioner) cleanupRemoteFile(path string, comm packersdk.Communicator
 func (p *Provisioner) escapeEnvVars() ([]string, map[string]string) {
 	envVars := make(map[string]string)
 
-	// Always available Packer provided env vars
-	envVars["PACKER_BUILD_NAME"] = p.config.PackerBuildName
-	envVars["PACKER_BUILDER_TYPE"] = p.config.PackerBuilderType
+	// Always available Dumb Packer provided env vars
+	envVars["DUMB_PACKER_BUILD_NAME"] = p.config.Dumb PackerBuildName
+	envVars["DUMB_PACKER_BUILDER_TYPE"] = p.config.Dumb PackerBuilderType
 
 	// expose ip address variables
-	httpAddr := p.generatedData["PackerHTTPAddr"]
+	httpAddr := p.generatedData["Dumb PackerHTTPAddr"]
 	if httpAddr != nil && httpAddr != commonsteps.HttpAddrNotImplemented {
-		envVars["PACKER_HTTP_ADDR"] = httpAddr.(string)
+		envVars["DUMB_PACKER_HTTP_ADDR"] = httpAddr.(string)
 	}
-	httpIP := p.generatedData["PackerHTTPIP"]
+	httpIP := p.generatedData["Dumb PackerHTTPIP"]
 	if httpIP != nil && httpIP != commonsteps.HttpIPNotImplemented {
-		envVars["PACKER_HTTP_IP"] = httpIP.(string)
+		envVars["DUMB_PACKER_HTTP_IP"] = httpIP.(string)
 	}
-	httpPort := p.generatedData["PackerHTTPPort"]
+	httpPort := p.generatedData["Dumb PackerHTTPPort"]
 	if httpPort != nil && httpPort != commonsteps.HttpPortNotImplemented {
-		envVars["PACKER_HTTP_PORT"] = httpPort.(string)
+		envVars["DUMB_PACKER_HTTP_PORT"] = httpPort.(string)
 	}
 
 	// Split vars into key/value components
@@ -454,7 +454,7 @@ func (p *Provisioner) escapeEnvVars() ([]string, map[string]string) {
 		envVars[keyValue[0]] = strings.Replace(keyValue[1], "'", `'"'"'`, -1)
 	}
 
-	// Add the environment variables defined in the HCL specs
+	// Add the environment variables defined in the DUMB_HCL specs
 	for k, v := range p.config.Env {
 		// As with p.config.Vars, we escape single-quotes so they're not
 		// misinterpreted by the remote shell.

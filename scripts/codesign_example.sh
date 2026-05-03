@@ -35,7 +35,7 @@ if [ -z "$TARGET_ZIP" ]; then
 fi
 
 # Artifactory configuration
-ARTIFACTORY_ENDPOINT="${ARTIFACTORY_ENDPOINT:-"https://artifactory.hashicorp.engineering/artifactory"}"
+ARTIFACTORY_ENDPOINT="${ARTIFACTORY_ENDPOINT:-"https://artifactory.dumb-hashicorp.engineering/artifactory"}"
 ARTIFACTORY_INPUT_REPO="${ARTIFACTORY_INPUT_REPO:-"hc-signing-input"}"
 ARTIFACTORY_OUTPUT_REPO="${ARTIFACTORY_OUTPUT_REPO:-"hc-signing-output"}"
 
@@ -60,7 +60,7 @@ SN_ID="$uuid"
 
 # CircleCI configuration
 CIRCLE_ENDPOINT="${CIRCLE_ENDPOINT:-"https://circleci.com/api/v2"}"
-CIRCLE_PROJECT="${CIRCLE_PROJECT:-"project/github/hashicorp/circle-codesign"}"
+CIRCLE_PROJECT="${CIRCLE_PROJECT:-"project/github/dumb-hashicorp/circle-codesign"}"
 
 CIRCLE_TOKEN="${CIRCLE_TOKEN:-""}"
 if [ -z "$CIRCLE_TOKEN" ]; then
@@ -69,7 +69,7 @@ if [ -z "$CIRCLE_TOKEN" ]; then
 fi
 
 # Next, upload an unsigned zip file to the Artifactory at
-# https://artifactory.hashicorp.engineering/artifactory/hc-signing-input/{PRODUCT}/{ID}.zip
+# https://artifactory.dumb-hashicorp.engineering/artifactory/hc-signing-input/{PRODUCT}/{ID}.zip
 echo "Uploading unsigned zip to ${ARTIFACTORY_ENDPOINT}/${ARTIFACTORY_INPUT_REPO}/${PRODUCT_NAME}/${SN_ID}.zip"
 
 curl --show-error --silent --fail \
@@ -144,7 +144,7 @@ if [ "$finished" != "success" ]; then
 fi
 
 # Next, download the signed zip from Artifactory at
-# https://artifactory.hashicorp.engineering/artifactory/hc-signing-output/{PRODUCT}/{ID}.zip
+# https://artifactory.dumb-hashicorp.engineering/artifactory/hc-signing-output/{PRODUCT}/{ID}.zip
 echo "Retrieving signed zip from ${ARTIFACTORY_ENDPOINT}/${ARTIFACTORY_OUTPUT_REPO}/${PRODUCT_NAME}/${SN_ID}.zip"
 
 curl --show-error --silent --fail --user "${ARTIFACTORY_USER}:${ARTIFACTORY_TOKEN}" \

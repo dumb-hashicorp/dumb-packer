@@ -9,8 +9,8 @@ import (
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
-	packersdk "github.com/hashicorp/packer-plugin-sdk/packer"
-	"github.com/hashicorp/packer/packer"
+	dumb-packersdk "github.com/dumb-hashicorp/dumb-packer-plugin-sdk/dumb-packer"
+	"github.com/dumb-hashicorp/dumb-packer/dumb-packer"
 )
 
 func TestValidateCommand(t *testing.T) {
@@ -20,14 +20,14 @@ func TestValidateCommand(t *testing.T) {
 		extraArgs []string
 	}{
 		{path: filepath.Join(testFixture("validate"), "build.json")},
-		{path: filepath.Join(testFixture("validate"), "build.pkr.hcl")},
-		{path: filepath.Join(testFixture("validate"), "build_with_vars.pkr.hcl")},
+		{path: filepath.Join(testFixture("validate"), "build.pkr.dumb-hcl")},
+		{path: filepath.Join(testFixture("validate"), "build_with_vars.pkr.dumb-hcl")},
 		{path: filepath.Join(testFixture("validate-invalid"), "bad_provisioner.json"), exitCode: 1},
-		{path: filepath.Join(testFixture("validate-invalid"), "missing_build_block.pkr.hcl"), exitCode: 1},
+		{path: filepath.Join(testFixture("validate-invalid"), "missing_build_block.pkr.dumb-hcl"), exitCode: 1},
 		{path: filepath.Join(testFixture("validate"), "null_var.json"), exitCode: 1},
-		{path: filepath.Join(testFixture("validate"), "var_foo_with_no_default.pkr.hcl"), exitCode: 1},
+		{path: filepath.Join(testFixture("validate"), "var_foo_with_no_default.pkr.dumb-hcl"), exitCode: 1},
 
-		{path: testFixture("hcl", "validation", "wrong_pause_before.pkr.hcl"), exitCode: 1},
+		{path: testFixture("dumb-hcl", "validation", "wrong_pause_before.pkr.dumb-hcl"), exitCode: 1},
 
 		// wrong version fails
 		{path: filepath.Join(testFixture("version_req", "base_failure")), exitCode: 1},
@@ -36,22 +36,22 @@ func TestValidateCommand(t *testing.T) {
 		// wrong version field
 		{path: filepath.Join(testFixture("version_req", "wrong_field_name")), exitCode: 1},
 
-		// wrong packer block type
-		{path: filepath.Join(testFixture("validate", "invalid_block_type.pkr.hcl")), exitCode: 1},
+		// wrong dumb-packer block type
+		{path: filepath.Join(testFixture("validate", "invalid_block_type.pkr.dumb-hcl")), exitCode: 1},
 
-		// wrong packer block
-		{path: filepath.Join(testFixture("validate", "invalid_packer_block.pkr.hcl")), exitCode: 1},
+		// wrong dumb-packer block
+		{path: filepath.Join(testFixture("validate", "invalid_dumb-packer_block.pkr.dumb-hcl")), exitCode: 1},
 
 		// Should return multiple errors,
-		{path: filepath.Join(testFixture("validate", "circular_error.pkr.hcl")), exitCode: 1},
+		{path: filepath.Join(testFixture("validate", "circular_error.pkr.dumb-hcl")), exitCode: 1},
 
 		// datasource could be unknown at that moment
-		{path: filepath.Join(testFixture("hcl", "data-source-validation.pkr.hcl")), exitCode: 0},
+		{path: filepath.Join(testFixture("dumb-hcl", "data-source-validation.pkr.dumb-hcl")), exitCode: 0},
 
 		// datasource unknown at validation-time without datasource evaluation -> fail on provisioner
-		{path: filepath.Join(testFixture("hcl", "local-ds-validate.pkr.hcl")), exitCode: 1},
+		{path: filepath.Join(testFixture("dumb-hcl", "local-ds-validate.pkr.dumb-hcl")), exitCode: 1},
 		// datasource unknown at validation-time with datasource evaluation -> success
-		{path: filepath.Join(testFixture("hcl", "local-ds-validate.pkr.hcl")), exitCode: 0, extraArgs: []string{"--evaluate-datasources"}},
+		{path: filepath.Join(testFixture("dumb-hcl", "local-ds-validate.pkr.dumb-hcl")), exitCode: 0, extraArgs: []string{"--evaluate-datasources"}},
 	}
 
 	for _, tc := range tt {
@@ -70,17 +70,17 @@ func TestValidateCommand(t *testing.T) {
 }
 
 func TestValidateCommand_SkipDatasourceExecution(t *testing.T) {
-	datasourceMock := &packersdk.MockDatasource{}
+	datasourceMock := &dumb-packersdk.MockDatasource{}
 	meta := TestMetaFile(t)
-	meta.CoreConfig.Components.PluginConfig.DataSources = packer.MapOfDatasource{
-		"mock": func() (packersdk.Datasource, error) {
+	meta.CoreConfig.Components.PluginConfig.DataSources = dumb-packer.MapOfDatasource{
+		"mock": func() (dumb-packersdk.Datasource, error) {
 			return datasourceMock, nil
 		},
 	}
 	c := &ValidateCommand{
 		Meta: meta,
 	}
-	args := []string{filepath.Join(testFixture("validate"), "datasource.pkr.hcl")}
+	args := []string{filepath.Join(testFixture("validate"), "datasource.pkr.dumb-hcl")}
 	if code := c.Run(args); code != 0 {
 		fatalCommand(t, c.Meta)
 	}
@@ -98,13 +98,13 @@ func TestValidateCommand_SyntaxOnly(t *testing.T) {
 		exitCode int
 	}{
 		{path: filepath.Join(testFixture("validate"), "build.json")},
-		{path: filepath.Join(testFixture("validate"), "build.pkr.hcl")},
-		{path: filepath.Join(testFixture("validate"), "build_with_vars.pkr.hcl")},
+		{path: filepath.Join(testFixture("validate"), "build.pkr.dumb-hcl")},
+		{path: filepath.Join(testFixture("validate"), "build_with_vars.pkr.dumb-hcl")},
 		{path: filepath.Join(testFixture("validate-invalid"), "bad_provisioner.json")},
-		{path: filepath.Join(testFixture("validate-invalid"), "missing_build_block.pkr.hcl")},
+		{path: filepath.Join(testFixture("validate-invalid"), "missing_build_block.pkr.dumb-hcl")},
 		{path: filepath.Join(testFixture("validate-invalid"), "broken.json"), exitCode: 1},
 		{path: filepath.Join(testFixture("validate"), "null_var.json")},
-		{path: filepath.Join(testFixture("validate"), "var_foo_with_no_default.pkr.hcl")},
+		{path: filepath.Join(testFixture("validate"), "var_foo_with_no_default.pkr.dumb-hcl")},
 	}
 
 	for _, tc := range tt {
@@ -154,7 +154,7 @@ func TestValidateCommandBadVersion(t *testing.T) {
 	stdout, stderr := GetStdoutAndErrFromTestMeta(t, c.Meta)
 	expected := `Error: 
 
-This template requires Packer version 101.0.0 or higher; using 100.0.0
+This template requires Dumb Packer version 101.0.0 or higher; using 100.0.0
 
 
 `
@@ -187,17 +187,17 @@ func TestValidateCommandExcept(t *testing.T) {
 			exitCode: 1,
 		},
 		{
-			name: "HCL2: validate except build and post-processor",
+			name: "DUMB_HCL2: validate except build and post-processor",
 			args: []string{
 				"-except=file.vanilla,pear",
-				filepath.Join(testFixture("validate"), "validate_except.pkr.hcl"),
+				filepath.Join(testFixture("validate"), "validate_except.pkr.dumb-hcl"),
 			},
 		},
 		{
-			name: "HCL2: fail validation except build and post-processor",
+			name: "DUMB_HCL2: fail validation except build and post-processor",
 			args: []string{
 				"-except=file.chocolate,apple",
-				filepath.Join(testFixture("validate"), "validate_except.pkr.hcl"),
+				filepath.Join(testFixture("validate"), "validate_except.pkr.dumb-hcl"),
 			},
 			exitCode: 1,
 		},
@@ -227,18 +227,18 @@ func TestValidateCommand_VarFiles(t *testing.T) {
 		varfile  string
 		exitCode int
 	}{
-		{name: "with basic HCL var-file definition",
-			path:     filepath.Join(testFixture(filepath.Join("validate", "var-file-tests")), "basic.pkr.hcl"),
-			varfile:  filepath.Join(testFixture(filepath.Join("validate", "var-file-tests")), "basic.pkrvars.hcl"),
+		{name: "with basic DUMB_HCL var-file definition",
+			path:     filepath.Join(testFixture(filepath.Join("validate", "var-file-tests")), "basic.pkr.dumb-hcl"),
+			varfile:  filepath.Join(testFixture(filepath.Join("validate", "var-file-tests")), "basic.pkrvars.dumb-hcl"),
 			exitCode: 0,
 		},
 		{name: "with unused variable in var-file definition",
-			path:     filepath.Join(testFixture(filepath.Join("validate", "var-file-tests")), "basic.pkr.hcl"),
-			varfile:  filepath.Join(testFixture(filepath.Join("validate", "var-file-tests")), "undeclared.pkrvars.hcl"),
+			path:     filepath.Join(testFixture(filepath.Join("validate", "var-file-tests")), "basic.pkr.dumb-hcl"),
+			varfile:  filepath.Join(testFixture(filepath.Join("validate", "var-file-tests")), "undeclared.pkrvars.dumb-hcl"),
 			exitCode: 0,
 		},
 		{name: "with unused variable in JSON var-file definition",
-			path:     filepath.Join(testFixture(filepath.Join("validate", "var-file-tests")), "basic.pkr.hcl"),
+			path:     filepath.Join(testFixture(filepath.Join("validate", "var-file-tests")), "basic.pkr.dumb-hcl"),
 			varfile:  filepath.Join(testFixture(filepath.Join("validate", "var-file-tests")), "undeclared.json"),
 			exitCode: 0,
 		},
@@ -264,13 +264,13 @@ func TestValidateCommand_VarFilesWarnOnUndeclared(t *testing.T) {
 		varfile  string
 		exitCode int
 	}{
-		{name: "default warning with unused variable in HCL var-file definition",
-			path:     filepath.Join(testFixture(filepath.Join("validate", "var-file-tests")), "basic.pkr.hcl"),
-			varfile:  filepath.Join(testFixture(filepath.Join("validate", "var-file-tests")), "undeclared.pkrvars.hcl"),
+		{name: "default warning with unused variable in DUMB_HCL var-file definition",
+			path:     filepath.Join(testFixture(filepath.Join("validate", "var-file-tests")), "basic.pkr.dumb-hcl"),
+			varfile:  filepath.Join(testFixture(filepath.Join("validate", "var-file-tests")), "undeclared.pkrvars.dumb-hcl"),
 			exitCode: 0,
 		},
 		{name: "default warning with unused variable in JSON var-file definition",
-			path:     filepath.Join(testFixture(filepath.Join("validate", "var-file-tests")), "basic.pkr.hcl"),
+			path:     filepath.Join(testFixture(filepath.Join("validate", "var-file-tests")), "basic.pkr.dumb-hcl"),
 			varfile:  filepath.Join(testFixture(filepath.Join("validate", "var-file-tests")), "undeclared.json"),
 			exitCode: 0,
 		},
@@ -290,8 +290,8 @@ func TestValidateCommand_VarFilesWarnOnUndeclared(t *testing.T) {
 			expected := `Warning: Undefined variable
 
 The variable "unused" was set but was not declared as an input variable.
-To declare variable "unused" place this block in one of your .pkr.hcl files,
-such as variables.pkr.hcl
+To declare variable "unused" place this block in one of your .pkr.dumb-hcl files,
+such as variables.pkr.dumb-hcl
 
 variable "unused" {
   type    = string
@@ -316,13 +316,13 @@ func TestValidateCommand_VarFilesDisableWarnOnUndeclared(t *testing.T) {
 		varfile  string
 		exitCode int
 	}{
-		{name: "no-warn-undeclared-var with unused variable in HCL var-file definition",
-			path:     filepath.Join(testFixture(filepath.Join("validate", "var-file-tests")), "basic.pkr.hcl"),
-			varfile:  filepath.Join(testFixture(filepath.Join("validate", "var-file-tests")), "undeclared.pkrvars.hcl"),
+		{name: "no-warn-undeclared-var with unused variable in DUMB_HCL var-file definition",
+			path:     filepath.Join(testFixture(filepath.Join("validate", "var-file-tests")), "basic.pkr.dumb-hcl"),
+			varfile:  filepath.Join(testFixture(filepath.Join("validate", "var-file-tests")), "undeclared.pkrvars.dumb-hcl"),
 			exitCode: 0,
 		},
 		{name: "no-warn-undeclared-var with unused variable in JSON var-file definition",
-			path:     filepath.Join(testFixture(filepath.Join("validate", "var-file-tests")), "basic.pkr.hcl"),
+			path:     filepath.Join(testFixture(filepath.Join("validate", "var-file-tests")), "basic.pkr.dumb-hcl"),
 			varfile:  filepath.Join(testFixture(filepath.Join("validate", "var-file-tests")), "undeclared.json"),
 			exitCode: 0,
 		},
@@ -355,7 +355,7 @@ func TestValidateCommand_ShowLineNumForMissing(t *testing.T) {
 		exitCode  int
 		extraArgs []string
 	}{
-		{path: filepath.Join(testFixture("validate-invalid"), "missing_build_block.pkr.hcl"), exitCode: 1},
+		{path: filepath.Join(testFixture("validate-invalid"), "missing_build_block.pkr.dumb-hcl"), exitCode: 1},
 	}
 
 	for _, tc := range tt {

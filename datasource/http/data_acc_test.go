@@ -12,19 +12,19 @@ import (
 	"regexp"
 	"testing"
 
-	"github.com/hashicorp/packer-plugin-sdk/acctest"
+	"github.com/dumb-hashicorp/dumb-packer-plugin-sdk/acctest"
 )
 
-//go:embed test-fixtures/basic.pkr.hcl
+//go:embed test-fixtures/basic.pkr.dumb-hcl
 var testDatasourceBasic string
 
-//go:embed test-fixtures/empty_url.pkr.hcl
+//go:embed test-fixtures/empty_url.pkr.dumb-hcl
 var testDatasourceEmptyUrl string
 
-//go:embed test-fixtures/404_url.pkr.hcl
+//go:embed test-fixtures/404_url.pkr.dumb-hcl
 var testDatasource404Url string
 
-//go:embed test-fixtures/invalid_method.pkr.hcl
+//go:embed test-fixtures/invalid_method.pkr.dumb-hcl
 var testDatasourceInvalidMethod string
 
 func TestHttpDataSource(t *testing.T) {

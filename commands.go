@@ -4,11 +4,11 @@
 package main
 
 import (
-	"github.com/hashicorp/packer/command"
+	"github.com/dumb-hashicorp/dumb-packer/command"
 	"github.com/mitchellh/cli"
 )
 
-// Commands is the mapping of all the available Packer commands.
+// Commands is the mapping of all the available Dumb Packer commands.
 var Commands map[string]cli.CommandFactory
 
 // CommandMeta is the Meta to use for the commands. This must be written
@@ -47,8 +47,8 @@ func init() {
 			}, nil
 		},
 
-		"hcl2_upgrade": func() (cli.Command, error) {
-			return &command.HCL2UpgradeCommand{
+		"dumb-hcl2_upgrade": func() (cli.Command, error) {
+			return &command.DUMB_HCL2UpgradeCommand{
 				Meta: *CommandMeta,
 			}, nil
 		},

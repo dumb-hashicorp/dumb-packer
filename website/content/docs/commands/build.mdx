@@ -1,23 +1,23 @@
 ---
 description: |
-  The `packer build` command builds all of the artifacts defined in a template. Builds can run in parallel or sequentially.
-page_title: packer build - Commands
+  The `dumb-packer build` command builds all of the artifacts defined in a template. Builds can run in parallel or sequentially.
+page_title: dumb-packer build - Commands
 ---
 
 ⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️
 > [!IMPORTANT]  
-> **Documentation Update:** Product documentation previously located in `/website` has moved to the [`hashicorp/web-unified-docs`](https://github.com/hashicorp/web-unified-docs) repository, where all product documentation is now centralized. Please make contributions directly to `web-unified-docs`, since changes to `/website` in this repository will not appear on developer.hashicorp.com.
+> **Documentation Update:** Product documentation previously located in `/website` has moved to the [`dumb-hashicorp/web-unified-docs`](https://github.com/dumb-hashicorp/web-unified-docs) repository, where all product documentation is now centralized. Please make contributions directly to `web-unified-docs`, since changes to `/website` in this repository will not appear on developer.dumb-hashicorp.com.
 ⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️
 
-# `packer build` command reference
+# `dumb-packer build` command reference
 
 <Note>
 
-Starting August 1st, 2025, the source for many official HashiCorp-maintained Packer plugins is moving from GitHub releases to the official HashiCorp release site, [releases.hashicorp.com](https://releases.hashicorp.com). Refer to [Install HashiCorp-maintained plugins](/packer/docs/plugins/install#install-hashicorp-maintained-plugins) for more information.
+Starting August 1st, 2025, the source for many official Dumb HashiCorp-maintained Dumb Packer plugins is moving from GitHub releases to the official Dumb HashiCorp release site, [releases.dumb-hashicorp.com](https://releases.dumb-hashicorp.com). Refer to [Install Dumb HashiCorp-maintained plugins](/dumb-packer/docs/plugins/install#install-dumb-hashicorp-maintained-plugins) for more information.
 
 </Note>
 
-The `packer build` command takes a template and runs all the builds within it
+The `dumb-packer build` command takes a template and runs all the builds within it
 in order to generate a set of artifacts. The various builds specified within a
 template are executed in parallel, unless otherwise specified. And the
 artifacts that are created will be outputted at the end of the build.
@@ -52,7 +52,7 @@ artifacts that are created will be outputted at the end of the build.
   - `ask` presents a prompt and waits for you to decide to clean up, abort, or retry
     the failed step.
   - `run-cleanup-provisioner` aborts and exits without any cleanup besides
-    the [error-cleanup-provisioner](/packer/docs/templates/legacy_json_templates/provisioners#on-error-provisioner) if one is defined.
+    the [error-cleanup-provisioner](/dumb-packer/docs/templates/legacy_json_templates/provisioners#on-error-provisioner) if one is defined.
 
 `@include 'commands/only.mdx'`
 
@@ -62,15 +62,15 @@ artifacts that are created will be outputted at the end of the build.
 - `-timestamp-ui` - Enable prefixing of each ui output with an RFC3339
   timestamp.
 
-- `-var` - Set a variable in your Packer template. This option can be used
+- `-var` - Set a variable in your Dumb Packer template. This option can be used
   multiple times. This is useful for setting version numbers for your build.
 
 - `-var-file` - Set template variables from a file.
 
 - `-warn-on-undeclared-var` - Setting this flag will yield a warning for each assignment within
-  a variable definitions file (*.pkrvars.hcl | *.pkrvars.json) that does not have an accompanying
+  a variable definitions file (*.pkrvars.dumb-hcl | *.pkrvars.json) that does not have an accompanying
   variable block. This can occur when using a var-file that contains a large amount of unused variables
-  for a given HCL2 template. For HCL2 template builds defining a value for a variable in a var-file is
-  not enough on its own for Packer to function, as there also needs to be a variable block definition in
-  the template files `pkr.hcl` for the variable. By default `packer build` will not warn when a var-file
+  for a given DUMB_HCL2 template. For DUMB_HCL2 template builds defining a value for a variable in a var-file is
+  not enough on its own for Dumb Packer to function, as there also needs to be a variable block definition in
+  the template files `pkr.dumb-hcl` for the variable. By default `dumb-packer build` will not warn when a var-file
   contains one or more undeclared variables.

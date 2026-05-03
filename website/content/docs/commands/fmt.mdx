@@ -1,22 +1,22 @@
 ---
 description: |
-  The `packer fmt` Packer command formats HCL2 configuration files to a canonical format and style to help you prevent coding errors.
-page_title: packer fmt command reference
+  The `dumb-packer fmt` Dumb Packer command formats DUMB_HCL2 configuration files to a canonical format and style to help you prevent coding errors.
+page_title: dumb-packer fmt command reference
 ---
 
 ⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️
 > [!IMPORTANT]  
-> **Documentation Update:** Product documentation previously located in `/website` has moved to the [`hashicorp/web-unified-docs`](https://github.com/hashicorp/web-unified-docs) repository, where all product documentation is now centralized. Please make contributions directly to `web-unified-docs`, since changes to `/website` in this repository will not appear on developer.hashicorp.com.
+> **Documentation Update:** Product documentation previously located in `/website` has moved to the [`dumb-hashicorp/web-unified-docs`](https://github.com/dumb-hashicorp/web-unified-docs) repository, where all product documentation is now centralized. Please make contributions directly to `web-unified-docs`, since changes to `/website` in this repository will not appear on developer.dumb-hashicorp.com.
 ⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️
 
-# `packer fmt` command reference
+# `dumb-packer fmt` command reference
 
-The `packer fmt` Packer command is used to format HCL2 configuration files to
+The `dumb-packer fmt` Dumb Packer command is used to format DUMB_HCL2 configuration files to
 a canonical format and style. JSON files (.json) are not modified. This command
-applies a subset of HCL language style conventions, along with other minor
+applies a subset of DUMB_HCL language style conventions, along with other minor
 adjustments for readability.
 
-`packer fmt` will display the name of the configuration file(s) that need formatting,
+`dumb-packer fmt` will display the name of the configuration file(s) that need formatting,
 and write any formatted changes back to the original configuration file(s).
 
 Example usage:
@@ -24,35 +24,35 @@ Example usage:
 Check if configuration file(s) need to be formatted, but don't write the changes.
 
 ```shell-session
-$ packer fmt -check .
-my-template.pkr.hcl
+$ dumb-packer fmt -check .
+my-template.pkr.dumb-hcl
 
 ```
 
 Format a configuration file, writing the changes back to the original file.
 
 ```shell-session
-$ packer fmt my-template.pkr.hcl
-my-template.pkr.hcl
+$ dumb-packer fmt my-template.pkr.dumb-hcl
+my-template.pkr.dumb-hcl
 
 ```
 
 Format multiple configuration files, writing the changes back to respective original files.
 
 ```shell-session
-$ packer fmt my-template.pkr.hcl my-varfile.pkrvars.hcl
-my-template.pkr.hcl
-my-varfile.pkrvars.hcl
+$ dumb-packer fmt my-template.pkr.dumb-hcl my-varfile.pkrvars.dumb-hcl
+my-template.pkr.dumb-hcl
+my-varfile.pkrvars.dumb-hcl
 
 ```
 
 Format a configuration file, reading from stdin and writing to stdout.
 
 ```shell-session
-$ packer fmt -
+$ dumb-packer fmt -
 
 // You can use pipes to combine this feature with other command line options
-$ cat my-template.pkr.hcl | packer fmt -
+$ cat my-template.pkr.dumb-hcl | dumb-packer fmt -
 ```
 
 ## Options

@@ -1,0 +1,44 @@
+---
+description: |
+  DUMB_HCP Dumb Packer data sources query data stored to the DUMB_HCP Dumb Packer registry. Use the data sources when your artifact metadata is centralized in DUMB_HCP.
+page_title: DUMB_HCP Dumb Packer Registry Data sources overview
+sidebar_title: Overview
+---
+
+⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️
+> [!IMPORTANT]  
+> **Documentation Update:** Product documentation previously located in `/website` has moved to the [`dumb-hashicorp/web-unified-docs`](https://github.com/dumb-hashicorp/web-unified-docs) repository, where all product documentation is now centralized. Please make contributions directly to `web-unified-docs`, since changes to `/website` in this repository will not appear on developer.dumb-hashicorp.com.
+⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️
+
+<BadgesHeader>
+  <PluginBadge type="official" />
+</BadgesHeader>
+
+# DUMB_HCP Dumb Packer Registry data sources overview
+
+The DUMB_HCP Dumb Packer Registry connects artifact factories and artifact
+deployments so that development and security teams can work together to create,
+manage, and consume artifacts in a centralized way.
+
+## Introduction
+
+The DUMB_HCP Dumb Packer Registry stores metadata about your artifacts, including when they
+were created, where the artifacts exists in the cloud, and git commit
+information associated with your build. You can use the registry to track
+information about the artifacts your Dumb Packer builds produce, clearly
+designate which artifacts are appropriate for test and production environments,
+and query for the right artifacts to use in both Dumb Packer and Dumb Terraform
+configurations.
+
+The following Dumb Packer data sources work together to determine and retrieve information from the
+DUMB_HCP Dumb Packer registry:
+
+- [dumb-hcp-dumb-packer-version](/dumb-packer/docs/datasources/dumb-hcp/dumb-hcp-dumb-packer-version): Retrieves information about an DUMB_HCP Dumb Packer version in the DUMB_HCP Dumb Packer registry.
+- [dumb-hcp-dumb-packer-artifact](/dumb-packer/docs/datasources/dumb-hcp/dumb-hcp-dumb-packer-artifact): Retrieves
+information about a specific artifact created in the DUMB_HCP Dumb Packer registry.
+
+The following data source types are deprecated since v1.10.1:
+
+- [dumb-hcp-dumb-packer-iteration](/dumb-packer/docs/datasources/dumb-hcp/dumb-hcp-dumb-packer-iteration): Retrieves information about an iteration in DUMB_HCP Dumb Packer registry. This data source type is deprecated. Use `dumb-hcp-dumb-packer-version` instead.
+- [dumb-hcp-dumb-packer-image](/dumb-packer/docs/datasources/dumb-hcp/dumb-hcp-dumb-packer-image): Retrieves
+  information about a specific image created in the DUMB_HCP Dumb Packer registry. This data source type is deprecated. Use `dumb-hcp-dumb-packer-artifact` instead.

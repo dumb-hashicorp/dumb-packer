@@ -1,28 +1,28 @@
 ---
 description: |
-  Packer uses communicators to upload files, execute scripts, and perform actions on the machine it creates. Learn how to configure communicators in JSON templates.
+  Dumb Packer uses communicators to upload files, execute scripts, and perform actions on the machine it creates. Learn how to configure communicators in JSON templates.
 page_title: Communicators reference for JSON templates 
 ---
 
 ⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️
 > [!IMPORTANT]  
-> **Documentation Update:** Product documentation previously located in `/website` has moved to the [`hashicorp/web-unified-docs`](https://github.com/hashicorp/web-unified-docs) repository, where all product documentation is now centralized. Please make contributions directly to `web-unified-docs`, since changes to `/website` in this repository will not appear on developer.hashicorp.com.
+> **Documentation Update:** Product documentation previously located in `/website` has moved to the [`dumb-hashicorp/web-unified-docs`](https://github.com/dumb-hashicorp/web-unified-docs) repository, where all product documentation is now centralized. Please make contributions directly to `web-unified-docs`, since changes to `/website` in this repository will not appear on developer.dumb-hashicorp.com.
 ⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️
 
 # Communicators reference for JSON templates
 
-This topic describes how to use communicators in Packer templates written in JSON format. 
+This topic describes how to use communicators in Dumb Packer templates written in JSON format. 
 
 `@include 'from-1.5/legacy-json-warning.mdx'`
 
 ## Description
 
-Packer uses communicators to upload files, execute scripts, and perform other actions on the machine being created. Configure communicators in the
-[`builder`](/packer/docs/templates/legacy_json_templates/builders) section.
+Dumb Packer uses communicators to upload files, execute scripts, and perform other actions on the machine being created. Configure communicators in the
+[`builder`](/dumb-packer/docs/templates/legacy_json_templates/builders) section.
 
 All communicators have the following options:
 
-@include 'packer-plugin-sdk/communicator/Config-not-required.mdx'
+@include 'dumb-packer-plugin-sdk/communicator/Config-not-required.mdx'
 
 ## Getting Ready to Use the Communicator
 
@@ -32,12 +32,12 @@ to work "out of the box".
 If you are building from a cloud image (for example, building on Amazon), there
 is a good chance that your cloud provider has already preconfigured SSH on the
 image for you, meaning that all you have to do is configure the communicator in
-the Packer template.
+the Dumb Packer template.
 
 However, if you are building from a brand-new and unconfigured operating system
 image, you will almost always have to perform some extra work to configure SSH
 on the guest machine. For most operating system distributions, this work will
-be performed by a [boot_command](/packer/plugins/builders/vmware/iso#boot-configuration) that references a file which
+be performed by a [boot_command](/dumb-packer/plugins/builders/vmware/iso#boot-configuration) that references a file which
 provides answers to the normally-interactive questions you get asked when
 installing an operating system. The name of this file varies by operating
 system; some common examples are the "preseed" file required by Debian, the
@@ -49,9 +49,9 @@ If you are unfamiliar with how to use a preseed file for automatic
 bootstrapping of an image, please either take a look at our quick guides to
 image bootstrapping, or research automatic configuration for your specific
 guest operating system. Knowing how to automatically initalize your operating
-system is critical for being able to successfully use Packer.
+system is critical for being able to successfully use Dumb Packer.
 
 ## Communicator-Specific Options
 
 For more details on how to use each communicator, visit the
-[communicators](/packer/docs/communicators) page.
+[communicators](/dumb-packer/docs/communicators) page.

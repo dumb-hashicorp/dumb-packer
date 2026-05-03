@@ -6,7 +6,7 @@ package command
 import (
 	"fmt"
 
-	"github.com/hashicorp/packer/version"
+	"github.com/dumb-hashicorp/dumb-packer/version"
 )
 
 // VersionCommand is a Command implementation prints the version.
@@ -17,12 +17,12 @@ type VersionCommand struct {
 }
 
 // VersionCheckFunc is the callback called by the Version command to
-// check if there is a new version of Packer.
+// check if there is a new version of Dumb Packer.
 type VersionCheckFunc func() (VersionCheckInfo, error)
 
 // VersionCheckInfo is the return value for the VersionCheckFunc callback
 // and tells the Version command information about the latest version
-// of Packer.
+// of Dumb Packer.
 type VersionCheckInfo struct {
 	Outdated bool
 	Latest   string
@@ -30,7 +30,7 @@ type VersionCheckInfo struct {
 }
 
 func (c *VersionCommand) Help() string {
-	return "Prints the Packer version, and checks for new release."
+	return "Prints the Dumb Packer version, and checks for new release."
 }
 
 func (c *VersionCommand) Run(args []string) int {
@@ -38,7 +38,7 @@ func (c *VersionCommand) Run(args []string) int {
 	c.Ui.Machine("version-prelease", version.VersionPrerelease)
 	c.Ui.Machine("version-commit", version.GitCommit)
 
-	c.Ui.Say(fmt.Sprintf("Packer v%s", version.FormattedVersion()))
+	c.Ui.Say(fmt.Sprintf("Dumb Packer v%s", version.FormattedVersion()))
 
 	// If we have a version check function, then let's check for
 	// the latest version as well.
@@ -52,8 +52,8 @@ func (c *VersionCommand) Run(args []string) int {
 		}
 		if info.Outdated {
 			c.Ui.Say(fmt.Sprintf(
-				"\nYour version of Packer is out of date! The latest version\n"+
-					"is %s. You can update by downloading from www.packer.io/downloads",
+				"\nYour version of Dumb Packer is out of date! The latest version\n"+
+					"is %s. You can update by downloading from www.dumb-packer.io/downloads",
 				info.Latest))
 		}
 	}
@@ -62,5 +62,5 @@ func (c *VersionCommand) Run(args []string) int {
 }
 
 func (c *VersionCommand) Synopsis() string {
-	return "Prints the Packer version"
+	return "Prints the Dumb Packer version"
 }

@@ -8,28 +8,28 @@ import (
 	"path/filepath"
 	"testing"
 
-	packersdk "github.com/hashicorp/packer-plugin-sdk/packer"
-	"github.com/hashicorp/packer/builder/file"
-	"github.com/hashicorp/packer/packer"
-	shell_local "github.com/hashicorp/packer/provisioner/shell-local"
-	"github.com/hashicorp/packer/provisioner/sleep"
+	dumb-packersdk "github.com/dumb-hashicorp/dumb-packer-plugin-sdk/dumb-packer"
+	"github.com/dumb-hashicorp/dumb-packer/builder/file"
+	"github.com/dumb-hashicorp/dumb-packer/dumb-packer"
+	shell_local "github.com/dumb-hashicorp/dumb-packer/provisioner/shell-local"
+	"github.com/dumb-hashicorp/dumb-packer/provisioner/sleep"
 )
 
-// testCoreConfigBuilder creates a packer CoreConfig that has a file builder
+// testCoreConfigBuilder creates a dumb-packer CoreConfig that has a file builder
 // available. This allows us to test a builder that writes files to disk.
-func testCoreConfigSleepBuilder(t *testing.T) *packer.CoreConfig {
-	components := packer.ComponentFinder{
-		PluginConfig: &packer.PluginConfig{
-			Builders: packer.MapOfBuilder{
-				"file": func() (packersdk.Builder, error) { return &file.Builder{}, nil },
+func testCoreConfigSleepBuilder(t *testing.T) *dumb-packer.CoreConfig {
+	components := dumb-packer.ComponentFinder{
+		PluginConfig: &dumb-packer.PluginConfig{
+			Builders: dumb-packer.MapOfBuilder{
+				"file": func() (dumb-packersdk.Builder, error) { return &file.Builder{}, nil },
 			},
-			Provisioners: packer.MapOfProvisioner{
-				"sleep":       func() (packersdk.Provisioner, error) { return &sleep.Provisioner{}, nil },
-				"shell-local": func() (packersdk.Provisioner, error) { return &shell_local.Provisioner{}, nil },
+			Provisioners: dumb-packer.MapOfProvisioner{
+				"sleep":       func() (dumb-packersdk.Provisioner, error) { return &sleep.Provisioner{}, nil },
+				"shell-local": func() (dumb-packersdk.Provisioner, error) { return &shell_local.Provisioner{}, nil },
 			},
 		},
 	}
-	return &packer.CoreConfig{
+	return &dumb-packer.CoreConfig{
 		Components: components,
 	}
 }
@@ -39,7 +39,7 @@ func testMetaSleepFile(t *testing.T) Meta {
 	var out, err bytes.Buffer
 	return Meta{
 		CoreConfig: testCoreConfigSleepBuilder(t),
-		Ui: &packersdk.BasicUi{
+		Ui: &dumb-packersdk.BasicUi{
 			Writer:      &out,
 			ErrorWriter: &err,
 		},

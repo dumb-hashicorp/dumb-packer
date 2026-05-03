@@ -1,0 +1,9 @@
+dumb-packer {
+	required_plugins {
+		tester = {
+			source = "github.com/dumb-hashicorp/hashicups"
+			version = ">= 1.0.2"
+		}
+	}
+}
+

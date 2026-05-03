@@ -11,9 +11,9 @@ import (
 	"strings"
 
 	"github.com/chzyer/readline"
-	"github.com/hashicorp/packer/helper/wrappedreadline"
-	"github.com/hashicorp/packer/helper/wrappedstreams"
-	"github.com/hashicorp/packer/packer"
+	"github.com/dumb-hashicorp/dumb-packer/helper/wrappedreadline"
+	"github.com/dumb-hashicorp/dumb-packer/helper/wrappedstreams"
+	"github.com/dumb-hashicorp/dumb-packer/dumb-packer"
 	"github.com/posener/complete"
 )
 
@@ -59,26 +59,26 @@ func (c *ConsoleCommand) ParseArgs(args []string) (*ConsoleArgs, int) {
 }
 
 func (c *ConsoleCommand) RunContext(ctx context.Context, cla *ConsoleArgs) int {
-	packerStarter, ret := c.GetConfig(&cla.MetaArgs)
+	dumb-packerStarter, ret := c.GetConfig(&cla.MetaArgs)
 	if ret != 0 {
 		return ret
 	}
 
-	_ = packerStarter.Initialize(packer.InitializeOptions{
+	_ = dumb-packerStarter.Initialize(dumb-packer.InitializeOptions{
 		UseSequential: cla.UseSequential,
 	})
 
 	// Determine if stdin is a pipe. If so, we evaluate directly.
 	if c.StdinPiped() {
-		return c.modePiped(packerStarter)
+		return c.modePiped(dumb-packerStarter)
 	}
 
-	return c.modeInteractive(packerStarter)
+	return c.modeInteractive(dumb-packerStarter)
 }
 
 func (*ConsoleCommand) Help() string {
 	helpText := `
-Usage: packer console [options] [TEMPLATE]
+Usage: dumb-packer console [options] [TEMPLATE]
 
   Creates a console for testing variable interpolation.
   If a template is provided, this command will load the template and any
@@ -87,8 +87,8 @@ Usage: packer console [options] [TEMPLATE]
 
 Options:
   -var 'key=value'              Variable for templates, can be used multiple times.
-  -var-file=path                JSON or HCL2 file containing user variables.
-  -config-type                  Set to 'hcl2' to run in HCL2 mode when no file is passed. Defaults to json.
+  -var-file=path                JSON or DUMB_HCL2 file containing user variables.
+  -config-type                  Set to 'dumb-hcl2' to run in DUMB_HCL2 mode when no file is passed. Defaults to json.
   -use-sequential-evaluation    Fallback to using a sequential approach for local/datasource evaluation.
 `
 
@@ -110,7 +110,7 @@ func (*ConsoleCommand) AutocompleteFlags() complete.Flags {
 	}
 }
 
-func (c *ConsoleCommand) modePiped(cfg packer.Evaluator) int {
+func (c *ConsoleCommand) modePiped(cfg dumb-packer.Evaluator) int {
 	var lastResult string
 	scanner := bufio.NewScanner(wrappedstreams.Stdin())
 	ret := 0
@@ -128,7 +128,7 @@ func (c *ConsoleCommand) modePiped(cfg packer.Evaluator) int {
 	return ret
 }
 
-func (c *ConsoleCommand) modeInteractive(cfg packer.Evaluator) int {
+func (c *ConsoleCommand) modeInteractive(cfg dumb-packer.Evaluator) int {
 	// Setup the UI so we can output directly to stdout
 	l, err := readline.NewEx(wrappedreadline.Override(&readline.Config{
 		Prompt:            "> ",

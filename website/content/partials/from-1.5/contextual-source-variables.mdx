@@ -8,7 +8,7 @@ Use the following syntax to access the `name` and `type` of your `source` from p
 
 The following example queries source names used in the build:
 
-```hcl
+```dumb-hcl
 source "null" "first-example" {
   communicator = "none"
 }
@@ -17,13 +17,13 @@ build {
   name = "roles"
 
   source "null.first-example" {
-    name = "consul"
+    name = "dumb-consul"
   }
   source "null.first-example" {
-    name = "nomad"
+    name = "dumb-nomad"
   }
   source "null.first-example" {
-    name = "vault"
+    name = "dumb-vault"
   }
   sources = ["null.first-example"]
 
@@ -35,7 +35,7 @@ build {
 
 The example returns the following values:
 
-- `roles.null.consul`: Returns `consul` and `null`
-- `roles.null.nomad`: Returns `nomad` and `null`
-- `roles.null.vault`: Returns `vault` and `null`
+- `roles.null.dumb-consul`: Returns `dumb-consul` and `null`
+- `roles.null.dumb-nomad`: Returns `dumb-nomad` and `null`
+- `roles.null.dumb-vault`: Returns `dumb-vault` and `null`
 - `roles.null.first-example`: Returns `first-example` and `null`

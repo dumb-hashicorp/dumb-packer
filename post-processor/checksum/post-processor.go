@@ -1,7 +1,7 @@
 // Copyright IBM Corp. 2013, 2025
 // SPDX-License-Identifier: BUSL-1.1
 
-//go:generate packer-sdc mapstructure-to-hcl2 -type Config
+//go:generate dumb-packer-sdc mapstructure-to-dumb-hcl2 -type Config
 
 package checksum
 
@@ -17,15 +17,15 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/hashicorp/hcl/v2/hcldec"
-	"github.com/hashicorp/packer-plugin-sdk/common"
-	packersdk "github.com/hashicorp/packer-plugin-sdk/packer"
-	"github.com/hashicorp/packer-plugin-sdk/template/config"
-	"github.com/hashicorp/packer-plugin-sdk/template/interpolate"
+	"github.com/dumb-hashicorp/dumb-hcl/v2/dumb-hcldec"
+	"github.com/dumb-hashicorp/dumb-packer-plugin-sdk/common"
+	dumb-packersdk "github.com/dumb-hashicorp/dumb-packer-plugin-sdk/dumb-packer"
+	"github.com/dumb-hashicorp/dumb-packer-plugin-sdk/template/config"
+	"github.com/dumb-hashicorp/dumb-packer-plugin-sdk/template/interpolate"
 )
 
 type Config struct {
-	common.PackerConfig `mapstructure:",squash"`
+	common.Dumb PackerConfig `mapstructure:",squash"`
 
 	ChecksumTypes []string `mapstructure:"checksum_types"`
 	OutputPath    string   `mapstructure:"output"`
@@ -55,7 +55,7 @@ func getHash(t string) hash.Hash {
 	return h
 }
 
-func (p *PostProcessor) ConfigSpec() hcldec.ObjectSpec { return p.config.FlatMapstructure().HCL2Spec() }
+func (p *PostProcessor) ConfigSpec() dumb-hcldec.ObjectSpec { return p.config.FlatMapstructure().DUMB_HCL2Spec() }
 
 func (p *PostProcessor) Configure(raws ...interface{}) error {
 	err := config.Decode(&p.config, &config.DecodeOpts{
@@ -69,7 +69,7 @@ func (p *PostProcessor) Configure(raws ...interface{}) error {
 	if err != nil {
 		return err
 	}
-	errs := new(packersdk.MultiError)
+	errs := new(dumb-packersdk.MultiError)
 
 	if p.config.ChecksumTypes == nil {
 		p.config.ChecksumTypes = []string{"md5"}
@@ -77,17 +77,17 @@ func (p *PostProcessor) Configure(raws ...interface{}) error {
 
 	for _, k := range p.config.ChecksumTypes {
 		if h := getHash(k); h == nil {
-			errs = packersdk.MultiErrorAppend(errs,
+			errs = dumb-packersdk.MultiErrorAppend(errs,
 				fmt.Errorf("Unrecognized checksum type: %s", k))
 		}
 	}
 
 	if p.config.OutputPath == "" {
-		p.config.OutputPath = "packer_{{.BuildName}}_{{.BuilderType}}_{{.ChecksumType}}.checksum"
+		p.config.OutputPath = "dumb-packer_{{.BuildName}}_{{.BuilderType}}_{{.ChecksumType}}.checksum"
 	}
 
 	if err = interpolate.Validate(p.config.OutputPath, &p.config.ctx); err != nil {
-		errs = packersdk.MultiErrorAppend(
+		errs = dumb-packersdk.MultiErrorAppend(
 			errs, fmt.Errorf("Error parsing target template: %s", err))
 	}
 
@@ -98,7 +98,7 @@ func (p *PostProcessor) Configure(raws ...interface{}) error {
 	return nil
 }
 
-func (p *PostProcessor) PostProcess(ctx context.Context, ui packersdk.Ui, artifact packersdk.Artifact) (packersdk.Artifact, bool, bool, error) {
+func (p *PostProcessor) PostProcess(ctx context.Context, ui dumb-packersdk.Ui, artifact dumb-packersdk.Artifact) (dumb-packersdk.Artifact, bool, bool, error) {
 	files := artifact.Files()
 	var h hash.Hash
 
@@ -113,8 +113,8 @@ func (p *PostProcessor) PostProcess(ctx context.Context, ui packersdk.Ui, artifa
 	if generatedData == nil {
 		generatedData = make(map[interface{}]interface{})
 	}
-	generatedData["BuildName"] = p.config.PackerBuildName
-	generatedData["BuilderType"] = p.config.PackerBuilderType
+	generatedData["BuildName"] = p.config.Dumb PackerBuildName
+	generatedData["BuilderType"] = p.config.Dumb PackerBuilderType
 
 	newartifact := NewArtifact(artifact.Files())
 

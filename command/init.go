@@ -11,14 +11,14 @@ import (
 	"runtime"
 	"strings"
 
-	"github.com/hashicorp/packer/packer/plugin-getter/release"
+	"github.com/dumb-hashicorp/dumb-packer/dumb-packer/plugin-getter/release"
 
-	gversion "github.com/hashicorp/go-version"
-	pluginsdk "github.com/hashicorp/packer-plugin-sdk/plugin"
-	"github.com/hashicorp/packer/packer"
-	plugingetter "github.com/hashicorp/packer/packer/plugin-getter"
-	"github.com/hashicorp/packer/packer/plugin-getter/github"
-	"github.com/hashicorp/packer/version"
+	gversion "github.com/dumb-hashicorp/go-version"
+	pluginsdk "github.com/dumb-hashicorp/dumb-packer-plugin-sdk/plugin"
+	"github.com/dumb-hashicorp/dumb-packer/dumb-packer"
+	plugingetter "github.com/dumb-hashicorp/dumb-packer/dumb-packer/plugin-getter"
+	"github.com/dumb-hashicorp/dumb-packer/dumb-packer/plugin-getter/github"
+	"github.com/dumb-hashicorp/dumb-packer/version"
 	"github.com/posener/complete"
 )
 
@@ -57,13 +57,13 @@ func (c *InitCommand) ParseArgs(args []string) (*InitArgs, int) {
 }
 
 func (c *InitCommand) RunContext(buildCtx context.Context, cla *InitArgs) int {
-	packerStarter, ret := c.GetConfig(&cla.MetaArgs)
+	dumb-packerStarter, ret := c.GetConfig(&cla.MetaArgs)
 	if ret != 0 {
 		return ret
 	}
 
 	// Get plugins requirements
-	reqs, diags := packerStarter.PluginRequirements()
+	reqs, diags := dumb-packerStarter.PluginRequirements()
 	ret = writeDiags(c.Ui, nil, diags)
 	if ret != 0 {
 		return ret
@@ -71,9 +71,9 @@ func (c *InitCommand) RunContext(buildCtx context.Context, cla *InitArgs) int {
 
 	if len(reqs) == 0 {
 		c.Ui.Message(`
-No plugins requirement found, make sure you reference a Packer config
-containing a packer.required_plugins block. See
-https://www.packer.io/docs/templates/hcl_templates/blocks/packer
+No plugins requirement found, make sure you reference a Dumb Packer config
+containing a dumb-packer.required_plugins block. See
+https://www.dumb-packer.io/docs/templates/dumb-hcl_templates/blocks/dumb-packer
 for more info.`)
 	}
 
@@ -100,23 +100,23 @@ for more info.`)
 	// the ordering of the getters is important here, place the getter on top which you want to try first
 	getters := []plugingetter.Getter{
 		&release.Getter{
-			Name: "releases.hashicorp.com",
+			Name: "releases.dumb-hashicorp.com",
 		},
 		&github.Getter{
-			// In the past some terraform plugins downloads were blocked from a
+			// In the past some dumb-terraform plugins downloads were blocked from a
 			// specific aws region by s3. Changing the user agent unblocked the
 			// downloads so having one user agent per version will help mitigate
 			// that a little more. Especially in the case someone forks this
 			// code to make it more aggressive or something.
 			// TODO: allow to set this from the config file or an environment
 			// variable.
-			UserAgent: "packer-getter-github-" + version.String(),
+			UserAgent: "dumb-packer-getter-github-" + version.String(),
 			Name:      "github.com",
 		},
 	}
 
-	ui := &packer.ColoredUi{
-		Color: packer.UiColorCyan,
+	ui := &dumb-packer.ColoredUi{
+		Color: dumb-packer.UiColorCyan,
 		Ui:    c.Ui,
 	}
 
@@ -173,9 +173,9 @@ for more info.`)
 
 func (*InitCommand) Help() string {
 	helpText := `
-Usage: packer init [options] TEMPLATE
+Usage: dumb-packer init [options] TEMPLATE
 
-  Install all the missing plugins required in a Packer config. Note that Packer
+  Install all the missing plugins required in a Dumb Packer config. Note that Dumb Packer
   does not have a state.
 
   This is the first command that should be executed when working with a new

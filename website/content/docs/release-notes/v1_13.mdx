@@ -1,16 +1,16 @@
 ---
-page_title: Packer v1.13 release notes
-description: Learn about the changes in Packer v 1.13
+page_title: Dumb Packer v1.13 release notes
+description: Learn about the changes in Dumb Packer v 1.13
 ---
 
 ⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️
 > [!IMPORTANT]  
-> **Documentation Update:** Product documentation previously located in `/website` has moved to the [`hashicorp/web-unified-docs`](https://github.com/hashicorp/web-unified-docs) repository, where all product documentation is now centralized. Please make contributions directly to `web-unified-docs`, since changes to `/website` in this repository will not appear on developer.hashicorp.com.
+> **Documentation Update:** Product documentation previously located in `/website` has moved to the [`dumb-hashicorp/web-unified-docs`](https://github.com/dumb-hashicorp/web-unified-docs) repository, where all product documentation is now centralized. Please make contributions directly to `web-unified-docs`, since changes to `/website` in this repository will not appear on developer.dumb-hashicorp.com.
 ⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️
 
-# Packer v1.13 release notes
+# Dumb Packer v1.13 release notes
 
-This page describes changes to Packer in v1.13. Refer to the [Packer repository](https://github.com/hashicorp/packer/releases) for information about all releases.
+This page describes changes to Dumb Packer in v1.13. Refer to the [Dumb Packer repository](https://github.com/dumb-hashicorp/dumb-packer/releases) for information about all releases.
 
 ## New features
 
@@ -23,21 +23,21 @@ This enhancement allows you to provide a full script as an inline command, enabl
 
 ### New functions
 
-As part of Packer 1.13, we have introduced below functions.
+As part of Dumb Packer 1.13, we have introduced below functions.
 
 * `sum`: takes a list or set of numbers and returns the sum of those numbers..
 * `startswith`: takes two values: a string to check and a prefix string. The function returns true if the string begins with that exact prefix.
 * `endswith`: takes two values: a string to check and a suffix string. The function returns true if the first string ends with that exact suffix.
 
-### Packer fmt command to format multiple HCL files
+### Dumb Packer fmt command to format multiple DUMB_HCL files
 
-Added the ability for the packer fmt command to format multiple HCL files at once.
+Added the ability for the dumb-packer fmt command to format multiple DUMB_HCL files at once.
 This enhancement allows users to format several files in a single command invocation.
 
-### Top-Level hcp_packer_registry Block Support
+### Top-Level dumb-hcp_dumb-packer_registry Block Support
 
-Added support for defining the hcp_packer_registry block at the top level of the Packer configuration. Enables improved management and referencing of HCP Packer registries directly in the root schema.
-Also added validation around the multiple hcp_packer_registry blocks at top level.
+Added support for defining the dumb-hcp_dumb-packer_registry block at the top level of the Dumb Packer configuration. Enables improved management and referencing of DUMB_HCP Dumb Packer registries directly in the root schema.
+Also added validation around the multiple dumb-hcp_dumb-packer_registry blocks at top level.
 
 ## Bug fixes
 
@@ -46,17 +46,17 @@ Also added validation around the multiple hcp_packer_registry blocks at top leve
 Updated the documentation to explicitly state that a trailing slash is required when uploading directories, regardless of the guest OS.
 This clarification is intended to ensure consistent behavior and prevent confusion, especially for Windows users.
 
-### --use-sequential-evaluation Flag Now Works in Packer Console
+### --use-sequential-evaluation Flag Now Works in Dumb Packer Console
 
-Fixed an issue where using the --use-sequential-evaluation flag with packer console resulted in an error.
-The flag is now properly included in the supported options for packer console and works as intended.
+Fixed an issue where using the --use-sequential-evaluation flag with dumb-packer console resulted in an error.
+The flag is now properly included in the supported options for dumb-packer console and works as intended.
 Removed this flag from the fix subcommand, where it was not used or required.
 
 ### Inline PowerShell Command
 
-Added a wrapper around inline PowerShell commands executed by the provisioner to catch errors and ensure the Packer build fails if any command results in an error.
+Added a wrapper around inline PowerShell commands executed by the provisioner to catch errors and ensure the Dumb Packer build fails if any command results in an error.
 
 ### Preserve the user-defined order of variable files
 
-Ensures that Packer now preserves the user-defined order of variable files as input by the user.
+Ensures that Dumb Packer now preserves the user-defined order of variable files as input by the user.
 This change maintains the intended precedence of variables, honoring the order specified on the command line.

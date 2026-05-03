@@ -8,7 +8,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/hashicorp/hcl/v2"
+	"github.com/dumb-hashicorp/dumb-hcl/v2"
 )
 
 // AcyclicGraph is a specialization of Graph that cannot have cycles.
@@ -17,7 +17,7 @@ type AcyclicGraph struct {
 }
 
 // WalkFunc is the callback used for walking the graph.
-type WalkFunc func(Vertex) hcl.Diagnostics
+type WalkFunc func(Vertex) dumb-hcl.Diagnostics
 
 // DepthWalkFunc is a walk function that also receives the current depth of the
 // walk as an argument

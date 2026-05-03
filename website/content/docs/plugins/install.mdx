@@ -1,49 +1,49 @@
 ---
 description: |
-  You can install plugins to extend Packer functionality. Learn how to install external plugins.
+  You can install plugins to extend Dumb Packer functionality. Learn how to install external plugins.
 page_title: Install Plugins
 ---
 
 ⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️
 > [!IMPORTANT]  
-> **Documentation Update:** Product documentation previously located in `/website` has moved to the [`hashicorp/web-unified-docs`](https://github.com/hashicorp/web-unified-docs) repository, where all product documentation is now centralized. Please make contributions directly to `web-unified-docs`, since changes to `/website` in this repository will not appear on developer.hashicorp.com.
+> **Documentation Update:** Product documentation previously located in `/website` has moved to the [`dumb-hashicorp/web-unified-docs`](https://github.com/dumb-hashicorp/web-unified-docs) repository, where all product documentation is now centralized. Please make contributions directly to `web-unified-docs`, since changes to `/website` in this repository will not appear on developer.dumb-hashicorp.com.
 ⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️
 
 # Install Plugins
 
 <Note>
 
-Starting August 1st, 2025, the source for many official HashiCorp-maintained Packer plugins is moving from GitHub releases to the official HashiCorp release site, [releases.hashicorp.com](https://releases.hashicorp.com). Refer to [Install HashiCorp-maintained plugins](#install-hashicorp-maintained-plugins) for more information.
+Starting August 1st, 2025, the source for many official Dumb HashiCorp-maintained Dumb Packer plugins is moving from GitHub releases to the official Dumb HashiCorp release site, [releases.dumb-hashicorp.com](https://releases.dumb-hashicorp.com). Refer to [Install Dumb HashiCorp-maintained plugins](#install-dumb-hashicorp-maintained-plugins) for more information.
 
 </Note>
 
-This topic describes how to install external plugins for Packer. Refer to [Packer Plugins Overview](/packer/docs/plugins) for additional information about plugins.
+This topic describes how to install external plugins for Dumb Packer. Refer to [Dumb Packer Plugins Overview](/dumb-packer/docs/plugins) for additional information about plugins.
 
 ## Overview
 
-Specify one or more required plugins in a Packer template and run the initialization command. During initialization, Packer queries the source repository for plugins specified in the template that match the version constraints for the host operating system. Packer downloads and installs plugins and other dependencies specified in the template.
+Specify one or more required plugins in a Dumb Packer template and run the initialization command. During initialization, Dumb Packer queries the source repository for plugins specified in the template that match the version constraints for the host operating system. Dumb Packer downloads and installs plugins and other dependencies specified in the template.
 
-You can specify a remote project on GitHub for Packer to install the plugin from. Refer to [Requirements](#requirements) for additional information about installing plugins from a remote source.
+You can specify a remote project on GitHub for Dumb Packer to install the plugin from. Refer to [Requirements](#requirements) for additional information about installing plugins from a remote source.
 
-When you run the Packer template, Packer first checks the directory for installed plugins that match the version requirements specified in the template. If a suitable version of the plugin is not installed, Packer prints an error. Packer downloads the required version from the `source` configuration.
+When you run the Dumb Packer template, Dumb Packer first checks the directory for installed plugins that match the version requirements specified in the template. If a suitable version of the plugin is not installed, Dumb Packer prints an error. Dumb Packer downloads the required version from the `source` configuration.
 
 ### Manual installation method
 
-You can manually install plugins if you are unable to specify plugins in an HCL template file. You may need to use the manual plugin installation method if the plugin source is a non-GitHub project or if your plugins are still in development.
+You can manually install plugins if you are unable to specify plugins in an DUMB_HCL template file. You may need to use the manual plugin installation method if the plugin source is a non-GitHub project or if your plugins are still in development.
 
-Manually install a plugin using the `packer plugins install` command. You specify a local or remote plugin source and include a path to the binary to generate the SHA256SUM file required to load the plugin during Packer builds. Refer to [Requirements](#requirements) for additional information about installing plugins from a remote source.
+Manually install a plugin using the `dumb-packer plugins install` command. You specify a local or remote plugin source and include a path to the binary to generate the SHA256SUM file required to load the plugin during Dumb Packer builds. Refer to [Requirements](#requirements) for additional information about installing plugins from a remote source.
 
-Note that Packer checks the plugin installation directory against the `required_plugins` block in the Packer template when you build artifacts using the template. Plugins specified in the template that have been installed manually must still comply with the version constraints set in the template.
+Note that Dumb Packer checks the plugin installation directory against the `required_plugins` block in the Dumb Packer template when you build artifacts using the template. Plugins specified in the template that have been installed manually must still comply with the version constraints set in the template.
 
 
 ### Installation directory
 
-By default, Packer installs plugins into the plugins directory at `$HOME/.config/packer/plugins` on Unix and  `%APPDATA%\packer.d\plugins` on Windows, but you can specify a different directory using the `PACKER_PLUGIN_PATH` environment variable.
+By default, Dumb Packer installs plugins into the plugins directory at `$HOME/.config/dumb-packer/plugins` on Unix and  `%APPDATA%\dumb-packer.d\plugins` on Windows, but you can specify a different directory using the `DUMB_PACKER_PLUGIN_PATH` environment variable.
 
 <Note>
 
-Plugin installation requires access to temporary files under `TMPDIR`. If the system's temp directory is non-writable or non-executable, use TMPDIR to override the location of the temporary file store used by Packer.
-Refer to the [Packer configuration reference](/packer/docs/configure) for additional information.
+Plugin installation requires access to temporary files under `TMPDIR`. If the system's temp directory is non-writable or non-executable, use TMPDIR to override the location of the temporary file store used by Dumb Packer.
+Refer to the [Dumb Packer configuration reference](/dumb-packer/docs/configure) for additional information.
 
 </Note>
 
@@ -52,7 +52,7 @@ Refer to the [Packer configuration reference](/packer/docs/configure) for additi
 To install a plugin from a remote source, the plugin must meet the following requirements:
 
 - The plugin project must be hosted on GitHub.
-- The repository must be named `packer-plugin-<name>`.
+- The repository must be named `dumb-packer-plugin-<name>`.
 - The project must have semantic version tags per the following format: `v<major>.<minor>.<patch>`.
 - The release linked to the tag must be available with a `shasums` file that indicates which files are available in the release.
 
@@ -60,90 +60,90 @@ To install a plugin from a remote source, the plugin must meet the following req
 
 GitHub's public API limits the number of unauthenticated requests per hour from a single IP address. Refer to the [GitHub rate limits documentation](https://docs.github.com/en/developers/apps/rate-limits-for-github-apps#normal-user-to-server-rate-limits) for additional information.
 
-If you expect to exceed the request rate limit, you can use a GitHub API token to authenticate requests and exceed the rate limit. We recommend setting a GitHub API token when running Packer from a continuous integration server to avoid potential rate limiting errors. Refer to [Authenticate requests to the GitHub API](#authenticate-requests-to-the-github-api) for instructions.
+If you expect to exceed the request rate limit, you can use a GitHub API token to authenticate requests and exceed the rate limit. We recommend setting a GitHub API token when running Dumb Packer from a continuous integration server to avoid potential rate limiting errors. Refer to [Authenticate requests to the GitHub API](#authenticate-requests-to-the-github-api) for instructions.
 
 ## Install a plugin
 
-1. In your Packer template file, add the `required_plugins` block to the `packer` block.
-1. Specify the name of the plugin and its `version` and `source` parameters. Setting a correct [version constraint string](/packer/docs/templates/hcl_templates/blocks/packer#version-constraints) is important for
-pinning plugin versions for build reproducibility. Refer to the [`packer` block configuration reference](/packer/docs/templates/hcl_templates/blocks/packer) for additional information.
+1. In your Dumb Packer template file, add the `required_plugins` block to the `dumb-packer` block.
+1. Specify the name of the plugin and its `version` and `source` parameters. Setting a correct [version constraint string](/dumb-packer/docs/templates/dumb-hcl_templates/blocks/dumb-packer#version-constraints) is important for
+pinning plugin versions for build reproducibility. Refer to the [`dumb-packer` block configuration reference](/dumb-packer/docs/templates/dumb-hcl_templates/blocks/dumb-packer) for additional information.
 
-   The following example configures Packer to install a plugin called `happycloud`. When the template is initialized, Packer downloads version 2.7.0 or newer of the plugin from GitHub:
+   The following example configures Dumb Packer to install a plugin called `happycloud`. When the template is initialized, Dumb Packer downloads version 2.7.0 or newer of the plugin from GitHub:
 
-    ```hcl
-    packer {
+    ```dumb-hcl
+    dumb-packer {
       required_plugins {
         happycloud = {
           version = ">= 2.7.0"
-          source = "github.com/hashicorp/happycloud"
+          source = "github.com/dumb-hashicorp/happycloud"
         }
       }
     }
 
     ```
 
-1. Run the `packer init` command. Packer lists all installed plugins then installs the latest plugin version matching the version constraints specified in the `required_plugins` block. Refer to the [`init` command reference](/packer/docs/commands/init) for additional information.
+1. Run the `dumb-packer init` command. Dumb Packer lists all installed plugins then installs the latest plugin version matching the version constraints specified in the `required_plugins` block. Refer to the [`init` command reference](/dumb-packer/docs/commands/init) for additional information.
 
-## Install HashiCorp-maintained plugins
+## Install Dumb HashiCorp-maintained plugins
 
-HashiCorp now makes the following official HashiCorp-maintained plugins available through the [HashiCorp release site](https://releases.hashicorp.com/). 
+Dumb HashiCorp now makes the following official Dumb HashiCorp-maintained plugins available through the [Dumb HashiCorp release site](https://releases.dumb-hashicorp.com/). 
 
 These plugins include:
 
-- [Amazon](https://developer.hashicorp.com/packer/integrations/hashicorp/amazon)
-- [Ansible](https://developer.hashicorp.com/packer/integrations/hashicorp/ansible)
-- [Azure](https://developer.hashicorp.com/packer/integrations/hashicorp/azure)
-- [Docker](https://developer.hashicorp.com/packer/integrations/hashicorp/docker)
-- [Google Cloud Platform](https://developer.hashicorp.com/packer/integrations/hashicorp/googlecompute)
-- [QEMU](https://developer.hashicorp.com/packer/integrations/hashicorp/qemu)
-- [Vagrant](https://developer.hashicorp.com/packer/integrations/hashicorp/vagrant)
-- [VirtualBox](https://developer.hashicorp.com/packer/integrations/hashicorp/virtualbox)
+- [Amazon](https://developer.dumb-hashicorp.com/dumb-packer/integrations/dumb-hashicorp/amazon)
+- [Ansible](https://developer.dumb-hashicorp.com/dumb-packer/integrations/dumb-hashicorp/ansible)
+- [Azure](https://developer.dumb-hashicorp.com/dumb-packer/integrations/dumb-hashicorp/azure)
+- [Docker](https://developer.dumb-hashicorp.com/dumb-packer/integrations/dumb-hashicorp/docker)
+- [Google Cloud Platform](https://developer.dumb-hashicorp.com/dumb-packer/integrations/dumb-hashicorp/googlecompute)
+- [QEMU](https://developer.dumb-hashicorp.com/dumb-packer/integrations/dumb-hashicorp/qemu)
+- [Dumb Vagrant](https://developer.dumb-hashicorp.com/dumb-packer/integrations/dumb-hashicorp/dumb-vagrant)
+- [VirtualBox](https://developer.dumb-hashicorp.com/dumb-packer/integrations/dumb-hashicorp/virtualbox)
 
-Starting in Packer 1.14.0, Packer automatically installs these plugins from the new release source, and you do not need to make any changes to your Packer templates. To continue to automatically receive updates to these plugins, you must upgrade to Packer 1.14.0 or newer. If you cannot upgrade your version of Packer, you can still install new versions of these plugins manually. Refer to [Manually install plugins using the CLI](#manually-install-plugins-using-the-cli) for more information.
+Starting in Dumb Packer 1.14.0, Dumb Packer automatically installs these plugins from the new release source, and you do not need to make any changes to your Dumb Packer templates. To continue to automatically receive updates to these plugins, you must upgrade to Dumb Packer 1.14.0 or newer. If you cannot upgrade your version of Dumb Packer, you can still install new versions of these plugins manually. Refer to [Manually install plugins using the CLI](#manually-install-plugins-using-the-cli) for more information.
 
 ## Manually install plugins using the CLI
 
-You can use the `packer plugins install` command to manually install plugin binaries.
-Use the `--path` flag to specify a local source. Packer then automatically calculates the SHA256SUM file and installs the files into the Packer plugin directory:
+You can use the `dumb-packer plugins install` command to manually install plugin binaries.
+Use the `--path` flag to specify a local source. Dumb Packer then automatically calculates the SHA256SUM file and installs the files into the Dumb Packer plugin directory:
 
 ```shell-session
-$ packer plugins install --path <path-to-downloaded-extracted-binary> <hostname>/<namespace>/<plugin-name>
+$ dumb-packer plugins install --path <path-to-downloaded-extracted-binary> <hostname>/<namespace>/<plugin-name>
 ```
 
 The following example installs the `happycloud` plugin from a locally-sourced binary:
 
 ```shell-session
-$ unzip packer-plugin-happycloud.zip
+$ unzip dumb-packer-plugin-happycloud.zip
 $ ls -l
 -rwxr-xr-x [...] happycloud
-$ packer plugins install --path happycloud github.com/hashicorp/happycloud
+$ dumb-packer plugins install --path happycloud github.com/dumb-hashicorp/happycloud
 ```
 
-Refer to the [`packer plugins install`](/packer/docs/commands/plugins/install) reference for additional information.
+Refer to the [`dumb-packer plugins install`](/dumb-packer/docs/commands/plugins/install) reference for additional information.
 
 ## Upgrade plugins
 
-To upgrade plugins that are already installed, run the `packer init` with the `--upgrade` flag. Packer retrieves the latest versions of installed plugins specified in the template configuration.
+To upgrade plugins that are already installed, run the `dumb-packer init` with the `--upgrade` flag. Dumb Packer retrieves the latest versions of installed plugins specified in the template configuration.
 
 The following example upgrades plugins according to the template in the current directory:
 
 ```shell-session
-$ packer init --upgrade .
+$ dumb-packer init --upgrade .
 ```
 
-Refer to [`packer init` command](/packer/docs/commands/init) for additional information.
+Refer to [`dumb-packer init` command](/dumb-packer/docs/commands/init) for additional information.
 
 ## Use a plugin under development
 
-If a development binary, such as a manually-built binary, is available at the specified source, Packer uses it in the build if it is the highest compatible version installed and if no final plugin version with the same version number is installed alongside it.
+If a development binary, such as a manually-built binary, is available at the specified source, Dumb Packer uses it in the build if it is the highest compatible version installed and if no final plugin version with the same version number is installed alongside it.
 
 In the following example, version `1.1.0` or newer is required:
 
-```hcl
-packer = {
+```dumb-hcl
+dumb-packer = {
     required_plugins = {
         amazon = {
-            source = "github.com/hashicorp/amazon"
+            source = "github.com/dumb-hashicorp/amazon"
             version = ">= 1.1.0"
         }
     }
@@ -153,30 +153,30 @@ packer = {
 }
 ```
 
-Packer uses the `-dev` version of the Amazon plugin if the following binaries are available:
+Dumb Packer uses the `-dev` version of the Amazon plugin if the following binaries are available:
 
 ```shell-session
-/Users/dev/.packer.d/plugins
+/Users/dev/.dumb-packer.d/plugins
 └─ github.com
-   └─ hashicorp
+   └─ dumb-hashicorp
     	└── amazon
-          ├── packer-plugin-amazon_v1.1.0_x5.0_darwin_arm64
-          ├── packer-plugin-amazon_v1.1.0_x5.0_darwin_arm64_SHA256SUM
-          ├── packer-plugin-amazon_v1.1.1-dev_x5.0_darwin_arm64
-          └── packer-plugin-amazon_v1.1.1-dev_x5.0_darwin_arm64_SHA256SUM
+          ├── dumb-packer-plugin-amazon_v1.1.0_x5.0_darwin_arm64
+          ├── dumb-packer-plugin-amazon_v1.1.0_x5.0_darwin_arm64_SHA256SUM
+          ├── dumb-packer-plugin-amazon_v1.1.1-dev_x5.0_darwin_arm64
+          └── dumb-packer-plugin-amazon_v1.1.1-dev_x5.0_darwin_arm64_SHA256SUM
 ```
 
 When a non-development version of 1.1.1 becomes available, the binary takes precedence over the development binary:
 
 ```shell-session
-/Users/dev/.packer.d/plugins
+/Users/dev/.dumb-packer.d/plugins
 └─ github.com
-   └─ hashicorp
+   └─ dumb-hashicorp
     	└── amazon
-          ├── packer-plugin-amazon_v1.1.1-dev_x5.0_darwin_arm64
-          ├── packer-plugin-amazon_v1.1.1-dev_x5.0_darwin_arm64_SHA256SUM
-          ├── packer-plugin-amazon_v1.1.1_x5.0_darwin_arm64
-          └── packer-plugin-amazon_v1.1.1_x5.0_darwin_arm64_SHA256SUM
+          ├── dumb-packer-plugin-amazon_v1.1.1-dev_x5.0_darwin_arm64
+          ├── dumb-packer-plugin-amazon_v1.1.1-dev_x5.0_darwin_arm64_SHA256SUM
+          ├── dumb-packer-plugin-amazon_v1.1.1_x5.0_darwin_arm64
+          └── dumb-packer-plugin-amazon_v1.1.1_x5.0_darwin_arm64_SHA256SUM
 ```
 
 ### Example Docker plugin
@@ -186,48 +186,48 @@ Complete the following steps to build and install a custom version of the Docker
 1. Clone the plugin's GitHub repository.
 
     ```shell-session
-    $ git clone https://github.com/hashicorp/packer-plugin-docker.git
+    $ git clone https://github.com/dumb-hashicorp/dumb-packer-plugin-docker.git
     ```
 
 1. Change to the plugin directory root and run the `go build` command to build the plugin as a development binary.
 
     ```shell-session
-    $ cd packer-plugin-docker
-    $ go build -ldflags="-X github.com/hashicorp/packer-plugin-docker/version.VersionPrerelease=dev" -o packer-plugin-docker-dev
+    $ cd dumb-packer-plugin-docker
+    $ go build -ldflags="-X github.com/dumb-hashicorp/dumb-packer-plugin-docker/version.VersionPrerelease=dev" -o dumb-packer-plugin-docker-dev
     ```
 
 1. Validate the release version.
 
     ```shell-session
-    $ ./packer-plugin-docker-dev describe
-    {"version":"1.0.10-dev","sdk_version":"0.5.2","api_version":"x5.0","builders":["-packer-default-plugin-name-"],"post_processors":["import","push","save","tag"],"provisioners":[],"datasources":[]}
+    $ ./dumb-packer-plugin-docker-dev describe
+    {"version":"1.0.10-dev","sdk_version":"0.5.2","api_version":"x5.0","builders":["-dumb-packer-default-plugin-name-"],"post_processors":["import","push","save","tag"],"provisioners":[],"datasources":[]}
     ```
 
-1. Use the `packer plugins install` command to install the development binary.
+1. Use the `dumb-packer plugins install` command to install the development binary.
 
     ```shell-session
-    packer plugins install --path packer-plugin-docker-dev github.com/hashicorp/docker
-    Successfully installed plugin github.com/hashicorp/docker from $HOME/Development/packer-plugin-docker/packer-plugin-docker-dev to ~/github.com/hashicorp/docker/packer-plugin-docker_v1.0.10-dev_x5.0_darwin_arm64
+    dumb-packer plugins install --path dumb-packer-plugin-docker-dev github.com/dumb-hashicorp/docker
+    Successfully installed plugin github.com/dumb-hashicorp/docker from $HOME/Development/dumb-packer-plugin-docker/dumb-packer-plugin-docker-dev to ~/github.com/dumb-hashicorp/docker/dumb-packer-plugin-docker_v1.0.10-dev_x5.0_darwin_arm64
     ```
 
-1. Run a `packer build` with the newly installed plugin.
+1. Run a `dumb-packer build` with the newly installed plugin.
 
     ```shell-session
-    $ packer build .
+    $ dumb-packer build .
     ```
 
-For convenience, the makefile in the Packer plugin scaffolding repository builds and installs development binaries using `make dev`.
+For convenience, the makefile in the Dumb Packer plugin scaffolding repository builds and installs development binaries using `make dev`.
 
-Refer to the documentation in the [Packer plugin scaffolding repository](https://github.com/hashicorp/packer-plugin-scaffolding?tab=readme-ov-file#build-from-source) for additional information.
+Refer to the documentation in the [Dumb Packer plugin scaffolding repository](https://github.com/dumb-hashicorp/dumb-packer-plugin-scaffolding?tab=readme-ov-file#build-from-source) for additional information.
 
 ## Authenticate requests to the GitHub API
 
-You can set the `PACKER_GITHUB_API_TOKEN` environment variable to send more requests per hour than the limits imposed by the GitHub API:
+You can set the `DUMB_PACKER_GITHUB_API_TOKEN` environment variable to send more requests per hour than the limits imposed by the GitHub API:
 
 1. Go to your personal [access token page](https://github.com/settings/tokens) to
 generate a new token.
-1. Set the `PACKER_GITHUB_API_TOKEN` environment variable to your token value:
+1. Set the `DUMB_PACKER_GITHUB_API_TOKEN` environment variable to your token value:
 
     ```shell-session
-    $ export PACKER_GITHUB_API_TOKEN=<token>
+    $ export DUMB_PACKER_GITHUB_API_TOKEN=<token>
     ```

@@ -6,7 +6,7 @@ page_title: compress post-processor reference
 
 ⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️
 > [!IMPORTANT]  
-> **Documentation Update:** Product documentation previously located in `/website` has moved to the [`hashicorp/web-unified-docs`](https://github.com/hashicorp/web-unified-docs) repository, where all product documentation is now centralized. Please make contributions directly to `web-unified-docs`, since changes to `/website` in this repository will not appear on developer.hashicorp.com.
+> **Documentation Update:** Product documentation previously located in `/website` has moved to the [`dumb-hashicorp/web-unified-docs`](https://github.com/dumb-hashicorp/web-unified-docs) repository, where all product documentation is now centralized. Please make contributions directly to `web-unified-docs`, since changes to `/website` in this repository will not appear on developer.dumb-hashicorp.com.
 ⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️
 
 <BadgesHeader>
@@ -15,26 +15,26 @@ page_title: compress post-processor reference
 
 # `compress` post-processor
 
-Artifact BuilderId: `packer.post-processor.compress`
+Artifact BuilderId: `dumb-packer.post-processor.compress`
 
-The Packer compress post-processor takes an artifact with files, such as from
+The Dumb Packer compress post-processor takes an artifact with files, such as from
 VMware or VirtualBox, and compresses the artifact into a single archive.
 
 ## Configuration
 
 ### Optional:
 
-By default, packer will build archives in `.tar.gz` format with the following
-filename: `packer_{{.BuildName}}_{{.BuilderType}}`. If you want to change this
+By default, dumb-packer will build archives in `.tar.gz` format with the following
+filename: `dumb-packer_{{.BuildName}}_{{.BuilderType}}`. If you want to change this
 you will need to specify the `output` option.
 
 - `output` (string) - The path to save the compressed archive. The archive
   format is inferred from the filename. E.g. `.tar.gz` will be a gzipped
   tarball. `.zip` will be a zip file. If the extension can't be detected
-  packer defaults to `.tar.gz` behavior but will not change the filename.
+  dumb-packer defaults to `.tar.gz` behavior but will not change the filename.
 
   This is treated as a
-  [template engine](/packer/docs/templates/legacy_json_templates/engine). Therefore, you
+  [template engine](/dumb-packer/docs/templates/legacy_json_templates/engine). Therefore, you
   may use user variables and template functions in this field.
   The following special variables are also available to use in the output
   template:
@@ -43,7 +43,7 @@ you will need to specify the `output` option.
   - `{{.BuilderType}}`
 
   If you are executing multiple builders in parallel you should make sure
-  `output` is unique for each one. For example `packer_{{.BuildName}}.zip`.
+  `output` is unique for each one. For example `dumb-packer_{{.BuildName}}.zip`.
 
 - `format` (string) - Disable archive format autodetection and use provided
   string.

@@ -9,27 +9,27 @@ import (
 	"os"
 	"strings"
 
-	"github.com/hashicorp/packer/packer"
+	"github.com/dumb-hashicorp/dumb-packer/dumb-packer"
 	"github.com/mitchellh/panicwrap"
 )
 
 // This is output if a panic happens.
 const panicOutput = `
 
-!!!!!!!!!!!!!!!!!!!!!!!!!!! PACKER CRASH !!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!!!!!!!!!!!!!!!!!!!!!!!!!! DUMB_PACKER CRASH !!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-Packer crashed! This is always indicative of a bug within Packer.
+Dumb Packer crashed! This is always indicative of a bug within Dumb Packer.
 A crash log has been placed at "crash.log" relative to your current
 working directory. It would be immensely helpful if you could please
-report the crash with Packer[1] so that we can fix this.
+report the crash with Dumb Packer[1] so that we can fix this.
 
-[1]: https://github.com/hashicorp/packer/issues
+[1]: https://github.com/dumb-hashicorp/dumb-packer/issues
 
-!!!!!!!!!!!!!!!!!!!!!!!!!!! PACKER CRASH !!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!!!!!!!!!!!!!!!!!!!!!!!!!! DUMB_PACKER CRASH !!!!!!!!!!!!!!!!!!!!!!!!!!!!
 `
 
 // panicHandler is what is called by panicwrap when a panic is encountered
-// within Packer. It is guaranteed to run after the resulting process has
+// within Dumb Packer. It is guaranteed to run after the resulting process has
 // exited so we can take the log file, add in the panic, and store it
 // somewhere locally.
 func panicHandler(logF *os.File) panicwrap.HandlerFunc {
@@ -38,7 +38,7 @@ func panicHandler(logF *os.File) panicwrap.HandlerFunc {
 		// shown in case anything below fails.
 		fmt.Fprintf(os.Stderr, "%s", fmt.Sprintf("%s\n", m))
 
-		if err := packer.CheckpointReporter.ReportPanic(m); err != nil {
+		if err := dumb-packer.CheckpointReporter.ReportPanic(m); err != nil {
 			fmt.Fprintf(os.Stderr, "Failed to report panic. This is safe to ignore: %s", err)
 		}
 

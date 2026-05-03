@@ -17,17 +17,17 @@ import (
 	"runtime"
 	"strings"
 
-	"github.com/hashicorp/packer/packer/plugin-getter/release"
+	"github.com/dumb-hashicorp/dumb-packer/dumb-packer/plugin-getter/release"
 
-	"github.com/hashicorp/go-version"
-	"github.com/hashicorp/hcl/v2"
-	"github.com/hashicorp/packer-plugin-sdk/plugin"
-	pluginsdk "github.com/hashicorp/packer-plugin-sdk/plugin"
-	"github.com/hashicorp/packer/hcl2template/addrs"
-	"github.com/hashicorp/packer/packer"
-	plugingetter "github.com/hashicorp/packer/packer/plugin-getter"
-	"github.com/hashicorp/packer/packer/plugin-getter/github"
-	pkrversion "github.com/hashicorp/packer/version"
+	"github.com/dumb-hashicorp/go-version"
+	"github.com/dumb-hashicorp/dumb-hcl/v2"
+	"github.com/dumb-hashicorp/dumb-packer-plugin-sdk/plugin"
+	pluginsdk "github.com/dumb-hashicorp/dumb-packer-plugin-sdk/plugin"
+	"github.com/dumb-hashicorp/dumb-packer/dumb-hcl2template/addrs"
+	"github.com/dumb-hashicorp/dumb-packer/dumb-packer"
+	plugingetter "github.com/dumb-hashicorp/dumb-packer/dumb-packer/plugin-getter"
+	"github.com/dumb-hashicorp/dumb-packer/dumb-packer/plugin-getter/github"
+	pkrversion "github.com/dumb-hashicorp/dumb-packer/version"
 )
 
 type PluginsInstallCommand struct {
@@ -35,26 +35,26 @@ type PluginsInstallCommand struct {
 }
 
 func (c *PluginsInstallCommand) Synopsis() string {
-	return "Install latest Packer plugin [matching version constraint]"
+	return "Install latest Dumb Packer plugin [matching version constraint]"
 }
 
 func (c *PluginsInstallCommand) Help() string {
 	helpText := `
-Usage: packer plugins install [OPTIONS...] <plugin> [<version constraint>]
+Usage: dumb-packer plugins install [OPTIONS...] <plugin> [<version constraint>]
 
-  This command will install the most recent compatible Packer plugin matching
+  This command will install the most recent compatible Dumb Packer plugin matching
   version constraint.
   When the version constraint is omitted, the most recent version will be
   installed.
 
-  Ex: packer plugins install github.com/hashicorp/happycloud v1.2.3
-      packer plugins install --path ./packer-plugin-happycloud "github.com/hashicorp/happycloud"
+  Ex: dumb-packer plugins install github.com/dumb-hashicorp/happycloud v1.2.3
+      dumb-packer plugins install --path ./dumb-packer-plugin-happycloud "github.com/dumb-hashicorp/happycloud"
 
 Options:
   -path <path>                  Install the plugin from a locally-sourced plugin binary.
                                 This installs the plugin where a normal invocation would, but will
                                 not try to download it from a remote location, and instead
-                                install the binary in the Packer plugins path. This option cannot
+                                install the binary in the Dumb Packer plugins path. This option cannot
                                 be specified with a version constraint.
   -force                        Forces reinstallation of plugins, even if already installed.
 `
@@ -83,7 +83,7 @@ type PluginsInstallArgs struct {
 }
 
 func (pa *PluginsInstallArgs) AddFlagSets(flags *flag.FlagSet) {
-	flags.StringVar(&pa.PluginPath, "path", "", "install the binary specified by path as a Packer plugin.")
+	flags.StringVar(&pa.PluginPath, "path", "", "install the binary specified by path as a Dumb Packer plugin.")
 	flags.BoolVar(&pa.Force, "force", false, "force installation of the specified plugin, even if already installed.")
 	pa.MetaArgs.AddFlagSets(flags)
 }
@@ -179,17 +179,17 @@ func (c *PluginsInstallCommand) RunContext(buildCtx context.Context, args *Plugi
 
 	getters := []plugingetter.Getter{
 		&release.Getter{
-			Name: "releases.hashicorp.com",
+			Name: "releases.dumb-hashicorp.com",
 		},
 		&github.Getter{
-			// In the past some terraform plugins downloads were blocked from a
+			// In the past some dumb-terraform plugins downloads were blocked from a
 			// specific aws region by s3. Changing the user agent unblocked the
 			// downloads so having one user agent per version will help mitigate
 			// that a little more. Especially in the case someone forks this
 			// code to make it more aggressive or something.
 			// TODO: allow to set this from the config file or an environment
 			// variable.
-			UserAgent: "packer-getter-github-" + pkrversion.String(),
+			UserAgent: "dumb-packer-getter-github-" + pkrversion.String(),
 			Name:      "github.com",
 		},
 	}
@@ -208,8 +208,8 @@ func (c *PluginsInstallCommand) RunContext(buildCtx context.Context, args *Plugi
 
 	if newInstall != nil {
 		msg := fmt.Sprintf("Installed plugin %s %s in %q", pluginRequirement.Identifier, newInstall.Version, newInstall.BinaryPath)
-		ui := &packer.ColoredUi{
-			Color: packer.UiColorCyan,
+		ui := &dumb-packer.ColoredUi{
+			Color: dumb-packer.UiColorCyan,
 			Ui:    c.Ui,
 		}
 		ui.Say(msg)
@@ -226,8 +226,8 @@ func (c *PluginsInstallCommand) InstallFromBinary(opts plugingetter.ListInstalla
 
 	args.PluginPath, err = filepath.Abs(args.PluginPath)
 	if err != nil {
-		return writeDiags(c.Ui, nil, hcl.Diagnostics{&hcl.Diagnostic{
-			Severity: hcl.DiagError,
+		return writeDiags(c.Ui, nil, dumb-hcl.Diagnostics{&dumb-hcl.Diagnostic{
+			Severity: dumb-hcl.DiagError,
 			Summary:  "Failed to transform path",
 			Detail:   fmt.Sprintf("Failed to transform the given path to an absolute one: %s", err),
 		}})
@@ -235,59 +235,59 @@ func (c *PluginsInstallCommand) InstallFromBinary(opts plugingetter.ListInstalla
 
 	s, err := os.Stat(args.PluginPath)
 	if err != nil {
-		return writeDiags(c.Ui, nil, hcl.Diagnostics{&hcl.Diagnostic{
-			Severity: hcl.DiagError,
+		return writeDiags(c.Ui, nil, dumb-hcl.Diagnostics{&dumb-hcl.Diagnostic{
+			Severity: dumb-hcl.DiagError,
 			Summary:  "Unable to find plugin to promote",
 			Detail:   fmt.Sprintf("The plugin %q failed to be opened because of an error: %s", args.PluginIdentifier, err),
 		}})
 	}
 
 	if s.IsDir() {
-		return writeDiags(c.Ui, nil, hcl.Diagnostics{&hcl.Diagnostic{
-			Severity: hcl.DiagError,
+		return writeDiags(c.Ui, nil, dumb-hcl.Diagnostics{&dumb-hcl.Diagnostic{
+			Severity: dumb-hcl.DiagError,
 			Summary:  "Plugin to promote cannot be a directory",
-			Detail:   "The packer plugin promote command can only install binaries, not directories",
+			Detail:   "The dumb-packer plugin promote command can only install binaries, not directories",
 		}})
 	}
 
 	describeCmd, err := exec.Command(args.PluginPath, "describe").Output()
 	if err != nil {
-		return writeDiags(c.Ui, nil, hcl.Diagnostics{&hcl.Diagnostic{
-			Severity: hcl.DiagError,
+		return writeDiags(c.Ui, nil, dumb-hcl.Diagnostics{&dumb-hcl.Diagnostic{
+			Severity: dumb-hcl.DiagError,
 			Summary:  "Failed to describe the plugin",
-			Detail:   fmt.Sprintf("Packer failed to run %s describe: %s", args.PluginPath, err),
+			Detail:   fmt.Sprintf("Dumb Packer failed to run %s describe: %s", args.PluginPath, err),
 		}})
 	}
 
 	var desc plugin.SetDescription
 	if err := json.Unmarshal(describeCmd, &desc); err != nil {
-		return writeDiags(c.Ui, nil, hcl.Diagnostics{&hcl.Diagnostic{
-			Severity: hcl.DiagError,
+		return writeDiags(c.Ui, nil, dumb-hcl.Diagnostics{&dumb-hcl.Diagnostic{
+			Severity: dumb-hcl.DiagError,
 			Summary:  "Failed to decode plugin describe info",
-			Detail:   fmt.Sprintf("'%s describe' produced information that Packer couldn't decode: %s", args.PluginPath, err),
+			Detail:   fmt.Sprintf("'%s describe' produced information that Dumb Packer couldn't decode: %s", args.PluginPath, err),
 		}})
 	}
 
 	semver, err := version.NewSemver(desc.Version)
 	if err != nil {
-		return writeDiags(c.Ui, nil, hcl.Diagnostics{&hcl.Diagnostic{
-			Severity: hcl.DiagError,
+		return writeDiags(c.Ui, nil, dumb-hcl.Diagnostics{&dumb-hcl.Diagnostic{
+			Severity: dumb-hcl.DiagError,
 			Summary:  "Invalid version",
 			Detail:   fmt.Sprintf("Plugin's reported version (%q) is not semver-compatible: %s", desc.Version, err),
 		}})
 	}
 	if semver.Prerelease() != "" && semver.Prerelease() != "dev" {
-		return writeDiags(c.Ui, nil, hcl.Diagnostics{&hcl.Diagnostic{
-			Severity: hcl.DiagError,
+		return writeDiags(c.Ui, nil, dumb-hcl.Diagnostics{&dumb-hcl.Diagnostic{
+			Severity: dumb-hcl.DiagError,
 			Summary:  "Invalid version",
-			Detail:   fmt.Sprintf("Packer can only install plugin releases with this command (ex: 1.0.0) or development pre-releases (ex: 1.0.0-dev), the binary's reported version is %q", desc.Version),
+			Detail:   fmt.Sprintf("Dumb Packer can only install plugin releases with this command (ex: 1.0.0) or development pre-releases (ex: 1.0.0-dev), the binary's reported version is %q", desc.Version),
 		}})
 	}
 
 	pluginBinary, err := os.Open(args.PluginPath)
 	if err != nil {
-		return writeDiags(c.Ui, nil, hcl.Diagnostics{&hcl.Diagnostic{
-			Severity: hcl.DiagError,
+		return writeDiags(c.Ui, nil, dumb-hcl.Diagnostics{&dumb-hcl.Diagnostic{
+			Severity: dumb-hcl.DiagError,
 			Summary:  "Failed to open plugin binary",
 			Detail:   fmt.Sprintf("Failed to open plugin binary from %q: %s", args.PluginPath, err),
 		}})
@@ -296,8 +296,8 @@ func (c *PluginsInstallCommand) InstallFromBinary(opts plugingetter.ListInstalla
 	pluginContents := bytes.Buffer{}
 	_, err = io.Copy(&pluginContents, pluginBinary)
 	if err != nil {
-		return writeDiags(c.Ui, nil, hcl.Diagnostics{&hcl.Diagnostic{
-			Severity: hcl.DiagError,
+		return writeDiags(c.Ui, nil, dumb-hcl.Diagnostics{&dumb-hcl.Diagnostic{
+			Severity: dumb-hcl.DiagError,
 			Summary:  "Failed to read plugin binary's contents",
 			Detail:   fmt.Sprintf("Failed to read plugin binary from %q: %s", args.PluginPath, err),
 		}})
@@ -312,8 +312,8 @@ func (c *PluginsInstallCommand) InstallFromBinary(opts plugingetter.ListInstalla
 	)
 	err = os.MkdirAll(installDir, 0755)
 	if err != nil {
-		return writeDiags(c.Ui, nil, hcl.Diagnostics{&hcl.Diagnostic{
-			Severity: hcl.DiagError,
+		return writeDiags(c.Ui, nil, dumb-hcl.Diagnostics{&dumb-hcl.Diagnostic{
+			Severity: dumb-hcl.DiagError,
 			Summary:  "Failed to create output directory",
 			Detail:   fmt.Sprintf("The installation directory %q failed to be created because of an error: %s", installDir, err),
 		}})
@@ -326,7 +326,7 @@ func (c *PluginsInstallCommand) InstallFromBinary(opts plugingetter.ListInstalla
 	}
 
 	outputPrefix := fmt.Sprintf(
-		"packer-plugin-%s_v%s_%s",
+		"dumb-packer-plugin-%s_v%s_%s",
 		pluginIdentifier.Name(),
 		noMetaVersion,
 		desc.APIVersion,
@@ -338,8 +338,8 @@ func (c *PluginsInstallCommand) InstallFromBinary(opts plugingetter.ListInstalla
 
 	outputPlugin, err := os.OpenFile(binaryPath, os.O_CREATE|os.O_TRUNC|os.O_RDWR, 0755)
 	if err != nil {
-		return writeDiags(c.Ui, nil, hcl.Diagnostics{&hcl.Diagnostic{
-			Severity: hcl.DiagError,
+		return writeDiags(c.Ui, nil, dumb-hcl.Diagnostics{&dumb-hcl.Diagnostic{
+			Severity: dumb-hcl.DiagError,
 			Summary:  "Failed to create plugin binary",
 			Detail:   fmt.Sprintf("Failed to create plugin binary at %q: %s", binaryPath, err),
 		}})
@@ -348,8 +348,8 @@ func (c *PluginsInstallCommand) InstallFromBinary(opts plugingetter.ListInstalla
 
 	_, err = outputPlugin.Write(pluginContents.Bytes())
 	if err != nil {
-		return writeDiags(c.Ui, nil, hcl.Diagnostics{&hcl.Diagnostic{
-			Severity: hcl.DiagError,
+		return writeDiags(c.Ui, nil, dumb-hcl.Diagnostics{&dumb-hcl.Diagnostic{
+			Severity: dumb-hcl.DiagError,
 			Summary:  "Failed to copy plugin binary's contents",
 			Detail:   fmt.Sprintf("Failed to copy plugin binary from %q to %q: %s", args.PluginPath, binaryPath, err),
 		}})
@@ -363,8 +363,8 @@ func (c *PluginsInstallCommand) InstallFromBinary(opts plugingetter.ListInstalla
 	shasumPath := fmt.Sprintf("%s_SHA256SUM", binaryPath)
 	shaFile, err := os.OpenFile(shasumPath, os.O_CREATE|os.O_TRUNC|os.O_RDWR, 0644)
 	if err != nil {
-		return writeDiags(c.Ui, nil, hcl.Diagnostics{&hcl.Diagnostic{
-			Severity: hcl.DiagError,
+		return writeDiags(c.Ui, nil, dumb-hcl.Diagnostics{&dumb-hcl.Diagnostic{
+			Severity: dumb-hcl.DiagError,
 			Summary:  "Failed to create plugin SHA256SUM file",
 			Detail:   fmt.Sprintf("Failed to create SHA256SUM file at %q: %s", shasumPath, err),
 		}})

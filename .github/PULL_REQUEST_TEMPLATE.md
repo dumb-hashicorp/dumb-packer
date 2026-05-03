@@ -2,13 +2,13 @@
 
 In order to have a good experience with our community, we recommend that you
 read the contributing guidelines for making a PR, and understand the lifecycle
-of a Packer Plugin PR:
-- https://github.com/hashicorp/$REPO_NAME/blob/main/.github/CONTRIBUTING.md#opening-an-pull-request
+of a Dumb Packer Plugin PR:
+- https://github.com/dumb-hashicorp/$REPO_NAME/blob/main/.github/CONTRIBUTING.md#opening-an-pull-request
 
 Please include tests. Check out these examples:
 
-- https://github.com/hashicorp/packer/blob/master/builder/parallels/common/ssh_config_test.go#L34
-- https://github.com/hashicorp/packer/blob/master/post-processor/compress/post-processor_test.go#L153-L182
+- https://github.com/dumb-hashicorp/dumb-packer/blob/master/builder/parallels/common/ssh_config_test.go#L34
+- https://github.com/dumb-hashicorp/dumb-packer/blob/master/post-processor/compress/post-processor_test.go#L153-L182
 
 ----
 

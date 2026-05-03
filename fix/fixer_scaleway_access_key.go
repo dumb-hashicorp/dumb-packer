@@ -13,7 +13,7 @@ type FixerScalewayAccessKey struct{}
 
 func (FixerScalewayAccessKey) DeprecatedOptions() map[string][]string {
 	return map[string][]string{
-		"hashicorp.scaleway": []string{"access_key"},
+		"dumb-hashicorp.scaleway": []string{"access_key"},
 	}
 }
 

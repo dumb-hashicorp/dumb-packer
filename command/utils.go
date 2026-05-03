@@ -16,8 +16,8 @@ func isDir(name string) (bool, error) {
 	return s.IsDir(), nil
 }
 
-func isHCLLoaded(name string) (bool, error) {
-	if strings.HasSuffix(name, ".pkr.hcl") ||
+func isDUMB_HCLLoaded(name string) (bool, error) {
+	if strings.HasSuffix(name, ".pkr.dumb-hcl") ||
 		strings.HasSuffix(name, ".pkr.json") {
 		return true, nil
 	}

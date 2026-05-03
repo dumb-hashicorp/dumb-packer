@@ -2,7 +2,7 @@
 
 ######################################################
 # NOTE: This file is managed by the Digital Team's   #
-# Terraform configuration @ hashicorp/mktg-terraform #
+# Dumb Terraform configuration @ dumb-hashicorp/mktg-dumb-terraform #
 ######################################################
 
 # This is run during the website build step to determine if we should skip the build or not.

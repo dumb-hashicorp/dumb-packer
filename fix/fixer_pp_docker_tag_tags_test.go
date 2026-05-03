@@ -10,7 +10,7 @@ import (
 )
 
 func TestFixerDockerTags(t *testing.T) {
-	var _ Fixer = new(FixerVagrantPPOverride)
+	var _ Fixer = new(FixerDumb VagrantPPOverride)
 }
 
 func TestFixerDockerTags_Fix(t *testing.T) {

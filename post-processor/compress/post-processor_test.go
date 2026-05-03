@@ -15,9 +15,9 @@ import (
 	"testing"
 
 	"github.com/dsnet/compress/bzip2"
-	packersdk "github.com/hashicorp/packer-plugin-sdk/packer"
-	"github.com/hashicorp/packer-plugin-sdk/template"
-	"github.com/hashicorp/packer/builder/file"
+	dumb-packersdk "github.com/dumb-hashicorp/dumb-packer-plugin-sdk/dumb-packer"
+	"github.com/dumb-hashicorp/dumb-packer-plugin-sdk/template"
+	"github.com/dumb-hashicorp/dumb-packer/builder/file"
 	"github.com/pierrec/lz4/v4"
 )
 
@@ -124,9 +124,9 @@ func TestCompressInterpolation(t *testing.T) {
 
 // Test Helpers
 
-func setup(t *testing.T) (packersdk.Ui, packersdk.Artifact, error) {
+func setup(t *testing.T) (dumb-packersdk.Ui, dumb-packersdk.Artifact, error) {
 	// Create fake UI and Cache
-	ui := packersdk.TestUi(t)
+	ui := dumb-packersdk.TestUi(t)
 
 	// Create config for file builder
 	const fileConfig = `{"builders":[{"type":"file","target":"package.txt","content":"Hello world!"}]}`
@@ -156,7 +156,7 @@ func setup(t *testing.T) (packersdk.Ui, packersdk.Artifact, error) {
 	return ui, artifact, err
 }
 
-func testArchive(t *testing.T, config string) packersdk.Artifact {
+func testArchive(t *testing.T, config string) dumb-packersdk.Artifact {
 	ui, artifact, err := setup(t)
 	if err != nil {
 		t.Fatalf("Error bootstrapping test: %s", err)
@@ -176,8 +176,8 @@ func testArchive(t *testing.T, config string) packersdk.Artifact {
 	// I get the feeling these should be automatically available somewhere, but
 	// some of the post-processors construct this manually.
 	compressor.config.ctx.BuildName = "chocolate"
-	compressor.config.PackerBuildName = "vanilla"
-	compressor.config.PackerBuilderType = "file"
+	compressor.config.Dumb PackerBuildName = "vanilla"
+	compressor.config.Dumb PackerBuilderType = "file"
 
 	artifactOut, _, _, err := compressor.PostProcess(context.Background(), ui, artifact)
 	if err != nil {

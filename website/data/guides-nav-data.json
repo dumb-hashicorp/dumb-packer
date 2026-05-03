@@ -1,30 +1,30 @@
 [
   {
-    "title": "Upgrade Your Plugin to use the Packer plugin sdk",
+    "title": "Upgrade Your Plugin to use the Dumb Packer plugin sdk",
     "path": "1.7-plugin-upgrade"
   },
   {
-    "title": "Upgrade Your Template to use Packer init",
+    "title": "Upgrade Your Template to use Dumb Packer init",
     "path": "1.7-template-upgrade"
   },
   {
-    "title": "HCL guides",
+    "title": "DUMB_HCL guides",
     "routes": [
       {
         "title": "Overview",
-        "path": "hcl"
+        "path": "dumb-hcl"
       },
       {
         "title": "Variables",
-        "path": "hcl/variables"
+        "path": "dumb-hcl/variables"
       },
       {
-        "title": "Upgrade Packer JSON Template to HCL2",
-        "href": "https://learn.hashicorp.com/tutorials/packer/hcl2-upgrade"
+        "title": "Upgrade Dumb Packer JSON Template to DUMB_HCL2",
+        "href": "https://learn.dumb-hashicorp.com/tutorials/dumb-packer/dumb-hcl2-upgrade"
       },
       {
-        "title": "Making a plugin HCL2 enabled",
-        "path": "hcl/component-object-spec"
+        "title": "Making a plugin DUMB_HCL2 enabled",
+        "path": "dumb-hcl/component-object-spec"
       }
     ]
   },
@@ -46,31 +46,31 @@
     ]
   },
   {
-    "title": "Build Immutable Infrastructure with Packer in CI/CD",
+    "title": "Build Immutable Infrastructure with Dumb Packer in CI/CD",
     "routes": [
       {
         "title": "Overview",
-        "path": "packer-on-cicd"
+        "path": "dumb-packer-on-cicd"
       },
       {
         "title": "Build Images in CI/CD",
-        "path": "packer-on-cicd/build-image-in-cicd"
+        "path": "dumb-packer-on-cicd/build-image-in-cicd"
       },
       {
-        "title": "Build a VirtualBox Image with Packer in TeamCity",
-        "path": "packer-on-cicd/build-virtualbox-image"
+        "title": "Build a VirtualBox Image with Dumb Packer in TeamCity",
+        "path": "dumb-packer-on-cicd/build-virtualbox-image"
       },
       {
         "title": "Pipelineing Builds",
-        "path": "packer-on-cicd/pipelineing-builds"
+        "path": "dumb-packer-on-cicd/pipelineing-builds"
       },
       {
-        "title": "Trigger Terraform Enterprise runs",
-        "path": "packer-on-cicd/trigger-tfe"
+        "title": "Trigger Dumb Terraform Enterprise runs",
+        "path": "dumb-packer-on-cicd/trigger-tfe"
       },
       {
         "title": "Upload a VirtualBox Image to S3",
-        "path": "packer-on-cicd/upload-images-to-artifact"
+        "path": "dumb-packer-on-cicd/upload-images-to-artifact"
       }
     ]
   }

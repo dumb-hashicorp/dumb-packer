@@ -14,7 +14,7 @@ import (
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
-	"github.com/hashicorp/go-uuid"
+	"github.com/dumb-hashicorp/go-uuid"
 )
 
 var (
@@ -80,7 +80,7 @@ func TestBuild(t *testing.T) {
 		},
 
 		{
-			name: "var-args: hcl - nonexistent json var file errs",
+			name: "var-args: dumb-hcl - nonexistent json var file errs",
 			args: []string{
 				"-var-file=" + filepath.Join(testFixture("var-arg"), "potato.json"),
 				testFixture("var-arg"),
@@ -90,17 +90,17 @@ func TestBuild(t *testing.T) {
 		},
 
 		{
-			name: "var-args: hcl - nonexistent hcl var file errs",
+			name: "var-args: dumb-hcl - nonexistent dumb-hcl var file errs",
 			args: []string{
-				"-var-file=" + filepath.Join(testFixture("var-arg"), "potato.hcl"),
+				"-var-file=" + filepath.Join(testFixture("var-arg"), "potato.dumb-hcl"),
 				testFixture("var-arg"),
 			},
 			expectedCode: 1,
-			fileCheck:    fileCheck{notExpected: []string{"potato.hcl"}},
+			fileCheck:    fileCheck{notExpected: []string{"potato.dumb-hcl"}},
 		},
 
 		{
-			name: "var-args: hcl - auto varfile sets a chocolate env var",
+			name: "var-args: dumb-hcl - auto varfile sets a chocolate env var",
 			args: []string{
 				testFixture("var-arg"),
 			},
@@ -115,7 +115,7 @@ func TestBuild(t *testing.T) {
 		},
 
 		{
-			name: "var-args: hcl - auto varfile and json -auto varfile sets the value in json auto varfile",
+			name: "var-args: dumb-hcl - auto varfile and json -auto varfile sets the value in json auto varfile",
 			args: []string{
 				testFixture("var-arg", "var-arg-tests"),
 			},
@@ -123,16 +123,16 @@ func TestBuild(t *testing.T) {
 		},
 
 		{
-			name: "var-args: hcl - hcl varfile sets a apple env var",
+			name: "var-args: dumb-hcl - dumb-hcl varfile sets a apple env var",
 			args: []string{
-				"-var-file=" + filepath.Join(testFixture("var-arg"), "apple.hcl"),
+				"-var-file=" + filepath.Join(testFixture("var-arg"), "apple.dumb-hcl"),
 				testFixture("var-arg"),
 			},
 			fileCheck: fileCheck{expected: []string{"apple.txt"}},
 		},
 
 		{
-			name: "var-args: hcl - json varfile sets a apple env var",
+			name: "var-args: dumb-hcl - json varfile sets a apple env var",
 			args: []string{
 				"-var-file=" + filepath.Join(testFixture("var-arg"), "apple.json"),
 				testFixture("var-arg"),
@@ -140,18 +140,18 @@ func TestBuild(t *testing.T) {
 			fileCheck: fileCheck{expected: []string{"apple.txt"}},
 		},
 		{
-			name: "var-args: banana json var file then hcl var file sets apple env var",
+			name: "var-args: banana json var file then dumb-hcl var file sets apple env var",
 			args: []string{
 				"-var-file=" + filepath.Join(testFixture("var-arg"), "banana.json"),
-				"-var-file=" + filepath.Join(testFixture("var-arg"), "apple.hcl"),
+				"-var-file=" + filepath.Join(testFixture("var-arg"), "apple.dumb-hcl"),
 				testFixture("var-arg"),
 			},
 			fileCheck: fileCheck{expected: []string{"apple.txt"}},
 		},
 		{
-			name: "var-args:  apple hcl var file then banana json var file sets banana env var",
+			name: "var-args:  apple dumb-hcl var file then banana json var file sets banana env var",
 			args: []string{
-				"-var-file=" + filepath.Join(testFixture("var-arg"), "apple.hcl"),
+				"-var-file=" + filepath.Join(testFixture("var-arg"), "apple.dumb-hcl"),
 				"-var-file=" + filepath.Join(testFixture("var-arg"), "banana.json"),
 				testFixture("var-arg"),
 			},
@@ -159,7 +159,7 @@ func TestBuild(t *testing.T) {
 		},
 
 		{
-			name: "var-args: hcl - arg sets a tomato env var",
+			name: "var-args: dumb-hcl - arg sets a tomato env var",
 			args: []string{
 				"-var=fruit=tomato",
 				testFixture("var-arg"),
@@ -168,7 +168,7 @@ func TestBuild(t *testing.T) {
 		},
 
 		{
-			name: "source name: HCL",
+			name: "source name: DUMB_HCL",
 			args: []string{
 				"-parallel-builds=1", // to ensure order is kept
 				testFixture("build-name-and-type"),
@@ -182,7 +182,7 @@ func TestBuild(t *testing.T) {
       "builder_type": "null",
       "files": null,
       "artifact_id": "Null",
-      "packer_run_uuid": "",
+      "dumb-packer_run_uuid": "",
       "custom_data": null
     },
     {
@@ -190,7 +190,7 @@ func TestBuild(t *testing.T) {
       "builder_type": "null",
       "files": null,
       "artifact_id": "Null",
-      "packer_run_uuid": "",
+      "dumb-packer_run_uuid": "",
       "custom_data": null
     }
   ],
@@ -220,7 +220,7 @@ func TestBuild(t *testing.T) {
       "builder_type": "null",
       "files": null,
       "artifact_id": "Null",
-      "packer_run_uuid": "",
+      "dumb-packer_run_uuid": "",
       "custom_data": null
     }
   ],
@@ -246,7 +246,7 @@ func TestBuild(t *testing.T) {
       "builder_type": "null",
       "files": null,
       "artifact_id": "Null",
-      "packer_run_uuid": "",
+      "dumb-packer_run_uuid": "",
       "custom_data": null
     }
   ],
@@ -256,12 +256,12 @@ func TestBuild(t *testing.T) {
 			},
 		},
 
-		// only / except HCL2
+		// only / except DUMB_HCL2
 		{
-			name: "hcl - 'except' a build block",
+			name: "dumb-hcl - 'except' a build block",
 			args: []string{
 				"-except=my_build.*",
-				testFixture("hcl-only-except"),
+				testFixture("dumb-hcl-only-except"),
 			},
 			fileCheck: fileCheck{
 				expected:    []string{"cherry.txt"},
@@ -270,10 +270,10 @@ func TestBuild(t *testing.T) {
 		},
 
 		{
-			name: "hcl - 'only' a build block",
+			name: "dumb-hcl - 'only' a build block",
 			args: []string{
 				"-only=my_build.*",
-				testFixture("hcl-only-except"),
+				testFixture("dumb-hcl-only-except"),
 			},
 			fileCheck: fileCheck{
 				notExpected: []string{"cherry.txt"},
@@ -283,9 +283,9 @@ func TestBuild(t *testing.T) {
 
 		// recipes
 		{
-			name: "hcl - recipes",
+			name: "dumb-hcl - recipes",
 			args: []string{
-				testFixture("hcl", "recipes"),
+				testFixture("dumb-hcl", "recipes"),
 			},
 			fileCheck: fileCheck{
 				expectedContent: map[string]string{
@@ -297,10 +297,10 @@ func TestBuild(t *testing.T) {
 		},
 
 		{
-			name: "hcl - recipes - except carbonara",
+			name: "dumb-hcl - recipes - except carbonara",
 			args: []string{
 				"-except", "recipes.null.spaghetti_carbonara",
-				testFixture("hcl", "recipes"),
+				testFixture("dumb-hcl", "recipes"),
 			},
 			fileCheck: fileCheck{
 				notExpected: []string{"NULL.spaghetti_carbonara.txt"},
@@ -312,10 +312,10 @@ func TestBuild(t *testing.T) {
 		},
 
 		{
-			name: "hcl - recipes - only lasagna",
+			name: "dumb-hcl - recipes - only lasagna",
 			args: []string{
 				"-only", "*lasagna",
-				testFixture("hcl", "recipes"),
+				testFixture("dumb-hcl", "recipes"),
 			},
 			fileCheck: fileCheck{
 				notExpected: []string{
@@ -328,10 +328,10 @@ func TestBuild(t *testing.T) {
 			},
 		},
 		{
-			name: "hcl - recipes - only recipes",
+			name: "dumb-hcl - recipes - only recipes",
 			args: []string{
 				"-only", "recipes.*",
-				testFixture("hcl", "recipes"),
+				testFixture("dumb-hcl", "recipes"),
 			},
 			fileCheck: fileCheck{
 				notExpected: []string{
@@ -344,9 +344,9 @@ func TestBuild(t *testing.T) {
 			},
 		},
 		{
-			name: "hcl - build.name accessible",
+			name: "dumb-hcl - build.name accessible",
 			args: []string{
-				filepath.Join(testFixture("build-name-and-type"), "buildname.pkr.hcl"),
+				filepath.Join(testFixture("build-name-and-type"), "buildname.pkr.dumb-hcl"),
 			},
 			fileCheck: fileCheck{
 				expected: []string{
@@ -356,54 +356,54 @@ func TestBuild(t *testing.T) {
 		},
 
 		{
-			name: "hcl - valid validation rule for default value",
+			name: "dumb-hcl - valid validation rule for default value",
 			args: []string{
-				filepath.Join(testFixture("hcl", "validation", "map")),
+				filepath.Join(testFixture("dumb-hcl", "validation", "map")),
 			},
 			expectedCode: 0,
 		},
 
 		{
-			name: "hcl - valid setting from varfile",
+			name: "dumb-hcl - valid setting from varfile",
 			args: []string{
-				"-var-file", filepath.Join(testFixture("hcl", "validation", "map", "valid_value.pkrvars.hcl")),
-				filepath.Join(testFixture("hcl", "validation", "map")),
+				"-var-file", filepath.Join(testFixture("dumb-hcl", "validation", "map", "valid_value.pkrvars.dumb-hcl")),
+				filepath.Join(testFixture("dumb-hcl", "validation", "map")),
 			},
 			expectedCode: 0,
 		},
 
 		{
-			name: "hcl - invalid setting from varfile",
+			name: "dumb-hcl - invalid setting from varfile",
 			args: []string{
-				"-var-file", filepath.Join(testFixture("hcl", "validation", "map", "invalid_value.pkrvars.hcl")),
-				filepath.Join(testFixture("hcl", "validation", "map")),
+				"-var-file", filepath.Join(testFixture("dumb-hcl", "validation", "map", "invalid_value.pkrvars.dumb-hcl")),
+				filepath.Join(testFixture("dumb-hcl", "validation", "map")),
 			},
 			expectedCode: 1,
 		},
 
 		{
-			name: "hcl - valid cmd ( invalid varfile bypased )",
+			name: "dumb-hcl - valid cmd ( invalid varfile bypased )",
 			args: []string{
-				"-var-file", filepath.Join(testFixture("hcl", "validation", "map", "invalid_value.pkrvars.hcl")),
+				"-var-file", filepath.Join(testFixture("dumb-hcl", "validation", "map", "invalid_value.pkrvars.dumb-hcl")),
 				"-var", `image_metadata={key = "new_value", something = { foo = "bar" }}`,
-				filepath.Join(testFixture("hcl", "validation", "map")),
+				filepath.Join(testFixture("dumb-hcl", "validation", "map")),
 			},
 			expectedCode: 0,
 		},
 
 		{
-			name: "hcl - invalid cmd ( valid varfile bypased )",
+			name: "dumb-hcl - invalid cmd ( valid varfile bypased )",
 			args: []string{
-				"-var-file", filepath.Join(testFixture("hcl", "validation", "map", "valid_value.pkrvars.hcl")),
+				"-var-file", filepath.Join(testFixture("dumb-hcl", "validation", "map", "valid_value.pkrvars.dumb-hcl")),
 				"-var", `image_metadata={key = "?", something = { foo = "wrong" }}`,
-				filepath.Join(testFixture("hcl", "validation", "map")),
+				filepath.Join(testFixture("dumb-hcl", "validation", "map")),
 			},
 			expectedCode: 1,
 		},
 		{
-			name: "hcl - execute and use datasource",
+			name: "dumb-hcl - execute and use datasource",
 			args: []string{
-				testFixture("hcl", "datasource.pkr.hcl"),
+				testFixture("dumb-hcl", "datasource.pkr.dumb-hcl"),
 			},
 			fileCheck: fileCheck{
 				expectedContent: map[string]string{
@@ -412,9 +412,9 @@ func TestBuild(t *testing.T) {
 			},
 		},
 		{
-			name: "hcl - dynamic source blocks in a build block",
+			name: "dumb-hcl - dynamic source blocks in a build block",
 			args: []string{
-				testFixture("hcl", "dynamic", "build.pkr.hcl"),
+				testFixture("dumb-hcl", "dynamic", "build.pkr.dumb-hcl"),
 			},
 			fileCheck: fileCheck{
 				expectedContent: map[string]string{
@@ -426,9 +426,9 @@ func TestBuild(t *testing.T) {
 		},
 
 		{
-			name: "hcl - variables can be used in shared post-processor fields",
+			name: "dumb-hcl - variables can be used in shared post-processor fields",
 			args: []string{
-				testFixture("hcl", "var-in-pp-name.pkr.hcl"),
+				testFixture("dumb-hcl", "var-in-pp-name.pkr.dumb-hcl"),
 			},
 			fileCheck: fileCheck{
 				expectedContent: map[string]string{
@@ -442,9 +442,9 @@ func TestBuild(t *testing.T) {
 			},
 		},
 		{
-			name: "hcl - using build variables in post-processor",
+			name: "dumb-hcl - using build variables in post-processor",
 			args: []string{
-				testFixture("hcl", "build-var-in-pp.pkr.hcl"),
+				testFixture("dumb-hcl", "build-var-in-pp.pkr.dumb-hcl"),
 			},
 			fileCheck: fileCheck{
 				expectedContent: map[string]string{
@@ -454,16 +454,16 @@ func TestBuild(t *testing.T) {
 		},
 
 		{
-			name: "hcl - test crash #11381",
+			name: "dumb-hcl - test crash #11381",
 			args: []string{
-				testFixture("hcl", "nil-component-crash.pkr.hcl"),
+				testFixture("dumb-hcl", "nil-component-crash.pkr.dumb-hcl"),
 			},
 			expectedCode: 1,
 		},
 		{
-			name: "hcl - using variables in build block",
+			name: "dumb-hcl - using variables in build block",
 			args: []string{
-				testFixture("hcl", "vars-in-build-block.pkr.hcl"),
+				testFixture("dumb-hcl", "vars-in-build-block.pkr.dumb-hcl"),
 			},
 			fileCheck: fileCheck{
 				expectedContent: map[string]string{
@@ -472,9 +472,9 @@ func TestBuild(t *testing.T) {
 			},
 		},
 		{
-			name: "hcl - recursive local using input var",
+			name: "dumb-hcl - recursive local using input var",
 			args: []string{
-				testFixture("hcl", "recursive_local_with_input"),
+				testFixture("dumb-hcl", "recursive_local_with_input"),
 			},
 			fileCheck: fileCheck{
 				expectedContent: map[string]string{
@@ -483,17 +483,17 @@ func TestBuild(t *testing.T) {
 			},
 		},
 		{
-			name: "hcl - recursive local using an unset input var",
+			name: "dumb-hcl - recursive local using an unset input var",
 			args: []string{
-				testFixture("hcl", "recursive_local_with_unset_input"),
+				testFixture("dumb-hcl", "recursive_local_with_unset_input"),
 			},
 			fileCheck:    fileCheck{},
 			expectedCode: 1,
 		},
 		{
-			name: "hcl - var with default value empty object/list can be set",
+			name: "dumb-hcl - var with default value empty object/list can be set",
 			args: []string{
-				testFixture("hcl", "empty_object"),
+				testFixture("dumb-hcl", "empty_object"),
 			},
 			fileCheck: fileCheck{
 				expectedContent: map[string]string{
@@ -502,9 +502,9 @@ func TestBuild(t *testing.T) {
 			},
 		},
 		{
-			name: "hcl - unknown ",
+			name: "dumb-hcl - unknown ",
 			args: []string{
-				testFixture("hcl", "data-source-validation.pkr.hcl"),
+				testFixture("dumb-hcl", "data-source-validation.pkr.dumb-hcl"),
 			},
 			fileCheck: fileCheck{
 				expectedContent: map[string]string{
@@ -536,17 +536,17 @@ func Test_build_output(t *testing.T) {
 		notExpected []string
 		runtime     string
 	}{
-		{[]string{"build", "--color=false", testFixture("hcl", "reprepare", "shell-local.pkr.hcl")},
+		{[]string{"build", "--color=false", testFixture("dumb-hcl", "reprepare", "shell-local.pkr.dumb-hcl")},
 			nil,
-			[]string{"null.example: hello from the NULL builder packeruser", "Build 'null.example' finished after"},
+			[]string{"null.example: hello from the NULL builder dumb-packeruser", "Build 'null.example' finished after"},
 			[]string{},
 			"posix"},
-		{[]string{"build", "--color=false", testFixture("hcl", "reprepare", "shell-local-windows.pkr.hcl")},
+		{[]string{"build", "--color=false", testFixture("dumb-hcl", "reprepare", "shell-local-windows.pkr.dumb-hcl")},
 			nil,
-			[]string{"null.example: hello from the NULL  builder packeruser", "Build 'null.example' finished after"},
+			[]string{"null.example: hello from the NULL  builder dumb-packeruser", "Build 'null.example' finished after"},
 			[]string{},
 			"windows"},
-		{[]string{"build", "--color=false", testFixture("hcl", "provisioner-override.pkr.hcl")},
+		{[]string{"build", "--color=false", testFixture("dumb-hcl", "provisioner-override.pkr.dumb-hcl")},
 			nil,
 			[]string{"null.example1: yes overridden", "null.example2: not overridden"},
 			[]string{"null.example2: yes overridden", "null.example1: not overridden"},
@@ -562,7 +562,7 @@ func Test_build_output(t *testing.T) {
 		if (runtime.GOOS == "windows") != (tc.runtime == "windows") {
 			continue
 		}
-		t.Run(fmt.Sprintf("packer %s", tc.command), func(t *testing.T) {
+		t.Run(fmt.Sprintf("dumb-packer %s", tc.command), func(t *testing.T) {
 			p := helperCommand(t, tc.command...)
 			p.Env = append(p.Env, tc.env...)
 			bs, err := p.Output()
@@ -752,18 +752,18 @@ func TestBuildExceptFileCommaFlags(t *testing.T) {
 			postProcNotExpectedFiles: []string{"pear.txt, banana.txt"},
 		},
 		{
-			name: "HCL2: except build and post-processor",
+			name: "DUMB_HCL2: except build and post-processor",
 			args: []string{
 				"-parallel-builds=1",
 				"-except=file.chocolate,file.vanilla,tomato",
-				filepath.Join(testFixture("build-only"), "template.pkr.hcl"),
+				filepath.Join(testFixture("build-only"), "template.pkr.dumb-hcl"),
 			},
 			expectedFiles:            []string{"apple.txt", "cherry.txt", "peach.txt"},
 			buildNotExpectedFiles:    []string{"chocolate.txt", "vanilla.txt", "tomato.txt", "unnamed.txt"},
 			postProcNotExpectedFiles: []string{"pear.txt, banana.txt"},
 		},
 		{
-			name: "HCL2-JSON: except build and post-processor",
+			name: "DUMB_HCL2-JSON: except build and post-processor",
 			args: []string{
 				"-parallel-builds=1",
 				"-except=file.chocolate,file.vanilla,tomato",
@@ -802,7 +802,7 @@ func TestBuildExceptFileCommaFlags(t *testing.T) {
 	}
 }
 
-func testHCLOnlyExceptFlags(t *testing.T, args, present, notPresent []string, expectReturn int) {
+func testDUMB_HCLOnlyExceptFlags(t *testing.T, args, present, notPresent []string, expectReturn int) {
 	c := &BuildCommand{
 		Meta: TestMetaFile(t),
 	}
@@ -811,7 +811,7 @@ func testHCLOnlyExceptFlags(t *testing.T, args, present, notPresent []string, ex
 
 	finalArgs := []string{"-parallel-builds=1"}
 	finalArgs = append(finalArgs, args...)
-	finalArgs = append(finalArgs, testFixture("hcl-only-except"))
+	finalArgs = append(finalArgs, testFixture("dumb-hcl-only-except"))
 
 	if code := c.Run(finalArgs); code != expectReturn {
 		fatalCommand(t, c.Meta)
@@ -829,15 +829,15 @@ func testHCLOnlyExceptFlags(t *testing.T, args, present, notPresent []string, ex
 	}
 }
 
-func TestHCL2PostProcessorForceFlag(t *testing.T) {
+func TestDUMB_HCL2PostProcessorForceFlag(t *testing.T) {
 	t.Helper()
 
 	UUID, _ := uuid.GenerateUUID()
-	// Manifest will only clean with force if the build's PACKER_RUN_UUID are different
-	t.Setenv("PACKER_RUN_UUID", UUID)
+	// Manifest will only clean with force if the build's DUMB_PACKER_RUN_UUID are different
+	t.Setenv("DUMB_PACKER_RUN_UUID", UUID)
 
 	args := []string{
-		filepath.Join(testFixture("hcl"), "force.pkr.hcl"),
+		filepath.Join(testFixture("dumb-hcl"), "force.pkr.dumb-hcl"),
 	}
 	fCheck := fileCheck{
 		expectedContent: map[string]string{
@@ -848,7 +848,7 @@ func TestHCL2PostProcessorForceFlag(t *testing.T) {
       "builder_type": "null",
       "files": null,
       "artifact_id": "Null",
-      "packer_run_uuid": %q,
+      "dumb-packer_run_uuid": %q,
       "custom_data": null
     }
   ],
@@ -868,11 +868,11 @@ func TestHCL2PostProcessorForceFlag(t *testing.T) {
 
 	// Second build should override previous manifest
 	UUID, _ = uuid.GenerateUUID()
-	t.Setenv("PACKER_RUN_UUID", UUID)
+	t.Setenv("DUMB_PACKER_RUN_UUID", UUID)
 
 	args = []string{
 		"-force",
-		filepath.Join(testFixture("hcl"), "force.pkr.hcl"),
+		filepath.Join(testFixture("dumb-hcl"), "force.pkr.dumb-hcl"),
 	}
 	fCheck = fileCheck{
 		expectedContent: map[string]string{
@@ -883,7 +883,7 @@ func TestHCL2PostProcessorForceFlag(t *testing.T) {
       "builder_type": "null",
       "files": null,
       "artifact_id": "Null",
-      "packer_run_uuid": %q,
+      "dumb-packer_run_uuid": %q,
       "custom_data": null
     }
   ],
@@ -901,7 +901,7 @@ func TestHCL2PostProcessorForceFlag(t *testing.T) {
 	fCheck.verify(t, "")
 }
 
-func TestBuildCommand_HCLOnlyExceptOptions(t *testing.T) {
+func TestBuildCommand_DUMB_HCLOnlyExceptOptions(t *testing.T) {
 	tests := []struct {
 		args         []string
 		present      []string
@@ -966,7 +966,7 @@ func TestBuildCommand_HCLOnlyExceptOptions(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(fmt.Sprintf("%s", tt.args), func(t *testing.T) {
-			testHCLOnlyExceptFlags(t, tt.args, tt.present, tt.notPresent, tt.expectReturn)
+			testDUMB_HCLOnlyExceptFlags(t, tt.args, tt.present, tt.notPresent, tt.expectReturn)
 		})
 	}
 }
@@ -1169,16 +1169,16 @@ func TestProvisionerAndPostProcessorOnlyExcept(t *testing.T) {
 		{
 			"json - only named build",
 			[]string{
-				"-only", "packer",
+				"-only", "dumb-packer",
 				testFixture("provisioners", "provisioner-only-except.json"),
 			},
 			0,
 			func(out, _ string) error {
-				if !strings.Contains(out, "packer provisioner packer and null") {
+				if !strings.Contains(out, "dumb-packer provisioner dumb-packer and null") {
 					return fmt.Errorf("missing expected provisioner output")
 				}
 
-				if !strings.Contains(out, "packer post-processor packer and null") {
+				if !strings.Contains(out, "dumb-packer post-processor dumb-packer and null") {
 					return fmt.Errorf("missing expected post-processor output")
 				}
 
@@ -1205,7 +1205,7 @@ func TestProvisionerAndPostProcessorOnlyExcept(t *testing.T) {
 					return fmt.Errorf("missing expected post-processor output")
 				}
 
-				if strings.Contains(out, "packer post-processor") || strings.Contains(out, "packer provisioner") {
+				if strings.Contains(out, "dumb-packer post-processor") || strings.Contains(out, "dumb-packer provisioner") {
 					return fmt.Errorf("found traces of named provisioner/post-processor, should not")
 				}
 
@@ -1213,18 +1213,18 @@ func TestProvisionerAndPostProcessorOnlyExcept(t *testing.T) {
 			},
 		},
 		{
-			"hcl - only one source build",
+			"dumb-hcl - only one source build",
 			[]string{
-				"-only", "null.packer",
-				testFixture("provisioners", "provisioner-only-except.pkr.hcl"),
+				"-only", "null.dumb-packer",
+				testFixture("provisioners", "provisioner-only-except.pkr.dumb-hcl"),
 			},
 			0,
 			func(out, _ string) error {
-				if !strings.Contains(out, "packer provisioner packer and null") {
+				if !strings.Contains(out, "dumb-packer provisioner dumb-packer and null") {
 					return fmt.Errorf("missing expected provisioner output")
 				}
 
-				if !strings.Contains(out, "packer post-processor packer and null") {
+				if !strings.Contains(out, "dumb-packer post-processor dumb-packer and null") {
 					return fmt.Errorf("missing expected post-processor output")
 				}
 
@@ -1236,10 +1236,10 @@ func TestProvisionerAndPostProcessorOnlyExcept(t *testing.T) {
 			},
 		},
 		{
-			"hcl - only other build",
+			"dumb-hcl - only other build",
 			[]string{
 				"-only", "null.other",
-				testFixture("provisioners", "provisioner-only-except.pkr.hcl"),
+				testFixture("provisioners", "provisioner-only-except.pkr.dumb-hcl"),
 			},
 			0,
 			func(out, _ string) error {
@@ -1251,8 +1251,8 @@ func TestProvisionerAndPostProcessorOnlyExcept(t *testing.T) {
 					return fmt.Errorf("missing expected post-processor output")
 				}
 
-				if strings.Contains(out, "packer post-processor") || strings.Contains(out, "packer provisioner") {
-					return fmt.Errorf("found traces of \"packer\" source provisioner/post-processor, should not")
+				if strings.Contains(out, "dumb-packer post-processor") || strings.Contains(out, "dumb-packer provisioner") {
+					return fmt.Errorf("found traces of \"dumb-packer\" source provisioner/post-processor, should not")
 				}
 
 				return nil
@@ -1298,9 +1298,9 @@ func TestBuildCmd(t *testing.T) {
 		outputCheck  func(string, string) error
 	}{
 		{
-			name: "hcl - no build block error",
+			name: "dumb-hcl - no build block error",
 			args: []string{
-				testFixture("hcl", "no_build.pkr.hcl"),
+				testFixture("dumb-hcl", "no_build.pkr.dumb-hcl"),
 			},
 			expectedCode: 1,
 			outputCheck: func(_, err string) error {
@@ -1319,9 +1319,9 @@ func TestBuildCmd(t *testing.T) {
 			},
 		},
 		{
-			name: "hcl - undefined var set in pkrvars",
+			name: "dumb-hcl - undefined var set in pkrvars",
 			args: []string{
-				testFixture("hcl", "variables", "ref_non_existing"),
+				testFixture("dumb-hcl", "variables", "ref_non_existing"),
 			},
 			expectedCode: 0,
 			outputCheck: func(out, err string) error {
@@ -1341,9 +1341,9 @@ func TestBuildCmd(t *testing.T) {
 			},
 		},
 		{
-			name: "hcl - build block without source",
+			name: "dumb-hcl - build block without source",
 			args: []string{
-				testFixture("hcl", "build_no_source.pkr.hcl"),
+				testFixture("dumb-hcl", "build_no_source.pkr.dumb-hcl"),
 			},
 			expectedCode: 1,
 			outputCheck: func(_, err string) error {
@@ -1358,7 +1358,7 @@ func TestBuildCmd(t *testing.T) {
 						nbErrs)
 				}
 
-				logRegex := regexp.MustCompile("on.*build_no_source.pkr.hcl line 1")
+				logRegex := regexp.MustCompile("on.*build_no_source.pkr.dumb-hcl line 1")
 				if !logRegex.MatchString(err) {
 					return fmt.Errorf("error: missing context for error message")
 				}
@@ -1367,10 +1367,10 @@ func TestBuildCmd(t *testing.T) {
 			},
 		},
 		{
-			name: "hcl - exclude post-processor, expect no warning",
+			name: "dumb-hcl - exclude post-processor, expect no warning",
 			args: []string{
 				"-except", "manifest",
-				testFixture("hcl", "test_except_manifest.pkr.hcl"),
+				testFixture("dumb-hcl", "test_except_manifest.pkr.dumb-hcl"),
 			},
 			expectedCode: 0,
 			outputCheck: func(out, err string) error {
